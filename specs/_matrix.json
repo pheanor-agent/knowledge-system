@@ -175,8 +175,8 @@
     "SPEC-A1": {
       "title": "P0-Integration-Test",
       "type": "requirement",
-      "status": "implemented",
-      "version": "0.2.2",
+      "status": "verified",
+      "version": "0.2.3",
       "version_history": [
         {
           "version": "0.1.0",
@@ -201,6 +201,12 @@
           "date": "2026-06-04",
           "status": "implemented",
           "summary": "in_progress → implemented"
+        },
+        {
+          "version": "0.2.3",
+          "date": "2026-06-04",
+          "status": "verified",
+          "summary": "implemented → verified"
         }
       ],
       "created": "2026-06-04",

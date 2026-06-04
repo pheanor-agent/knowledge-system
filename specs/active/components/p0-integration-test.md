@@ -2,8 +2,12 @@
 
 ---
 spec_id: SPEC-A1
-version: 0.2.2
+version: 0.2.3
 version_history:
+  - version: 0.2.3
+    date: 2026-06-04
+    status: verified
+    summary: "implemented → verified"
   - version: 0.2.2
     date: 2026-06-04
     status: implemented
@@ -20,7 +24,7 @@ version_history:
     date: 2026-06-04
     status: proposed
     summary: "초기 생성"
-status: implemented
+status: verified
 priority: P?
 category: 요구사항
 related_specs: []
