@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에이전트 메모리 시스템 세미나</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --bg-card: rgba(255,255,255,0.03);
+    --bg-card-hover: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.08);
+    --text: #e4e4e7;
+    --text-dim: #71717a;
+    --text-bright: #fafafa;
+    --accent: #22d3ee;
+    --accent-dim: rgba(34,211,238,0.15);
+    --green: #34d399;
+    --green-dim: rgba(52,211,153,0.15);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.15);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.15);
+    --rose: #fb7185;
+    --rose-dim: rgba(251,113,133,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .slides {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+  }
+
+  .slide-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text-bright);
+    margin-bottom: 28px;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: var(--text-dim);
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 700px;
+    text-align: center;
+  }
+
+  .slide-cover h1 {
+    font-size: 56px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cover-meta {
+    margin-top: 32px;
+    display: flex;
+    gap: 32px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .cover-meta span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cover-meta .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .content-grid {
+    display: grid;
+    gap: 16px;
+    margin-top: 12px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: all 0.2s ease;
+  }
+
+  .card:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .card h3 { font-size: 14px; margin-bottom: 6px; }
+  .card p { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flow-node {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--text-dim);
+    font-size: 18px;
+    opacity: 0.4;
+  }
+
+  .icebreaker {
+    max-width: 800px;
+    text-align: center;
+  }
+
+  .icebreaker .scenario {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 28px;
+    margin: 16px 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .icebreaker .question {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--amber);
+    margin: 16px 0;
+  }
+
+  .layer-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .layer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .layer-highlight {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    box-shadow: 0 0 20px var(--accent-dim);
+  }
+
+  .layer-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .layer-content h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .layer-content p {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 8px 20px;
+  }
+
+  .nav button {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 50%;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+  }
+
+  .nav button:hover {
+    color: var(--text-bright);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .nav-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .nav-dots {
+    display: flex;
+    gap: 3px;
+  }
+
+  .nav-dot {
+    width: 5px; height: 5px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.12);
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .nav-dot.active {
+    background: var(--accent);
+    width: 16px;
+  }
+
+  .key-hint {
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    font-size: 10px;
+    color: var(--text-dim);
+    opacity: 0.4;
+    font-family: 'JetBrains Mono', monospace;
+    z-index: 100;
+  }
+
+  .key-hint kbd {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: inherit;
+    font-size: 9px;
+  }
+
+  .more-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+
+  .more-btn:hover {
+    background: var(--bg-card-hover);
+    color: var(--text);
+  }
+
+  .more-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .more-overlay.active {
+    display: flex;
+  }
+
+  .more-content {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .more-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .more-close:hover {
+    color: var(--text);
+  }
+
+  .more-content h3 {
+    font-size: 20px;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+
+  .more-content p {
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 12px;
+  }
+
+  .more-content code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 6px;
+    border-radius: 5px;
+    color: var(--accent);
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 40px;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 2px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .stat-accent .stat-value { color: var(--accent); }
+  .stat-green .stat-value { color: var(--green); }
+  .stat-purple .stat-value { color: var(--purple); }
+  .stat-amber .stat-value { color: var(--amber); }
+</style>
+</head>
+<body>
+
+<div class="key-hint">
+  <kbd>←</kbd> <kbd>→</kbd> or <kbd>Space</kbd>
+</div>
+
+<div class="slides" id="slides">
+
+  <!-- Slide 1: Cover -->
+  <div class="slide slide-cover active" data-slide="0">
+    <div class="slide-label">에이전트 메모리 시스템</div>
+    <h1>지식 관리의<br>새로운 방식</h1>
+    <p class="subtitle">
+      AI 에이전트가 어떻게 지식을 저장, 검색, 활용하는지<br>
+      실제 운영 사례를 통해 알아봅니다
+    </p>
+    <div class="cover-meta">
+      <span><span class="dot"></span>2026.06.04</span>
+      <span><span class="dot"></span>에르메스</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: Ice Breaker -->
+  <div class="slide" data-slide="1">
+    <div class="slide-label">도입</div>
+    <h2>신입 사원,业务知识 어떻게 관리할까?</h2>
+    <div class="icebreaker">
+      <div class="scenario">
+        대기업에 입사한 신입 사원.<br>
+        매뉴얼 500페이지, 이전 직원 노트 200건, 미팅록 100건.<br>
+        <strong>"무엇부터 보며, 어떻게 정리하지?"</strong>
+      </div>
+      <div class="question">→ AI 에이전트도 똑같은 문제에 직면합니다</div>
+    </div>
+  </div>
+
+  <!-- Slide 3: Connection -->
+  <div class="slide" data-slide="2">
+    <div class="slide-label">연결</div>
+    <h2>신입 사원과 AI의 공통점</h2>
+    <div class="two-col" style="max-width: 900px;">
+      <div class="card" style="border-color: var(--purple-dim);">
+        <div class="card-icon" style="background: var(--purple-dim); color: var(--purple);">👤</div>
+        <h3>신입 사원</h3>
+        <p>방대한 자료를 접하지만, 무엇이 중요한지 모릅니다. 체계적인 분류와 우선순위가 필요합니다.</p>
+      </div>
+      <div class="card" style="border-color: var(--accent-dim);">
+        <div class="card-icon" style="background: var(--accent-dim); color: var(--accent);">🤖</div>
+        <h3>AI 에이전트</h3>
+        <p>수만 건의 데이터를 처리하지만, 효율적인 검색과 기억이 필요합니다. 외부 메모리 시스템이 필수적입니다.</p>
+      </div>
+    </div>
+    <div class="icebreaker .question">
+      <div style="margin-top: 24px; font-size: 18px; color: var(--amber); font-weight: 600;">
+        → 두 경우 모두 '지식 관리 시스템'이 핵심입니다
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: AI 3-Layer -->
+  <div class="slide" data-slide="3">
+    <div class="slide-label">AI 기술 3층위</div>
+    <h2>AI가 지식을 다루는 3단계</h2>
+    <div class="layer-visual">
+      <div class="layer">
+        <div class="layer-num" style="background: var(--purple-dim); color: var(--purple);">1</div>
+        <div class="layer-content">
+          <h3 style="color: var(--purple);">모델 학습</h3>
+          <p>LLM이 세계 지식을 ' یادگیری' — 수조 토큰으로 pre-training</p>
+        </div>
+      </div>
+      <div class="layer layer-highlight">
+        <div class="layer-num" style="background: var(--accent-dim); color: var(--accent);">2</div>
+        <div class="layer-content">
+          <h3 style="color: var(--accent);">에이전트 메모리 ← 오늘 주제</h3>
+          <p>에이전트가 작업 지식을 '저장·검색·분류' — 오늘 다룰 내용</p>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="layer-num" style="background: var(--green-dim); color: var(--green);">3</div>
+        <div class="layer-content">
+          <h3 style="color: var(--green);">RAG (검색+생성)</h3>
+          <p>외부 지식을 검색해서 답변 '활용' — 메모리 시스템이 기반</p>
+        </div>
+      </div>
+    </div>
+    <button class="more-btn" onclick="showMore('tech')">기술적 내용 보기</button>
+  </div>
+
+  <!-- Slide 5: Transition -->
+  <div class="slide" data-slide="4">
+    <div class="slide-label">본론</div>
+    <h2>에이전트 메모리,<br>왜 중요한가요?</h2>
+    <div class="icebreaker">
+      <div class="scenario">
+        모델 학습은 끝났습니다. 수조 토큰으로 훈련된 LLM.<br>
+        하지만 <strong>"내 프로젝트는?"</strong> <strong>"어제 한 작업은?"</strong><br>
+        이걸 기억하려면 <strong>에이전트 메모리</strong>가 필요합니다.
+      </div>
+      <div class="question">→ 지식 시스템은 AI의 '외부 뇌'입니다</div>
+    </div>
+  </div>
+
+  <!-- Slide 6: System Overview -->
+  <div class="slide" data-slide="5">
+    <div class="slide-label">시스템 개요</div>
+    <h2>에이전트 메모리 시스템</h2>
+    <div class="content-grid grid-3" style="max-width: 900px;">
+      <div class="stat stat-accent">
+        <div class="stat-value">3</div>
+        <div class="stat-label">계층 구조</div>
+      </div>
+      <div class="stat stat-green">
+        <div class="stat-value">10</div>
+        <div class="stat-label">도메인 분류</div>
+      </div>
+      <div class="stat stat-purple">
+        <div class="stat-value">3</div>
+        <div class="stat-label">중요도 레벨</div>
+      </div>
+    </div>
+    <div style="margin-top: 24px; text-align: center;">
+      <p class="subtitle" style="max-width: 600px;">
+        원본 데이터 → LLM 가공 → 구조화된 지식<br>
+        엔드투엔드 파이프라인
+      </p>
+    </div>
+    <button class="more-btn" onclick="showMore('overview')">상세 내용 보기</button>
+  </div>
+
+  <!-- Slide 7: Architecture -->
+  <div class="slide" data-slide="6">
+    <div class="slide-label">아키텍처</div>
+    <h2>3계층 구조</h2>
+    <div class="flow">
+      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">
+        L1: Raw Sources<br><span style="font-size:10px; color: var(--text-dim);">불변 원본</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--green); color: var(--green);">
+        L2: Wiki<br><span style="font-size:10px; color: var(--text-dim);">LLM 가공</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">
+        L3: Schema<br><span style="font-size:10px; color: var(--text-dim);">규칙 정의</span>
+      </div>
+    </div>
+    <div class="content-grid grid-3" style="max-width: 900px;">
+      <div class="card">
+        <div class="card-icon" style="background: var(--purple-dim); color: var(--purple);">📁</div>
+        <h3>원본 데이터</h3>
+        <p>메모리, 세션, 작업 기록 등 불변 원본</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--green-dim); color: var(--green);">📄</div>
+        <h3>가공 지식</h3>
+        <p>LLM이 정리한 구조화된 문서</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--accent-dim); color: var(--accent);">📐</div>
+        <h3>규칙 정의</h3>
+        <p>분류 체계와 관리 규칙</p>
+      </div>
+    </div>
+    <button class="more-btn" onclick="showMore('arch')">기술적 내용 보기</button>
+  </div>
+
+  <!-- Slide 8: Pipeline -->
+  <div class="slide" data-slide="7">
+    <div class="slide-label">파이프라인</div>
+    <h2>데이터 흐름</h2>
+    <div class="flow">
+      <div class="flow-node" style="border-color: var(--amber); color: var(--amber);">수집</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">메타데이터</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--green); color: var(--green);">점수 계산</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">노출</div>
+    </div>
+    <div class="two-col" style="max-width: 800px;">
+      <div>
+        <h3 style="color: var(--amber); margin-bottom: 8px; font-size: 14px;">⏰ 자동화</h3>
+        <div class="card">
+          <p style="font-size: 13px; line-height: 1.7;">
+            • 원본 데이터 수집<br>
+            • 메타데이터 추출<br>
+            • 중요도 점수 계산<br>
+            • 인덱스 생성
+          </p>
+        </div>
+      </div>
+      <div>
+        <h3 style="color: var(--green); margin-bottom: 8px; font-size: 14px;">📊 품질 관리</h3>
+        <div class="card">
+          <p style="font-size: 13px; line-height: 1.7;">
+            • 도메인 분류 정확도<br>
+            • 태그 부착률<br>
+            • 인덱싱률<br>
+            • 노출률
+          </p>
+        </div>
+      </div>
+    </div>
+    <button class="more-btn" onclick="showMore('pipeline')">기술적 내용 보기</button>
+  </div>
+
+  <!-- Slide 9: Priority -->
+  <div class="slide" data-slide="8">
+    <div class="slide-label">중요도</div>
+    <h2>3단계 중요도 시스템</h2>
+    <div class="content-grid grid-3" style="max-width: 800px;">
+      <div class="card" style="border-color: var(--accent-dim);">
+        <div style="font-size: 24px; font-weight: 800; color: var(--accent); margin-bottom: 8px;">T1</div>
+        <h3 style="color: var(--accent);">핵심 지식</h3>
+        <p>항상 노출되는 중요 문서<br>에이전트의 핵심 작업에 필수</p>
+      </div>
+      <div class="card" style="border-color: var(--green-dim);">
+        <div style="font-size: 24px; font-weight: 800; color: var(--green); margin-bottom: 8px;">T2</div>
+        <h3 style="color: var(--green);">일상 지식</h3>
+        <p>상황에 따라 노출<br>주기적으로 참조되는 정보</p>
+      </div>
+      <div class="card" style="border-color: var(--purple-dim);">
+        <div style="font-size: 24px; font-weight: 800; color: var(--purple); margin-bottom: 8px;">T3</div>
+        <h3 style="color: var(--purple);">참고 지식</h3>
+        <p>명시적 요청 시 제공<br>보조적인 배경 정보</p>
+      </div>
+    </div>
+    <button class="more-btn" onclick="showMore('priority')">기술적 내용 보기</button>
+  </div>
+
+  <!-- Slide 10: Domains -->
+  <div class="slide" data-slide="9">
+    <div class="slide-label">도메인</div>
+    <h2>지식 분류 체계</h2>
+    <div class="content-grid grid-3" style="max-width: 900px;">
+      <div class="card">
+        <h3 style="color: var(--accent);">🤖 에이전트</h3>
+        <p>작업 워크플로우, 스킬, 프로세스</p>
+      </div>
+      <div class="card">
+        <h3 style="color: var(--green);">⚙️ 시스템</h3>
+        <p>인프라, 설정, 자동화</p>
+      </div>
+      <div class="card">
+        <h3 style="color: var(--purple);">🧠 메모리</h3>
+        <p>사용자 선호, 경험 교훈</p>
+      </div>
+      <div class="card">
+        <h3 style="color: var(--amber);">💬 세션</h3>
+        <p>대화 기록, 컨텍스트</p>
+      </div>
+      <div class="card">
+        <h3 style="color: var(--rose);">📚 지식</h3>
+        <p>연구, 학습 자료</p>
+      </div>
+      <div class="card">
+        <h3 style="color: var(--text-dim);">...</h3>
+        <p>외 5개 도메인</p>
+      </div>
+    </div>
+    <button class="more-btn" onclick="showMore('domains')">기술적 내용 보기</button>
+  </div>
+
+  <!-- Slide 11: Exposure -->
+  <div class="slide" data-slide="10">
+    <div class="slide-label">노출</div>
+    <h2>LLM이 지식을 찾는 길</h2>
+    <div class="flow">
+      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">index.md</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--green); color: var(--green);">T1 Core</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">domain/tag</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--amber); color: var(--amber);">pages/*.md</div>
+    </div>
+    <div class="content-grid grid-4" style="max-width: 900px;">
+      <div class="card" style="border-color: var(--accent-dim);">
+        <div style="font-size: 10px; color: var(--accent); font-weight: 700; margin-bottom: 4px;">L1</div>
+        <h3>진입점 정의</h3>
+        <p>knowledge-navigation 스킬</p>
+      </div>
+      <div class="card" style="border-color: var(--green-dim);">
+        <div style="font-size: 10px; color: var(--green); font-weight: 700; margin-bottom: 4px;">L2</div>
+        <h3>카탈로그</h3>
+        <p>wiki/index.md</p>
+      </div>
+      <div class="card" style="border-color: var(--purple-dim);">
+        <div style="font-size: 10px; color: var(--purple); font-weight: 700; margin-bottom: 4px;">L3</div>
+        <h3>필터링</h3>
+        <p>domain/tag indexes</p>
+      </div>
+      <div class="card" style="border-color: var(--amber-dim);">
+        <div style="font-size: 10px; color: var(--amber); font-weight: 700; margin-bottom: 4px;">L4</div>
+        <h3>상세</h3>
+        <p>pages/*.md</p>
+      </div>
+    </div>
+    <button class="more-btn" onclick="showMore('exposure')">기술적 내용 보기</button>
+  </div>
+
+  <!-- Slide 12: Challenges -->
+  <div class="slide" data-slide="11">
+    <div class="slide-label">현재 과제</div>
+    <h2>개선 방향</h2>
+    <div class="content-grid grid-3" style="max-width: 900px;">
+      <div class="card" style="border-color: var(--rose-dim);">
+        <div class="card-icon" style="background: var(--rose-dim); color: var(--rose);">🔴</div>
+        <h3>그래프 재활성화</h3>
+        <p>지식 간 연결 관계 복원 — 허브-스포크 구조</p>
+      </div>
+      <div class="card" style="border-color: var(--rose-dim);">
+        <div class="card-icon" style="background: var(--rose-dim); color: var(--rose);">🔴</div>
+        <h3>사용량 추적</h3>
+        <p>지식 접근 패턴 분석 — 사용자 행동 기반 최적화</p>
+      </div>
+      <div class="card" style="border-color: var(--amber-dim);">
+        <div class="card-icon" style="background: var(--amber-dim); color: var(--amber);">🟡</div>
+        <h3>점수 균일화</h3>
+        <p>중요도 스케일 세분화 — 더 정밀한 우선순위</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 13: Thank You -->
+  <div class="slide slide-cover" data-slide="12">
+    <div class="slide-label">Thank You</div>
+    <h1 style="font-size: 48px;">세미나 완료</h1>
+    <p class="subtitle" style="margin-top: 16px;">
+      📎 자료: <code>docs/seminar.md</code><br>
+      🌐 GitHub: <code>pheanor-agent.github.io/knowledge-system</code>
+    </p>
+    <div class="cover-meta" style="margin-top: 32px;">
+      <span><span class="dot"></span>Hermes Agent</span>
+      <span><span class="dot"></span>2026.06.04</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- More Content Overlay -->
+<div class="more-overlay" id="moreOverlay" onclick="hideMore()">
+  <div class="more-content" id="moreContent" onclick="event.stopPropagation()">
+    <button class="more-close" onclick="hideMore()">×</button>
+    <div id="moreBody"></div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()" aria-label="Previous">‹</button>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="nav-counter" id="navCounter">1 / 13</span>
+  <button onclick="nextSlide()" aria-label="Next">›</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const dotsContainer = document.getElementById('navDots');
+  const counter = document.getElementById('navCounter');
+
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dotsContainer.children[current].classList.remove('active');
+    current = ((n % total) + total) % total;
+    slides[current].classList.add('active');
+    dotsContainer.children[current].classList.add('active');
+    counter.textContent = `${current + 1} / ${total}`;
+  }
+
+  function nextSlide() { goTo(current + 1); }
+  function prevSlide() { goTo(current - 1); }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+    if (e.key >= '1' && e.key <= '9') { goTo(parseInt(e.key) - 1); }
+    if (e.key === '0') { goTo(total - 1); }
+    if (e.key === 'Escape') { hideMore(); }
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(diff) > 60) { diff < 0 ? nextSlide() : prevSlide(); }
+  });
+
+  const moreData = {
+    tech: `
+      <h3>AI 기술 3층위</h3>
+      <p><strong>모델 학습 (Layer 1)</strong></p>
+      <p>LLM은 수조 토큰으로 pre-training되어 세계 지식을 학습합니다. 하지만 이는 '일반 지식'에 불과합니다.</p>
+      <p><strong>에이전트 메모리 (Layer 2)</strong></p>
+      <p>에이전트가 작업 중 발생하는 지식을 '저장·검색·분류'하는 시스템입니다. 오늘 세미나의 핵심 주제입니다.</p>
+      <p><strong>RAG (Layer 3)</strong></p>
+      <p>외부 지식을 검색해서 답변을 생성하는 방식입니다. 메모리 시스템이 기반이 되어야 효과적으로 동작합니다.</p>
+    `,
+    overview: `
+      <h3>시스템 개요</h3>
+      <p><strong>3계층 구조 (Karpathy)</strong></p>
+      <p>L1: Raw Sources — 불변 원본 데이터 (append-only)</p>
+      <p>L2: Wiki — LLM이 가공한 구조화된 지식 (CRUD 가능)</p>
+      <p>L3: Schema — 규칙 정의와 메타데이터 체계</p>
+      <p><strong>10개 도메인</strong></p>
+      <p>agent, system, memory, session, knowledge, novel, image, reference, devops, general</p>
+      <p><strong>3단계 중요도</strong></p>
+      <p>T1: 핵심 (항상 노출) · T2: 일상 (상황별) · T3: 참고 (명시적 요청)</p>
+    `,
+    arch: `
+      <h3>아키텍처 상세</h3>
+      <p><strong>L1: Raw Sources</strong></p>
+      <p>OpenClaw Memory · Hermes Sessions · JOB Files · External Refs</p>
+      <p>불변 원본 · append-only · source: 필드만 참조</p>
+      <p><strong>L2: Wiki Pages</strong></p>
+      <p>3,651 페이지 · T1/T2/T3 분류 · tags/domain 메타데이터 · index.md 카탈로그</p>
+      <p><strong>L3: Schema</strong></p>
+      <p>SCHEMA.md 구조 정의 · 프론트매터 스키마 · AGENTS.md 진입점 규칙</p>
+    `,
+    pipeline: `
+      <h3>파이프라인 상세</h3>
+      <p><strong>자동화 스케줄</strong></p>
+      <p>sync-all: 04:00 (매일) · fetch: 06:00, 18:00 · synthesis: 10:00</p>
+      <p><strong>가공률</strong></p>
+      <p>OpenClaw Memory: 99.6% · Hermes Sessions: 95.1% · JOB Files: 100% · External Refs: 100%</p>
+      <p><strong>점수 계산</strong></p>
+      <p>score = (0.3 × priority) + (0.2 × recency) + (0.3 × usage) + (0.1 × hub)</p>
+    `,
+    priority: `
+      <h3>중요도 점수</h3>
+      <p><strong>T1 Core (≥0.7)</strong></p>
+      <p>272 페이지 · 항상 노출 · 에이전트 핵심 작업에 필수</p>
+      <p><strong>T2 Working (0.4-0.7)</strong></p>
+      <p>2,123 페이지 · 상황에 따라 노출 · 주기적으로 참조</p>
+      <p><strong>T3 Reference (<0.4)</strong></p>
+      <p>1,256 페이지 · 명시적 요청 시 제공 · 보조 정보</p>
+    `,
+    domains: `
+      <h3>도메인별 분포</h3>
+      <p>🤖 agent: 1,029 · ⚙️ system: 786 · 📋 general: 744</p>
+      <p>🖼️ image: 258 · 🧠 memory: 254 · 💬 session: 204</p>
+      <p>📖 novel: 129 · 📚 knowledge: 122 · 📎 reference: 35 · 🔧 devops: 33</p>
+    `,
+    exposure: `
+      <h3>노출 구조</h3>
+      <p><strong>L1: 진입점 정의</strong></p>
+      <p>knowledge-navigation 스킬 기반 진입점 + 탐색 워크플로우</p>
+      <p><strong>L2: 메인 카탈로그</strong></p>
+      <p>wiki/index.md — T1/T2/T3 분류 · 75KB · 1,764개 노출 (48.5%)</p>
+      <p><strong>L3: 필터링</strong></p>
+      <p>16 domain + 30 tag index 파일</p>
+      <p><strong>L4: 상세 페이지</strong></p>
+      <p>3,651 페이지 · 프론트매터 + 본문</p>
+    `
+  };
+
+  function showMore(key) {
+    document.getElementById('moreBody').innerHTML = moreData[key];
+    document.getElementById('moreOverlay').classList.add('active');
+  }
+
+  function hideMore() {
+    document.getElementById('moreOverlay').classList.remove('active');
+  }
+</script>
+
+</body>
+</html>
