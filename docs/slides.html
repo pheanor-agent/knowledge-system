@@ -12,7 +12,6 @@
     --bg-card: rgba(255,255,255,0.03);
     --bg-card-hover: rgba(255,255,255,0.06);
     --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(255,255,255,0.15);
     --text: #e4e4e7;
     --text-dim: #71717a;
     --text-bright: #fafafa;
@@ -52,12 +51,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding: 60px 80px;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
     pointer-events: none;
-    overflow-y: auto;
+    overflow: hidden;
   }
 
   .slide.active {
@@ -66,58 +66,55 @@
     pointer-events: all;
   }
 
-  /* Typography */
   .slide-label {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     opacity: 0.8;
   }
 
   h1 {
-    font-size: 56px;
+    font-size: 48px;
     font-weight: 800;
     line-height: 1.1;
     color: var(--text-bright);
-    margin-bottom: 16px;
-    letter-spacing: -1.5px;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+    text-align: center;
   }
 
   h2 {
-    font-size: 42px;
+    font-size: 36px;
     font-weight: 700;
     line-height: 1.15;
     color: var(--text-bright);
-    margin-bottom: 40px;
-    letter-spacing: -1px;
+    margin-bottom: 28px;
+    letter-spacing: -0.5px;
+    text-align: center;
   }
 
   h3 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     color: var(--text-bright);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   .subtitle {
-    font-size: 20px;
+    font-size: 18px;
     color: var(--text-dim);
     font-weight: 400;
     line-height: 1.6;
     max-width: 700px;
+    text-align: center;
   }
 
-  /* Cover slide */
-  .slide-cover {
-    align-items: flex-start;
-    justify-content: center;
-  }
-
+  /* Cover */
   .slide-cover h1 {
-    font-size: 72px;
+    font-size: 56px;
     background: linear-gradient(135deg, var(--accent), var(--purple));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -125,10 +122,10 @@
   }
 
   .cover-meta {
-    margin-top: 48px;
+    margin-top: 32px;
     display: flex;
-    gap: 40px;
-    font-size: 14px;
+    gap: 32px;
+    font-size: 13px;
     color: var(--text-dim);
   }
 
@@ -147,8 +144,10 @@
   /* Content layout */
   .content-grid {
     display: grid;
-    gap: 24px;
-    margin-top: 16px;
+    gap: 16px;
+    margin-top: 12px;
+    width: 100%;
+    max-width: 1100px;
   }
 
   .grid-2 { grid-template-columns: 1fr 1fr; }
@@ -159,49 +158,48 @@
   .card {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
+    border-radius: 14px;
+    padding: 20px;
     transition: all 0.2s ease;
   }
 
   .card:hover {
     background: var(--bg-card-hover);
-    border-color: var(--border-hover);
     transform: translateY(-2px);
   }
 
   .card-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
+    width: 36px; height: 36px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
-    margin-bottom: 16px;
+    font-size: 16px;
+    margin-bottom: 12px;
     font-weight: 700;
   }
 
-  .card h3 { font-size: 16px; margin-bottom: 8px; }
-  .card p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+  .card h3 { font-size: 14px; margin-bottom: 6px; }
+  .card p { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
 
   /* Stat cards */
   .stat {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
+    border-radius: 14px;
+    padding: 20px;
     text-align: center;
   }
 
   .stat-value {
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 800;
     font-family: 'JetBrains Mono', monospace;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 
   .stat-label {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-dim);
     font-weight: 500;
   }
@@ -215,22 +213,22 @@
   .table-wrap {
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: 14px;
     overflow: hidden;
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   thead th {
     text-align: left;
-    padding: 14px 20px;
+    padding: 10px 16px;
     font-weight: 600;
     color: var(--text-dim);
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     border-bottom: 1px solid var(--border);
@@ -238,10 +236,10 @@
   }
 
   tbody td {
-    padding: 12px 20px;
+    padding: 8px 16px;
     border-bottom: 1px solid rgba(255,255,255,0.04);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   tbody tr:last-child td { border-bottom: none; }
@@ -251,10 +249,9 @@
   .badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 16px;
+    font-size: 11px;
     font-weight: 600;
     font-family: 'JetBrains Mono', monospace;
   }
@@ -263,30 +260,29 @@
   .badge-t2 { background: var(--green-dim); color: var(--green); }
   .badge-t3 { background: var(--purple-dim); color: var(--purple); }
   .badge-ok { background: var(--green-dim); color: var(--green); }
-  .badge-warn { background: var(--amber-dim); color: var(--amber); }
   .badge-err { background: var(--rose-dim); color: var(--rose); }
 
-  /* Code / Monospace */
+  /* Code */
   code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
+    font-size: 12px;
     background: rgba(255,255,255,0.05);
-    padding: 2px 8px;
-    border-radius: 6px;
+    padding: 2px 6px;
+    border-radius: 5px;
     color: var(--accent);
   }
 
   .code-block {
     background: rgba(0,0,0,0.4);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 24px;
+    border-radius: 10px;
+    padding: 14px 18px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    line-height: 1.8;
+    font-size: 12px;
+    line-height: 1.7;
     color: var(--text);
     overflow-x: auto;
-    margin: 16px 0;
+    margin: 12px 0;
   }
 
   .code-block .comment { color: var(--text-dim); }
@@ -294,90 +290,202 @@
   .code-block .string { color: var(--green); }
   .code-block .number { color: var(--amber); }
 
+  /* Tier visual */
+  .tier-visual {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    height: 50px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 12px 0;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .tier-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.6);
+  }
+
+  /* Flow */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flow-node {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .flow-arrow {
+    color: var(--text-dim);
+    font-size: 18px;
+    opacity: 0.4;
+  }
+
+  /* Domain list */
+  .domain-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px;
+  }
+
+  .domain-item:last-child { border-bottom: none; }
+
+  .domain-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
   /* Progress bar */
   .progress-bar {
     width: 100%;
-    height: 6px;
+    height: 4px;
     background: rgba(255,255,255,0.06);
-    border-radius: 3px;
+    border-radius: 2px;
     overflow: hidden;
-    margin-top: 8px;
+    margin-top: 4px;
   }
 
   .progress-fill {
     height: 100%;
-    border-radius: 3px;
-    transition: width 0.8s ease;
+    border-radius: 2px;
   }
 
-  /* Timeline */
-  .timeline {
-    display: flex;
-    gap: 0;
-    margin-top: 24px;
-    position: relative;
+  /* Quote */
+  .quote {
+    border-left: 2px solid var(--accent);
+    padding: 12px 18px;
+    margin: 12px 0;
+    background: rgba(34,211,238,0.03);
+    border-radius: 0 10px 10px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
   }
 
-  .timeline::before {
-    content: '';
-    position: absolute;
-    top: 20px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--border);
-  }
-
-  .timeline-step {
-    flex: 1;
-    text-align: center;
-    position: relative;
-  }
-
-  .timeline-dot {
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    border: 2px solid var(--accent);
-    background: var(--bg);
-    margin: 13px auto 12px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .timeline-step.active .timeline-dot {
-    background: var(--accent);
-    box-shadow: 0 0 12px var(--accent-dim);
-  }
-
-  .timeline-label {
+  .quote-author {
     font-size: 11px;
-    font-weight: 600;
     color: var(--text-dim);
+    margin-top: 6px;
   }
 
-  .timeline-time {
-    font-size: 10px;
+  /* Two column */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  /* Ice breaker */
+  .icebreaker {
+    max-width: 800px;
+    text-align: center;
+  }
+
+  .icebreaker .scenario {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 28px;
+    margin: 16px 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .icebreaker .question {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--amber);
+    margin: 16px 0;
+  }
+
+  /* 3-layer AI */
+  .layer-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .layer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .layer-highlight {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    box-shadow: 0 0 20px var(--accent-dim);
+  }
+
+  .layer-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .layer-content h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .layer-content p {
+    font-size: 12px;
     color: var(--text-dim);
-    font-family: 'JetBrains Mono', monospace;
-    margin-top: 2px;
-    opacity: 0.6;
   }
 
   /* Navigation */
   .nav {
     position: fixed;
-    bottom: 32px;
+    bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     z-index: 100;
     background: rgba(10,10,15,0.85);
     backdrop-filter: blur(16px);
     border: 1px solid var(--border);
     border-radius: 100px;
-    padding: 10px 24px;
+    padding: 8px 20px;
   }
 
   .nav button {
@@ -385,15 +493,15 @@
     border: none;
     color: var(--text-dim);
     cursor: pointer;
-    font-size: 18px;
-    padding: 8px;
+    font-size: 16px;
+    padding: 6px;
     border-radius: 50%;
     transition: all 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
 
   .nav button:hover {
@@ -403,19 +511,19 @@
 
   .nav-counter {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-dim);
-    min-width: 60px;
+    min-width: 50px;
     text-align: center;
   }
 
   .nav-dots {
     display: flex;
-    gap: 4px;
+    gap: 3px;
   }
 
   .nav-dot {
-    width: 6px; height: 6px;
+    width: 5px; height: 5px;
     border-radius: 3px;
     background: rgba(255,255,255,0.12);
     transition: all 0.2s ease;
@@ -424,137 +532,14 @@
 
   .nav-dot.active {
     background: var(--accent);
-    width: 20px;
+    width: 16px;
   }
 
-  /* Tier distribution visual */
-  .tier-visual {
-    display: flex;
-    align-items: stretch;
-    gap: 2px;
-    height: 60px;
-    border-radius: 8px;
-    overflow: hidden;
-    margin: 16px 0;
-  }
-
-  .tier-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    color: rgba(0,0,0,0.6);
-    transition: all 0.3s ease;
-  }
-
-  /* Flow diagram */
-  .flow {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 24px 0;
-  }
-
-  .flow-node {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 24px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .flow-arrow {
-    color: var(--text-dim);
-    font-size: 20px;
-    opacity: 0.4;
-  }
-
-  /* Domain list */
-  .domain-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 14px;
-  }
-
-  .domain-item:last-child { border-bottom: none; }
-
-  .domain-count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: 600;
-  }
-
-  /* Quote */
-  .quote {
-    border-left: 2px solid var(--accent);
-    padding: 16px 24px;
-    margin: 16px 0;
-    background: rgba(34,211,238,0.03);
-    border-radius: 0 12px 12px 0;
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--text);
-  }
-
-  .quote-author {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 8px;
-  }
-
-  /* Section divider */
-  .divider {
-    width: 40px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--purple));
-    border-radius: 2px;
-    margin-bottom: 24px;
-  }
-
-  /* Two column layout */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: start;
-  }
-
-  /* Scrollable content area */
-  .slide-content {
-    max-width: 1200px;
-    width: 100%;
-  }
-
-  /* Animations */
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .slide.active .animate {
-    animation: fadeInUp 0.5s ease forwards;
-  }
-
-  .slide.active .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
-  .slide.active .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
-  .slide.active .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
-  .slide.active .animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
-  .slide.active .animate-delay-5 { animation-delay: 0.5s; opacity: 0; }
-
-  /* Keyboard hint */
   .key-hint {
     position: fixed;
-    top: 24px;
-    right: 32px;
-    font-size: 11px;
+    top: 18px;
+    right: 24px;
+    font-size: 10px;
     color: var(--text-dim);
     opacity: 0.4;
     font-family: 'JetBrains Mono', monospace;
@@ -564,471 +549,311 @@
   .key-hint kbd {
     background: rgba(255,255,255,0.06);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2px 6px;
+    border-radius: 3px;
+    padding: 1px 5px;
     font-family: inherit;
-    font-size: 10px;
+    font-size: 9px;
   }
 </style>
 </head>
 <body>
 
 <div class="key-hint">
-  <kbd>←</kbd> <kbd>→</kbd> or <kbd>Space</kbd> to navigate
+  <kbd>←</kbd> <kbd>→</kbd> or <kbd>Space</kbd>
 </div>
 
 <div class="slides" id="slides">
 
   <!-- Slide 1: Cover -->
   <div class="slide slide-cover active" data-slide="0">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">Hermes Agent</div>
-      <h1 class="animate animate-delay-2">지식 시스템</h1>
-      <p class="subtitle animate animate-delay-3">
-        Karpathy 3계층 구조 기반 개인 AI 에이전트 지식 관리 시스템<br>
-        3,651 페이지 · 10 도메인 · 7 Tier 분류
-      </p>
-      <div class="cover-meta animate animate-delay-4">
-        <span><span class="dot"></span>2026.06.04</span>
-        <span><span class="dot"></span>에르메스</span>
-        <span><span class="dot"></span>내부 세미나</span>
-      </div>
+    <div class="slide-label">Hermes Agent</div>
+    <h1>지식 시스템</h1>
+    <p class="subtitle">
+      AI 에이전트가 지식을 관리하는 방식<br>
+      3,651 페이지 · 10 도메인 · 3 Tier 분류
+    </p>
+    <div class="cover-meta">
+      <span><span class="dot"></span>2026.06.04</span>
+      <span><span class="dot"></span>에르메스</span>
     </div>
   </div>
 
-  <!-- Slide 2: Overview -->
+  <!-- Slide 2: Ice Breaker -->
   <div class="slide" data-slide="1">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">01 / Overview</div>
-      <h2 class="animate animate-delay-2">지식 시스템 개요</h2>
-      <div class="content-grid grid-4 animate animate-delay-3">
-        <div class="stat stat-accent">
-          <div class="stat-value">3,651</div>
-          <div class="stat-label">Wiki Pages</div>
-        </div>
-        <div class="stat stat-green">
-          <div class="stat-value">10</div>
-          <div class="stat-label">Domains</div>
-        </div>
-        <div class="stat stat-purple">
-          <div class="stat-value">30</div>
-          <div class="stat-label">Tag Indexes</div>
-        </div>
-        <div class="stat stat-amber">
-          <div class="stat-value">578</div>
-          <div class="stat-label">Jobs</div>
-        </div>
+    <div class="slide-label">도입</div>
+    <h2>신입 사원,业务知识 어떻게 관리할까?</h2>
+    <div class="icebreaker">
+      <div class="scenario">
+        대기업에 입사한 신입 사원.<br>
+        매뉴얼 500페이지, 이전 직원 노트 200건, 미팅록 100건.<br>
+        <strong>"무엇부터 보며, 어떻게 정리하지?"</strong>
       </div>
-      <div class="quote animate animate-delay-4" style="margin-top: 32px;">
-        Karpathy 3계층 구조를 기반으로 원본 데이터를 수집 → LLM이 가공 → 구조화된 지식을 제공하는 엔드투엔드 파이프라인
-        <div class="quote-author">설계 원칙 — JOB-1394/1451/1490</div>
-      </div>
+      <div class="question">→ AI 에이전트도 똑같은 문제에 직면합니다</div>
     </div>
   </div>
 
-  <!-- Slide 3: 3-Layer Architecture -->
+  <!-- Slide 3: AI 3-Layer -->
   <div class="slide" data-slide="2">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">02 / Architecture</div>
-      <h2 class="animate animate-delay-2">Karpathy 3계층 구조</h2>
-      <div class="flow animate animate-delay-3">
-        <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">
-          L1: Raw Sources<br><span style="font-size:11px; color: var(--text-dim);">불변 원본 · append-only</span>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node" style="border-color: var(--green); color: var(--green);">
-          L2: Wiki<br><span style="font-size:11px; color: var(--text-dim);">LLM 가공 · CRUD 가능</span>
-        </div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">
-          L3: Schema<br><span style="font-size:11px; color: var(--text-dim);">규칙 정의 · 변경 통제</span>
+    <div class="slide-label">AI 기술 3층위</div>
+    <h2>AI가 지식을 다루는 3단계</h2>
+    <div class="layer-visual">
+      <div class="layer">
+        <div class="layer-num" style="background: var(--purple-dim); color: var(--purple);">1</div>
+        <div class="layer-content">
+          <h3 style="color: var(--purple);">모델 학습</h3>
+          <p>LLM이 세계 지식을 ' یادگیری' — 수조 토큰으로 pre-training</p>
         </div>
       </div>
-      <div class="content-grid grid-3 animate animate-delay-4">
-        <div class="card">
-          <div class="card-icon" style="background: var(--purple-dim); color: var(--purple);">📁</div>
-          <h3>Raw Sources</h3>
-          <p>OpenClaw Memory 260 · Hermes Sessions 204 · JOB Files 578 · External Refs 172</p>
+      <div class="layer layer-highlight">
+        <div class="layer-num" style="background: var(--accent-dim); color: var(--accent);">2</div>
+        <div class="layer-content">
+          <h3 style="color: var(--accent);">에이전트 메모리 ← 오늘 주제</h3>
+          <p>에이전트가 작업 지식을 '저장·검색·분류' — 오늘 다룰 내용</p>
         </div>
-        <div class="card">
-          <div class="card-icon" style="background: var(--green-dim); color: var(--green);">📄</div>
-          <h3>Wiki Pages</h3>
-          <p>3,651 페이지 · T1/T2/T3 분류 · tags/domain 메타데이터 · index.md 카탈로그</p>
-        </div>
-        <div class="card">
-          <div class="card-icon" style="background: var(--accent-dim); color: var(--accent);">📐</div>
-          <h3>Schema</h3>
-          <p>SCHEMA.md 구조 정의 · 프론트매터 스키마 · AGENTS.md 진입점 규칙</p>
+      </div>
+      <div class="layer">
+        <div class="layer-num" style="background: var(--green-dim); color: var(--green);">3</div>
+        <div class="layer-content">
+          <h3 style="color: var(--green);">RAG (검색+생성)</h3>
+          <p>외부 지식을 검색해서 답변 '활용' — 메모리 시스템이 기반</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Slide 4: Data Flow -->
+  <!-- Slide 4: Transition -->
   <div class="slide" data-slide="3">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">03 / Data Flow</div>
-      <h2 class="animate animate-delay-2">데이터 파이프라인</h2>
-      <div class="timeline animate animate-delay-3">
-        <div class="timeline-step active">
-          <div class="timeline-label">원본 수집</div>
-          <div class="timeline-dot"></div>
-          <div class="timeline-time">fetch.sh</div>
-        </div>
-        <div class="timeline-step active">
-          <div class="timeline-label">메타데이터</div>
-          <div class="timeline-dot"></div>
-          <div class="timeline-time">04:00</div>
-        </div>
-        <div class="timeline-step active">
-          <div class="timeline-label">그래프</div>
-          <div class="timeline-dot"></div>
-          <div class="timeline-time">graph</div>
-        </div>
-        <div class="timeline-step active">
-          <div class="timeline-label">점수 계산</div>
-          <div class="timeline-dot"></div>
-          <div class="timeline-time">scores</div>
-        </div>
-        <div class="timeline-step active">
-          <div class="timeline-label">Index</div>
-          <div class="timeline-dot"></div>
-          <div class="timeline-time">expose</div>
-        </div>
-        <div class="timeline-step">
-          <div class="timeline-label">LLM 소비</div>
-          <div class="timeline-dot"></div>
-          <div class="timeline-time">agent</div>
-        </div>
+    <div class="slide-label">본론</div>
+    <h2>에이전트 메모리,<br>왜 중요한가요?</h2>
+    <div class="icebreaker">
+      <div class="scenario">
+        모델 학습은 끝났습니다. 수조 토큰으로 훈련된 LLM.<br>
+        하지만 <strong>"내 프로젝트는?"</strong> <strong>"어제 한 작업은?"</strong><br>
+        이걸 기억하려면 <strong>에이전트 메모리</strong>가 필요합니다.
       </div>
-      <div class="two-col animate animate-delay-4">
-        <div>
-          <h3 style="color: var(--amber); margin-bottom: 12px;">⏰ 자동화 스케줄</h3>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>작업</th><th>스케줄</th><th>상태</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>sync-all</td><td>04:00</td><td><span class="badge badge-ok">✓</span></td></tr>
-                <tr><td>fetch</td><td>06:00, 18:00</td><td><span class="badge badge-ok">✓</span></td></tr>
-                <tr><td>synthesis</td><td>10:00</td><td><span class="badge badge-ok">✓</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div>
-          <h3 style="color: var(--green); margin-bottom: 12px;">📊 가공률</h3>
-          <div class="domain-item">
-            <span>OpenClaw Memory</span>
-            <span class="domain-count" style="color: var(--green);">99.6%</span>
-          </div>
-          <div class="domain-item">
-            <span>Hermes Sessions</span>
-            <span class="domain-count" style="color: var(--green);">95.1%</span>
-          </div>
-          <div class="domain-item">
-            <span>JOB Files</span>
-            <span class="domain-count" style="color: var(--green);">100%</span>
-          </div>
-          <div class="domain-item">
-            <span>External Refs</span>
-            <span class="domain-count" style="color: var(--green);">100%</span>
-          </div>
-        </div>
-      </div>
+      <div class="question">→ 지식 시스템은 AI의 '외부 뇌'입니다</div>
     </div>
   </div>
 
-  <!-- Slide 5: Tier Distribution -->
+  <!-- Slide 5: Overview -->
   <div class="slide" data-slide="4">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">04 / Priority</div>
-      <h2 class="animate animate-delay-2">중요도 분포</h2>
-      <div class="tier-visual animate animate-delay-2">
-        <div class="tier-bar" style="width: 7.4%; background: var(--accent);">7.4%</div>
-        <div class="tier-bar" style="width: 58.1%; background: var(--green);">58.1%</div>
-        <div class="tier-bar" style="width: 34.4%; background: var(--purple);">34.4%</div>
+    <div class="slide-label">01 / Overview</div>
+    <h2>지식 시스템 개요</h2>
+    <div class="content-grid grid-4" style="max-width: 900px;">
+      <div class="stat stat-accent">
+        <div class="stat-value">3,651</div>
+        <div class="stat-label">Wiki Pages</div>
       </div>
-      <div class="content-grid grid-3 animate animate-delay-3">
-        <div class="stat stat-accent">
-          <div class="stat-value">272</div>
-          <div class="stat-label">T1 Core (≥0.7)</div>
-          <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">항상 노출</div>
-        </div>
-        <div class="stat stat-green">
-          <div class="stat-value">2,123</div>
-          <div class="stat-label">T2 Working (0.4-0.7)</div>
-          <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">컨텍스트 기반</div>
-        </div>
-        <div class="stat stat-purple">
-          <div class="stat-value">1,256</div>
-          <div class="stat-label">T3 Reference (<0.4)</div>
-          <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">명시적 요청 시</div>
-        </div>
+      <div class="stat stat-green">
+        <div class="stat-value">10</div>
+        <div class="stat-label">Domains</div>
       </div>
-      <div class="code-block animate animate-delay-4">
-<span class="comment"># 점수 계산 공식</span>
-score = (<span class="number">0.3</span> × priority) + (<span class="number">0.2</span> × recency) + (<span class="number">0.3</span> × usage) + (<span class="number">0.1</span> × hub)
-score = score × recency_decay  <span class="comment"># 90일+ & usage=0 → 0.3</span>
+      <div class="stat stat-purple">
+        <div class="stat-value">30</div>
+        <div class="stat-label">Tag Indexes</div>
+      </div>
+      <div class="stat stat-amber">
+        <div class="stat-value">578</div>
+        <div class="stat-label">Jobs</div>
       </div>
     </div>
   </div>
 
-  <!-- Slide 6: Domain Distribution -->
+  <!-- Slide 6: 3-Layer Architecture -->
   <div class="slide" data-slide="5">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">05 / Domains</div>
-      <h2 class="animate animate-delay-2">도메인별 분포</h2>
-      <div class="two-col animate animate-delay-3">
-        <div>
-          <div class="domain-item">
-            <span>🤖 agent</span>
-            <span class="domain-count">1,029</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 100%; background: var(--accent);"></div></div>
-
-          <div class="domain-item">
-            <span>⚙️ system</span>
-            <span class="domain-count">786</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 76%; background: var(--green);"></div></div>
-
-          <div class="domain-item">
-            <span>📋 general</span>
-            <span class="domain-count">744</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 72%; background: var(--purple);"></div></div>
-
-          <div class="domain-item">
-            <span>🖼️ image</span>
-            <span class="domain-count">258</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 25%; background: var(--amber);"></div></div>
-
-          <div class="domain-item">
-            <span>🧠 memory</span>
-            <span class="domain-count">254</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 25%; background: var(--rose);"></div></div>
-        </div>
-        <div>
-          <div class="domain-item">
-            <span>💬 session</span>
-            <span class="domain-count">204</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 20%; background: var(--accent);"></div></div>
-
-          <div class="domain-item">
-            <span>📖 novel</span>
-            <span class="domain-count">129</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 12%; background: var(--green);"></div></div>
-
-          <div class="domain-item">
-            <span>📚 knowledge</span>
-            <span class="domain-count">122</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 12%; background: var(--purple);"></div></div>
-
-          <div class="domain-item">
-            <span>📎 reference</span>
-            <span class="domain-count">35</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 3%; background: var(--amber);"></div></div>
-
-          <div class="domain-item">
-            <span>🔧 devops</span>
-            <span class="domain-count">33</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width: 3%; background: var(--rose);"></div></div>
-        </div>
+    <div class="slide-label">02 / Architecture</div>
+    <h2>Karpathy 3계층 구조</h2>
+    <div class="flow">
+      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">
+        L1: Raw Sources<br><span style="font-size:10px; color: var(--text-dim);">불변 원본</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--green); color: var(--green);">
+        L2: Wiki<br><span style="font-size:10px; color: var(--text-dim);">LLM 가공</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">
+        L3: Schema<br><span style="font-size:10px; color: var(--text-dim);">규칙 정의</span>
+      </div>
+    </div>
+    <div class="content-grid grid-3" style="max-width: 900px;">
+      <div class="card">
+        <div class="card-icon" style="background: var(--purple-dim); color: var(--purple);">📁</div>
+        <h3>Raw Sources</h3>
+        <p>Memory 260 · Sessions 204 · Jobs 578</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--green-dim); color: var(--green);">📄</div>
+        <h3>Wiki Pages</h3>
+        <p>3,651 페이지 · T1/T2/T3 분류</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: var(--accent-dim); color: var(--accent);">📐</div>
+        <h3>Schema</h3>
+        <p>구조 정의 · 프론트매터 스키마</p>
       </div>
     </div>
   </div>
 
-  <!-- Slide 7: Index Structure -->
+  <!-- Slide 7: Data Pipeline -->
   <div class="slide" data-slide="6">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">06 / Exposure</div>
-      <h2 class="animate animate-delay-2">노출 구조</h2>
-      <p class="subtitle animate animate-delay-2" style="margin-bottom: 32px;">
-        LLM이 계층적으로 컨텍스트를 로드하는 구조 — 한 번에 1-2KB만
-      </p>
-      <div class="content-grid grid-4 animate animate-delay-3">
-        <div class="card" style="border-color: var(--accent-dim);">
-          <div style="font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 8px;">L1 — 진입점 정의</div>
-          <h3>knowledge-navigation</h3>
-          <p>스크일 기반 진입점 + 탐색 워크플로우 정의</p>
-        </div>
-        <div class="card" style="border-color: var(--green-dim);">
-          <div style="font-size: 11px; color: var(--green); font-weight: 700; margin-bottom: 8px;">L2 — 메인 카탈로그</div>
-          <h3>wiki/index.md</h3>
-          <p>T1/T2/T3 분류 · 75KB · 1,764개 노출 (48.5%)</p>
-        </div>
-        <div class="card" style="border-color: var(--purple-dim);">
-          <div style="font-size: 11px; color: var(--purple); font-weight: 700; margin-bottom: 8px;">L3 — 필터링</div>
-          <h3>domain/tag indexes</h3>
-          <p>16 domain + 30 tag index 파일</p>
-        </div>
-        <div class="card" style="border-color: var(--amber-dim);">
-          <div style="font-size: 11px; color: var(--amber); font-weight: 700; margin-bottom: 8px;">L4 — 상세 페이지</div>
-          <h3>pages/*.md</h3>
-          <p>3,651 페이지 · 프론트매터 + 본문</p>
+    <div class="slide-label">03 / Pipeline</div>
+    <h2>데이터 파이프라인</h2>
+    <div class="flow">
+      <div class="flow-node" style="border-color: var(--amber); color: var(--amber);">수집</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">메타데이터</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--green); color: var(--green);">점수 계산</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">노출</div>
+    </div>
+    <div class="two-col">
+      <div>
+        <h3 style="color: var(--amber); margin-bottom: 8px; font-size: 14px;">⏰ 자동화</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>작업</th><th>스케줄</th><th>상태</th></tr></thead>
+            <tbody>
+              <tr><td>sync-all</td><td>04:00</td><td><span class="badge badge-ok">✓</span></td></tr>
+              <tr><td>fetch</td><td>06/18</td><td><span class="badge badge-ok">✓</span></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <div class="flow animate animate-delay-4" style="margin-top: 32px;">
-        <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">index.md</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node" style="border-color: var(--green); color: var(--green);">T1 Core 확인</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">domain/tag 필터</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node" style="border-color: var(--amber); color: var(--amber);">pages/*.md 읽기</div>
+      <div>
+        <h3 style="color: var(--green); margin-bottom: 8px; font-size: 14px;">📊 가공률</h3>
+        <div class="domain-item"><span>Memory</span><span class="domain-count" style="color: var(--green);">99.6%</span></div>
+        <div class="domain-item"><span>Sessions</span><span class="domain-count" style="color: var(--green);">95.1%</span></div>
+        <div class="domain-item"><span>Jobs</span><span class="domain-count" style="color: var(--green);">100%</span></div>
       </div>
     </div>
   </div>
 
-  <!-- Slide 8: Challenges -->
+  <!-- Slide 8: Tier Distribution -->
   <div class="slide" data-slide="7">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">07 / Challenges</div>
-      <h2 class="animate animate-delay-2">현재 과제</h2>
-      <div class="content-grid grid-3 animate animate-delay-3">
-        <div class="card" style="border-color: var(--rose-dim);">
-          <div class="card-icon" style="background: var(--rose-dim); color: var(--rose);">🔴</div>
-          <h3>그래프 재활성화</h3>
-          <p>허브 54개 존재 but 에지 0개 — wikilinks 파싱 + 허브-스포크 연결 재구축 필요</p>
-          <div style="margin-top: 12px;"><span class="badge badge-err">P1</span></div>
-        </div>
-        <div class="card" style="border-color: var(--rose-dim);">
-          <div class="card-icon" style="background: var(--rose-dim); color: var(--rose);">🔴</div>
-          <h3>사용량 추적</h3>
-          <p>.usage.db SQLite 존재 but 0회 기록 — wiki 접근 시 counter hook 통합 필요</p>
-          <div style="margin-top: 12px;"><span class="badge badge-err">P1</span></div>
-        </div>
-        <div class="card" style="border-color: var(--amber-dim);">
-          <div class="card-icon" style="background: var(--amber-dim); color: var(--amber);">🟡</div>
-          <h3>점수 균일화</h3>
-          <p>0.34/0.54/0.74 이산값만 — 더 세분화된 스케일링 적용 필요</p>
-          <div style="margin-top: 12px;"><span class="badge badge-warn">P2</span></div>
-        </div>
+    <div class="slide-label">04 / Priority</div>
+    <h2>중요도 분포</h2>
+    <div class="tier-visual">
+      <div class="tier-bar" style="width: 7.4%; background: var(--accent);">7.4%</div>
+      <div class="tier-bar" style="width: 58.1%; background: var(--green);">58.1%</div>
+      <div class="tier-bar" style="width: 34.4%; background: var(--purple);">34.4%</div>
+    </div>
+    <div class="content-grid grid-3" style="max-width: 800px;">
+      <div class="stat stat-accent">
+        <div class="stat-value">272</div>
+        <div class="stat-label">T1 Core</div>
       </div>
-      <div class="table-wrap animate animate-delay-4" style="margin-top: 24px;">
-        <table>
-          <thead>
-            <tr><th>메트릭</th><th>값</th><th>상태</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Wiki Pages</td><td>3,651</td><td><span class="badge badge-ok">✓</span></td></tr>
-            <tr><td>Metadata 인덱싱</td><td>100%</td><td><span class="badge badge-ok">✓</span></td></tr>
-            <tr><td>Tags 부착률</td><td>92.8%</td><td><span class="badge badge-ok">✓</span></td></tr>
-            <tr><td>노출률</td><td>48.5%</td><td><span class="badge badge-ok">✓</span></td></tr>
-            <tr><td>평균 점수</td><td>0.463</td><td><span class="badge badge-warn">△</span></td></tr>
-            <tr><td>그래프 에지</td><td>0</td><td><span class="badge badge-err">✗</span></td></tr>
-            <tr><td>사용량 추적</td><td>0</td><td><span class="badge badge-err">✗</span></td></tr>
-          </tbody>
-        </table>
+      <div class="stat stat-green">
+        <div class="stat-value">2,123</div>
+        <div class="stat-label">T2 Working</div>
+      </div>
+      <div class="stat stat-purple">
+        <div class="stat-value">1,256</div>
+        <div class="stat-label">T3 Reference</div>
       </div>
     </div>
   </div>
 
-  <!-- Slide 9: Lessons -->
+  <!-- Slide 9: Domains -->
   <div class="slide" data-slide="8">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">08 / Lessons</div>
-      <h2 class="animate animate-delay-2">핵심 교훈</h2>
-      <div class="content-grid grid-2 animate animate-delay-3">
-        <div class="quote">
-          "추정치와 실제 파일 수가 최대 86% 차이. <code>find + wc</code>로 실측."
-          <div class="quote-author">JOB-1445 — 추정치 금지</div>
-        </div>
-        <div class="quote">
-          "원본은 절대 복사/이동/symlink 금지. <code>source:</code> 필드에 원본 경로만."
-          <div class="quote-author">JOB-1443 — 원본 직접 참조</div>
-        </div>
-        <div class="quote">
-          "process → graph → priority → health 순차 실행 필수. 시간 충돌 분석."
-          <div class="quote-author">JOB-1451 — cron 의존성</div>
-        </div>
-        <div class="quote">
-          "점수/tags/domain 계산만으로는 부족. <strong>노출 구조</strong>가 핵심."
-          <div class="quote-author">JOB-1460 — 계산 ≠ 노출</div>
-        </div>
-        <div class="quote">
-          "surrogate 감지는 <code>read_text()</code> 전에 <code>md.name</code>에서 확인."
-          <div class="quote-author">JOB-1447 — surrogate 문자</div>
-        </div>
-        <div class="quote">
-          "스크립트 존재 ≠ 자동화. <code>crontab -l</code>로 항상 확인."
-          <div class="quote-author">JOB-1497 — 자동화 검증</div>
-        </div>
+    <div class="slide-label">05 / Domains</div>
+    <h2>도메인별 분포</h2>
+    <div class="two-col" style="max-width: 800px;">
+      <div>
+        <div class="domain-item"><span>🤖 agent</span><span class="domain-count">1,029</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 100%; background: var(--accent);"></div></div>
+        <div class="domain-item"><span>⚙️ system</span><span class="domain-count">786</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 76%; background: var(--green);"></div></div>
+        <div class="domain-item"><span>📋 general</span><span class="domain-count">744</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 72%; background: var(--purple);"></div></div>
+        <div class="domain-item"><span>🖼️ image</span><span class="domain-count">258</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 25%; background: var(--amber);"></div></div>
+      </div>
+      <div>
+        <div class="domain-item"><span>🧠 memory</span><span class="domain-count">254</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 25%; background: var(--rose);"></div></div>
+        <div class="domain-item"><span>💬 session</span><span class="domain-count">204</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 20%; background: var(--accent);"></div></div>
+        <div class="domain-item"><span>📖 novel</span><span class="domain-count">129</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 12%; background: var(--green);"></div></div>
+        <div class="domain-item"><span>📚 knowledge</span><span class="domain-count">122</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width: 12%; background: var(--purple);"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- Slide 10: Tech Stack -->
+  <!-- Slide 10: Exposure -->
   <div class="slide" data-slide="9">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">09 / Tech Stack</div>
-      <h2 class="animate animate-delay-2">기술 스택</h2>
-      <div class="two-col animate animate-delay-3">
-        <div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>구성</th><th>도구</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>검색</td><td>FTS5 (SQLite)</td></tr>
-                <tr><td>스크립트</td><td>Bash + Python</td></tr>
-                <tr><td>데이터</td><td>Markdown + JSON + SQLite</td></tr>
-                <tr><td>Cron</td><td>crontab + Hermes cronjob</td></tr>
-                <tr><td>LLM 가공</td><td>gpt-4o-mini</td></tr>
-                <tr><td>외부 수집</td><td>curl + blogwatcher-cli</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div>
-          <h3 style="margin-bottom: 12px; color: var(--accent);">프로젝트 정보</h3>
-          <div class="card" style="margin-bottom: 12px;">
-            <p style="font-size: 13px;">
-              <code>~/.hermes/workspace/projects/knowledge-system/</code>
-            </p>
-            <p style="margin-top: 8px; font-size: 12px; color: var(--text-dim);">
-              Spec-Driven 프로젝트 · 7개 Spec · Git 연동
-            </p>
-          </div>
-          <div class="card">
-            <p style="font-size: 13px;">
-              <code>~/.hermes/knowledge/</code>
-            </p>
-            <p style="margin-top: 8px; font-size: 12px; color: var(--text-dim);">
-              runtime 지식 시스템 · processed/wiki/ · pipeline/
-            </p>
-          </div>
-        </div>
+    <div class="slide-label">06 / Exposure</div>
+    <h2>LLM이 지식을 찾는 길</h2>
+    <div class="flow">
+      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">index.md</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--green); color: var(--green);">T1 Core</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">domain/tag</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color: var(--amber); color: var(--amber);">pages/*.md</div>
+    </div>
+    <div class="content-grid grid-4" style="max-width: 900px;">
+      <div class="card" style="border-color: var(--accent-dim);">
+        <div style="font-size: 10px; color: var(--accent); font-weight: 700; margin-bottom: 4px;">L1</div>
+        <h3>진입점 정의</h3>
+        <p>knowledge-navigation 스킬</p>
+      </div>
+      <div class="card" style="border-color: var(--green-dim);">
+        <div style="font-size: 10px; color: var(--green); font-weight: 700; margin-bottom: 4px;">L2</div>
+        <h3>카탈로그</h3>
+        <p>wiki/index.md</p>
+      </div>
+      <div class="card" style="border-color: var(--purple-dim);">
+        <div style="font-size: 10px; color: var(--purple); font-weight: 700; margin-bottom: 4px;">L3</div>
+        <h3>필터링</h3>
+        <p>domain/tag indexes</p>
+      </div>
+      <div class="card" style="border-color: var(--amber-dim);">
+        <div style="font-size: 10px; color: var(--amber); font-weight: 700; margin-bottom: 4px;">L4</div>
+        <h3>상세</h3>
+        <p>pages/*.md</p>
       </div>
     </div>
   </div>
 
-  <!-- Slide 11: Thank You -->
-  <div class="slide slide-cover" data-slide="10">
-    <div class="slide-content">
-      <div class="slide-label animate animate-delay-1">Thank You</div>
-      <h1 class="animate animate-delay-2" style="font-size: 60px;">
-        지식 시스템<br>세미나 완료
-      </h1>
-      <p class="subtitle animate animate-delay-3" style="margin-top: 24px;">
-        자료: <code>~/.hermes/workspace/knowledge-seminar.md</code><br>
-        아키텍처: <code>~/.hermes/workspace/knowledge-system-architecture.html</code><br>
-        Spec: <code>~/.hermes/workspace/projects/knowledge-system/</code>
-      </p>
-      <div class="cover-meta animate animate-delay-4" style="margin-top: 48px;">
-        <span><span class="dot"></span>Hermes Agent</span>
-        <span><span class="dot"></span>2026.06.04</span>
+  <!-- Slide 11: Challenges -->
+  <div class="slide" data-slide="10">
+    <div class="slide-label">07 / Challenges</div>
+    <h2>현재 과제</h2>
+    <div class="content-grid grid-3" style="max-width: 900px;">
+      <div class="card" style="border-color: var(--rose-dim);">
+        <div class="card-icon" style="background: var(--rose-dim); color: var(--rose);">🔴</div>
+        <h3>그래프 재활성화</h3>
+        <p>허브 54개 but 에지 0개 — wikilinks 파싱 필요</p>
       </div>
+      <div class="card" style="border-color: var(--rose-dim);">
+        <div class="card-icon" style="background: var(--rose-dim); color: var(--rose);">🔴</div>
+        <h3>사용량 추적</h3>
+        <p>.usage.db 존재 but 0회 — counter hook 통합</p>
+      </div>
+      <div class="card" style="border-color: var(--amber-dim);">
+        <div class="card-icon" style="background: var(--amber-dim); color: var(--amber);">🟡</div>
+        <h3>점수 균일화</h3>
+        <p>0.34/0.54/0.74 이산값 — 세분화 필요</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 12: Thank You -->
+  <div class="slide slide-cover" data-slide="11">
+    <div class="slide-label">Thank You</div>
+    <h1 style="font-size: 48px;">세미나 완료</h1>
+    <p class="subtitle" style="margin-top: 16px;">
+      📎 자료: <code>docs/seminar.md</code><br>
+      🌐 GitHub: <code>pheanor-agent.github.io/knowledge-system</code>
+    </p>
+    <div class="cover-meta" style="margin-top: 32px;">
+      <span><span class="dot"></span>Hermes Agent</span>
+      <span><span class="dot"></span>2026.06.04</span>
     </div>
   </div>
 
@@ -1038,7 +863,7 @@ score = score × recency_decay  <span class="comment"># 90일+ & usage=0 → 0.3
 <div class="nav">
   <button onclick="prevSlide()" aria-label="Previous">‹</button>
   <div class="nav-dots" id="navDots"></div>
-  <span class="nav-counter" id="navCounter">1 / 11</span>
+  <span class="nav-counter" id="navCounter">1 / 12</span>
   <button onclick="nextSlide()" aria-label="Next">›</button>
 </div>
 
@@ -1049,7 +874,6 @@ score = score × recency_decay  <span class="comment"># 90일+ & usage=0 → 0.3
   const dotsContainer = document.getElementById('navDots');
   const counter = document.getElementById('navCounter');
 
-  // Create dots
   for (let i = 0; i < total; i++) {
     const dot = document.createElement('div');
     dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
@@ -1069,31 +893,20 @@ score = score × recency_decay  <span class="comment"># 90일+ & usage=0 → 0.3
   function nextSlide() { goTo(current + 1); }
   function prevSlide() { goTo(current - 1); }
 
-  // Keyboard navigation
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-      e.preventDefault();
-      nextSlide();
-    }
-    if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'PageUp') {
-      e.preventDefault();
-      prevSlide();
-    }
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
     if (e.key === 'Home') { e.preventDefault(); goTo(0); }
     if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
-    // Number keys 1-9, 0 for 10
     if (e.key >= '1' && e.key <= '9') { goTo(parseInt(e.key) - 1); }
     if (e.key === '0') { goTo(total - 1); }
   });
 
-  // Touch support
   let touchStartX = 0;
   document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
   document.addEventListener('touchend', (e) => {
     const diff = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(diff) > 60) {
-      diff < 0 ? nextSlide() : prevSlide();
-    }
+    if (Math.abs(diff) > 60) { diff < 0 ? nextSlide() : prevSlide(); }
   });
 </script>
 
