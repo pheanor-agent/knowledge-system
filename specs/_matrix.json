@@ -175,8 +175,8 @@
     "SPEC-A1": {
       "title": "P0-Integration-Test",
       "type": "requirement",
-      "status": "deprecated",
-      "version": "0.2.4",
+      "status": "proposed",
+      "version": "1.0.0",
       "version_history": [
         {
           "version": "0.1.0",
@@ -213,6 +213,12 @@
           "date": "2026-06-04",
           "status": "deprecated",
           "summary": "verified → deprecated"
+        },
+        {
+          "version": "1.0.0",
+          "date": "2026-06-04",
+          "status": "proposed",
+          "summary": "deprecated → proposed"
         }
       ],
       "created": "2026-06-04",

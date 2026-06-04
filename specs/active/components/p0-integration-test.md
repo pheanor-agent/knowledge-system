@@ -4,6 +4,10 @@
 spec_id: SPEC-A1
 version: 0.2.4
 version_history:
+  - version: 1.0.0
+    date: 2026-06-04
+    status: proposed
+    summary: "deprecated → proposed"
   - version: 0.2.4
     date: 2026-06-04
     status: deprecated
