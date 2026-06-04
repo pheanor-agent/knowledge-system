@@ -25,8 +25,6 @@
     --amber-dim: rgba(217,119,6,0.1);
     --rose: #e11d48;
     --rose-dim: rgba(225,29,72,0.1);
-    --tip-bg: #eff6ff;
-    --tip-border: #3b82f6;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -275,23 +273,6 @@
   .layer-content p {
     font-size: 16px;
     color: var(--text-dim);
-  }
-
-  .tip {
-    margin-top: 24px;
-    padding: 16px 24px;
-    background: var(--tip-bg);
-    border-left: 4px solid var(--tip-border);
-    border-radius: 0 12px 12px 0;
-    font-size: 15px;
-    color: var(--text);
-    max-width: 800px;
-    text-align: left;
-    line-height: 1.7;
-  }
-
-  .tip strong {
-    color: var(--accent);
   }
 
   /* 팝업 스타일 */
@@ -548,6 +529,57 @@
   .stat-green .stat-value { color: var(--green); }
   .stat-purple .stat-value { color: var(--purple); }
   .stat-amber .stat-value { color: var(--amber); }
+
+  /* 다이어그램 스타일 */
+  .diagram {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .diagram-node {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .diagram-node.accent {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .diagram-node.green {
+    border-color: var(--green);
+    background: var(--green-dim);
+    color: var(--green);
+  }
+
+  .diagram-node.purple {
+    border-color: var(--purple);
+    background: var(--purple-dim);
+    color: var(--purple);
+  }
+
+  .diagram-arrow {
+    font-size: 24px;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  .diagram-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
 </style>
 </head>
 <body>
@@ -586,7 +618,7 @@
     </div>
   </div>
 
-  <!-- Slide 3: Connection -->
+  <!-- Slide 3: 신입사원 예시 -->
   <div class="slide" data-slide="2">
     <div class="slide-label">비유</div>
     <h2>신입사원이 배우는 3 가지 지식 관리 방법<span class="popup-trigger" onclick="showPopup('analogy')">?</span></h2>
@@ -595,80 +627,100 @@
         <div class="layer-num" style="background: var(--purple-dim); color: var(--purple);">1</div>
         <div class="layer-content">
           <h3 style="color: var(--purple);">회사 백과사전 외우기</h3>
-          <p>신입사원이 회사 역사, 조직도, 제도를 학습합니다. AI 도 학습 완료 시점 세계 지식을 학습한 것과 같습니다.</p>
+          <p>신입사원이 회사 역사, 조직도, 제도를 학습합니다. 변화 없는 고정 지식입니다.</p>
         </div>
       </div>
       <div class="layer layer-highlight">
         <div class="layer-num" style="background: var(--accent-dim); color: var(--accent);">2</div>
         <div class="layer-content">
-          <h3 style="color: var(--accent);">개인 노트 작성하기 ← 오늘 주제</h3>
-          <p>신입사원이 업무 경험을 파일로 기록합니다. AI 도 프로젝트 기록, 사용자 선호를 파일로 저장합니다.</p>
+          <h3 style="color: var(--accent);">개인 노트 작성하기 ← 중요</h3>
+          <p>신입사원이 업무 경험을 파일로 기록합니다. 계속 추가되고 수정됩니다.</p>
         </div>
       </div>
       <div class="layer">
         <div class="layer-num" style="background: var(--green-dim); color: var(--green);">3</div>
         <div class="layer-content">
           <h3 style="color: var(--green);">참고 자료 책상 위에 준비</h3>
-          <p>신입사원이 자주 쓰는 매뉴얼을 바로 꺼낼 수 있게 준비합니다. AI 도 외부 지식을 저장해두고 상황에 바로 참조합니다.</p>
+          <p>신입사원이 자주 쓰는 매뉴얼을 바로 꺼낼 수 있게 준비합니다. 상황에 따라 참조합니다.</p>
         </div>
       </div>
     </div>
-    <div class="tip">
-      <strong>💡Tip:</strong> 신입사원이 3 가지 방법을 모두 배우듯, AI 도 3 가지 방식의 지식 관리를 활용합니다. 오늘 세미나는 2 번 '개인 노트 작성하기' 에 해당하는 에이전트 메모리를 다룹니다.
-    </div>
   </div>
 
-  <!-- Slide 4: AI 3-Layer -->
+  <!-- Slide 4: AI 의 3 층 기억 + 두 내용 연결 -->
   <div class="slide" data-slide="3">
     <div class="slide-label">AI 의 3 층 기억</div>
-    <h2>AI 가 지식을 다루는 3 가지 방식<span class="popup-trigger" onclick="showPopup('ai3layer')">?</span></h2>
-    <div class="layer-visual">
-      <div class="layer">
-        <div class="layer-num" style="background: var(--purple-dim); color: var(--purple);">1</div>
-        <div class="layer-content">
-          <h3 style="color: var(--purple);">모델 학습 (학습한 지식)</h3>
-          <p>AI 가 이미 알고 있는 지식 — 세계사, 과학, 언어</p>
+    <h2>신입사원이 배우듯, AI 도 3 가지 방식을 활용합니다<span class="popup-trigger" onclick="showPopup('ai3layer')">?</span></h2>
+    <div class="two-col" style="max-width: 1000px;">
+      <div>
+        <h3 style="color: var(--purple); margin-bottom: 16px;">신입사원</h3>
+        <div class="layer" style="margin-bottom: 12px;">
+          <div class="layer-num" style="background: var(--purple-dim); color: var(--purple); width: 32px; height: 32px; font-size: 16px;">1</div>
+          <div class="layer-content">
+            <p style="font-size: 15px;">백과사전 외우기</p>
+          </div>
+        </div>
+        <div class="layer layer-highlight" style="margin-bottom: 12px;">
+          <div class="layer-num" style="background: var(--accent-dim); color: var(--accent); width: 32px; height: 32px; font-size: 16px;">2</div>
+          <div class="layer-content">
+            <p style="font-size: 15px;">개인 노트 작성하기 ← 오늘 주제</p>
+          </div>
+        </div>
+        <div class="layer" style="margin-bottom: 12px;">
+          <div class="layer-num" style="background: var(--green-dim); color: var(--green); width: 32px; height: 32px; font-size: 16px;">3</div>
+          <div class="layer-content">
+            <p style="font-size: 15px;">참고 자료 준비</p>
+          </div>
         </div>
       </div>
-      <div class="layer layer-highlight">
-        <div class="layer-num" style="background: var(--accent-dim); color: var(--accent);">2</div>
-        <div class="layer-content">
-          <h3 style="color: var(--accent);">에이전트 메모리 (파일로 저장하는 지식) ← 오늘 주제</h3>
-          <p>AI 가 경험을 파일로 기록 — 프로젝트 기록, 사용자 선호</p>
+      <div>
+        <h3 style="color: var(--accent); margin-bottom: 16px;">AI</h3>
+        <div class="layer" style="margin-bottom: 12px;">
+          <div class="layer-num" style="background: var(--purple-dim); color: var(--purple); width: 32px; height: 32px; font-size: 16px;">1</div>
+          <div class="layer-content">
+            <p style="font-size: 15px;">모델 학습 (학습한 지식)</p>
+          </div>
         </div>
-      </div>
-      <div class="layer">
-        <div class="layer-num" style="background: var(--green-dim); color: var(--green);">3</div>
-        <div class="layer-content">
-          <h3 style="color: var(--green);">RAG (준비해둔 참고 자료)</h3>
-          <p>외부 지식을 미리 저장해두기 — 회사 매뉴얼, 제품 문서</p>
+        <div class="layer layer-highlight" style="margin-bottom: 12px;">
+          <div class="layer-num" style="background: var(--accent-dim); color: var(--accent); width: 32px; height: 32px; font-size: 16px;">2</div>
+          <div class="layer-content">
+            <p style="font-size: 15px;">에이전트 메모리 (파일로 저장하는 지식) ← 오늘 주제</p>
+          </div>
+        </div>
+        <div class="layer" style="margin-bottom: 12px;">
+          <div class="layer-num" style="background: var(--green-dim); color: var(--green); width: 32px; height: 32px; font-size: 16px;">3</div>
+          <div class="layer-content">
+            <p style="font-size: 15px;">RAG (준비해둔 참고 자료)</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="tip">
-      <strong>💡Tip:</strong> 모델 학습은 변경 불가능한 고정 지식입니다. 에이전트 메모리는 파일로 저장되어 계속 추가됩니다. RAG 는 외부 지식을 미리 준비해두고 상황에 참조합니다.
+    <div style="margin-top: 24px; font-size: 20px; color: var(--accent); font-weight: 700;">
+      오늘은 2 번 '에이전트 메모리' 에 해당하는 파일 기반 지식 시스템을 다룹니다.
     </div>
   </div>
 
-  <!-- Slide 5: Transition -->
+  <!-- Slide 5: 에이전트 메모리 시스템 (다이어그램) -->
   <div class="slide" data-slide="4">
-    <div class="slide-label">본론</div>
-    <h2>오늘 주제: 파일 기반 지식 시스템<span class="popup-trigger" onclick="showPopup('today')">?</span></h2>
-    <div class="icebreaker">
-      <div class="scenario">
-        모델 학습은 이미 끝났습니다. AI 는 세계 지식을 알고 있습니다.<br>
-        하지만 <strong>"내 프로젝트는?"</strong> <strong>"어제 말했던 건?"</strong><br>
-        이걸 기억하려면 <strong>파일에 저장</strong>해야 합니다.
-      </div>
-      <div class="question">→ 파일 시스템이 AI 의 기억이 됩니다</div>
-    </div>
-  </div>
-
-  <!-- Slide 6: System Overview -->
-  <div class="slide" data-slide="5">
     <div class="slide-label">시스템 개요</div>
-    <h2>에이전트 메모리 시스템<span class="popup-trigger" onclick="showPopup('overview')">?</span></h2>
-    <div class="content-grid grid-3" style="max-width: 1000px;">
+    <h2>에이전트 메모리 시스템<span class="popup-trigger" onclick="showPopup('system')">?</span></h2>
+    <div class="diagram">
+      <div class="diagram-node purple">
+        원본 데이터
+        <div class="diagram-label">대화 기록, 작업 내용</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node green">
+        AI 가 정리
+        <div class="diagram-label">요약, 분류</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node accent">
+        구조화된 지식
+        <div class="diagram-label">검색 가능</div>
+      </div>
+    </div>
+    <div class="content-grid grid-3" style="max-width: 900px; margin-top: 24px;">
       <div class="stat stat-accent">
         <div class="stat-value">3</div>
         <div class="stat-label">단계로 파일 정리</div>
@@ -682,32 +734,29 @@
         <div class="stat-label">중요도 레벨</div>
       </div>
     </div>
-    <div style="margin-top: 28px; text-align: center;">
-      <p class="subtitle" style="max-width: 700px;">
-        원본 데이터 → AI 가 정리 → 구조화된 지식<br>
-        자동으로 파일을 관리하는 시스템
-      </p>
-    </div>
   </div>
 
-  <!-- Slide 7: Architecture -->
-  <div class="slide" data-slide="6">
+  <!-- Slide 6: 파일을 정리하는 3 단계 (다이어그램) -->
+  <div class="slide" data-slide="5">
     <div class="slide-label">3 단계 구조</div>
     <h2>파일을 정리하는 3 단계<span class="popup-trigger" onclick="showPopup('arch')">?</span></h2>
-    <div class="flow">
-      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">
-        1 단계: 원본<br><span style="font-size:12px; color: var(--text-dim);">대화 기록, 작업 내용</span>
+    <div class="diagram">
+      <div class="diagram-node purple">
+        1 단계: 원본
+        <div class="diagram-label">대화 기록, 작업 내용</div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="border-color: var(--green); color: var(--green);">
-        2 단계: 정리<br><span style="font-size:12px; color: var(--text-dim);">AI 가 요약하고 분류</span>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node green">
+        2 단계: 정리
+        <div class="diagram-label">AI 가 요약, 분류</div>
       </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">
-        3 단계: 규칙<br><span style="font-size:12px; color: var(--text-dim);">중요도, 주제 태그</span>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node accent">
+        3 단계: 규칙
+        <div class="diagram-label">중요도, 태그</div>
       </div>
     </div>
-    <div class="content-grid grid-3" style="max-width: 1000px;">
+    <div class="content-grid grid-3" style="max-width: 900px; margin-top: 24px;">
       <div class="card">
         <div class="card-icon" style="background: var(--purple-dim); color: var(--purple);">📁</div>
         <h3>원본 데이터</h3>
@@ -726,73 +775,83 @@
     </div>
   </div>
 
-  <!-- Slide 8: Pipeline -->
-  <div class="slide" data-slide="7">
+  <!-- Slide 7: 자동으로 파일을 정리하는 과정 (다이어그램) -->
+  <div class="slide" data-slide="6">
     <div class="slide-label">자동화</div>
     <h2>자동으로 파일을 정리하는 과정<span class="popup-trigger" onclick="showPopup('pipeline')">?</span></h2>
-    <div class="flow">
-      <div class="flow-node" style="border-color: var(--amber); color: var(--amber);">수집</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">분류</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="border-color: var(--green); color: var(--green);">점수 매기기</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">노출</div>
+    <div class="diagram">
+      <div class="diagram-node" style="border-color: var(--amber); color: var(--amber);">
+        수집
+        <div class="diagram-label">대화 기록</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node purple">
+        분류
+        <div class="diagram-label">주제별</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node green">
+        점수 매기기
+        <div class="diagram-label">0-1 점</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node accent">
+        노출
+        <div class="diagram-label">index.md</div>
+      </div>
     </div>
-    <div class="two-col" style="max-width: 900px;">
-      <div>
-        <h3 style="color: var(--amber); margin-bottom: 12px; font-size: 18px;">⏰ 매일 자동 실행</h3>
-        <div class="card">
-          <p style="font-size: 16px; line-height: 1.8;">
-            • 대화 기록 수집<br>
-            • 주제별 분류<br>
-            • 중요도 점수 계산<br>
-            • 검색용 인덱스 생성
-          </p>
-        </div>
-      </div>
-      <div>
-        <h3 style="color: var(--green); margin-bottom: 12px; font-size: 18px;">📊 품질 관리</h3>
-        <div class="card">
-          <p style="font-size: 16px; line-height: 1.8;">
-            • 분류 정확도 확인<br>
-            • 태그 부착률<br>
-            • 검색 노출률<br>
-            • 정기 점검
-          </p>
-        </div>
-      </div>
+    <div class="card" style="max-width: 800px; margin-top: 24px;">
+      <h3 style="color: var(--amber); margin-bottom: 12px;">⏰ 매일 자동 실행</h3>
+      <p style="font-size: 16px; line-height: 1.8;">
+        • 대화 기록 수집<br>
+        • 주제별 분류<br>
+        • 중요도 점수 계산<br>
+        • 검색용 인덱스 생성
+      </p>
     </div>
   </div>
 
-  <!-- Slide 9: Priority -->
-  <div class="slide" data-slide="8">
+  <!-- Slide 8: 점수 → 중요도 연결 (다이어그램) -->
+  <div class="slide" data-slide="7">
     <div class="slide-label">중요도</div>
-    <h2>3 단계 중요도 시스템<span class="popup-trigger" onclick="showPopup('priority')">?</span></h2>
-    <div class="content-grid grid-3" style="max-width: 900px;">
+    <h2>점수에 따라 3 단계 중요도로 분류합니다<span class="popup-trigger" onclick="showPopup('priority')">?</span></h2>
+    <div class="diagram">
+      <div class="diagram-node" style="border-color: var(--amber); color: var(--amber);">
+        점수 계산
+        <div class="diagram-label">0-1 점</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node purple">
+        중요도 분류
+        <div class="diagram-label">T1/T2/T3</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node accent">
+        노출 방식
+        <div class="diagram-label">항상/상황별/요청시</div>
+      </div>
+    </div>
+    <div class="content-grid grid-3" style="max-width: 900px; margin-top: 24px;">
       <div class="card" style="border-color: var(--accent-dim);">
         <div style="font-size: 32px; font-weight: 900; color: var(--accent); margin-bottom: 12px;">T1</div>
-        <h3 style="color: var(--accent);">핵심</h3>
-        <p style="font-size: 16px;">항상 보여지는 중요 문서<br>AI 의 핵심 작업에 필수</p>
+        <h3 style="color: var(--accent);">핵심 (0.7 점 이상)</h3>
+        <p style="font-size: 16px;">항상 노출<br>AI 의 핵심 작업에 필수</p>
       </div>
       <div class="card" style="border-color: var(--green-dim);">
         <div style="font-size: 32px; font-weight: 900; color: var(--green); margin-bottom: 12px;">T2</div>
-        <h3 style="color: var(--green);">일상</h3>
-        <p style="font-size: 16px;">상황에 따라 보여짐<br>주기적으로 참조되는 정보</p>
+        <h3 style="color: var(--green);">일상 (0.4-0.7 점)</h3>
+        <p style="font-size: 16px;">상황별 노출<br>주기적으로 참조</p>
       </div>
       <div class="card" style="border-color: var(--purple-dim);">
         <div style="font-size: 32px; font-weight: 900; color: var(--purple); margin-bottom: 12px;">T3</div>
-        <h3 style="color: var(--purple);">참고</h3>
+        <h3 style="color: var(--purple);">참고 (0.4 점 미만)</h3>
         <p style="font-size: 16px;">요청 시 제공<br>보조적인 배경 정보</p>
       </div>
     </div>
-    <div class="tip">
-      <strong>💡Tip:</strong> 중요한 문서일수록 AI 가 먼저 읽습니다. T1 은 항상, T2 는 상황별, T3 은 요청 시만 노출됩니다.
-    </div>
   </div>
 
-  <!-- Slide 10: Domains -->
-  <div class="slide" data-slide="9">
+  <!-- Slide 9: 지식을 주제별로 분류하는 체계 -->
+  <div class="slide" data-slide="8">
     <div class="slide-label">주제 분류</div>
     <h2>지식을 주제별로 분류하는 체계<span class="popup-trigger" onclick="showPopup('domains')">?</span></h2>
     <div class="content-grid grid-3" style="max-width: 1000px;">
@@ -823,77 +882,68 @@
     </div>
   </div>
 
-  <!-- Slide 11: Exposure -->
-  <div class="slide" data-slide="10">
+  <!-- Slide 10: AI 가 지식을 찾는 과정 (다이어그램) -->
+  <div class="slide" data-slide="9">
     <div class="slide-label">검색</div>
     <h2>AI 가 지식을 찾는 과정<span class="popup-trigger" onclick="showPopup('exposure')">?</span></h2>
-    <div class="flow">
-      <div class="flow-node" style="border-color: var(--accent); color: var(--accent);">메인 목록</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="border-color: var(--green); color: var(--green);">핵심 문서</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="border-color: var(--purple); color: var(--purple);">주제/태그</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="border-color: var(--amber); color: var(--amber);">상세 내용</div>
+    <div class="diagram">
+      <div class="diagram-node accent">
+        진입점
+        <div class="diagram-label">AI 가 시작하는 곳</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node green">
+        목록
+        <div class="diagram-label">정리된 지식 목록</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node purple">
+        필터
+        <div class="diagram-label">주제/태그로 검색</div>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node" style="border-color: var(--amber); color: var(--amber);">
+        상세
+        <div class="diagram-label">전체 내용 확인</div>
+      </div>
     </div>
-    <div class="content-grid grid-4" style="max-width: 1000px;">
-      <div class="card" style="border-color: var(--accent-dim);">
+    <div class="content-grid grid-4" style="max-width: 1000px; margin-top: 24px;">
+      <div class="card" style="border-color: var(--accent-dim); padding: 20px;">
         <div style="font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 6px;">1 단계</div>
         <h3>진입점</h3>
-        <p style="font-size: 15px;">AI 가 시작하는 곳</p>
+        <p style="font-size: 15px;">knowledge-navigation 스킬</p>
       </div>
-      <div class="card" style="border-color: var(--green-dim);">
+      <div class="card" style="border-color: var(--green-dim); padding: 20px;">
         <div style="font-size: 12px; color: var(--green); font-weight: 700; margin-bottom: 6px;">2 단계</div>
         <h3>목록</h3>
-        <p style="font-size: 15px;">정리된 지식 목록</p>
+        <p style="font-size: 15px;">index.md 파일</p>
       </div>
-      <div class="card" style="border-color: var(--purple-dim);">
+      <div class="card" style="border-color: var(--purple-dim); padding: 20px;">
         <div style="font-size: 12px; color: var(--purple); font-weight: 700; margin-bottom: 6px;">3 단계</div>
         <h3>필터</h3>
-        <p style="font-size: 15px;">주제/태그로 검색</p>
+        <p style="font-size: 15px;">domain-*.md, tag-*.md</p>
       </div>
-      <div class="card" style="border-color: var(--amber-dim);">
+      <div class="card" style="border-color: var(--amber-dim); padding: 20px;">
         <div style="font-size: 12px; color: var(--amber); font-weight: 700; margin-bottom: 6px;">4 단계</div>
         <h3>상세</h3>
-        <p style="font-size: 15px;">전체 내용 확인</p>
+        <p style="font-size: 15px;">pages/*.md</p>
       </div>
     </div>
   </div>
 
-  <!-- Slide 12: Challenges -->
-  <div class="slide" data-slide="11">
-    <div class="slide-label">개선 방향</div>
-    <h2>현재 과제<span class="popup-trigger" onclick="showPopup('challenges')">?</span></h2>
-    <div class="content-grid grid-3" style="max-width: 1000px;">
-      <div class="card" style="border-color: var(--rose-dim);">
-        <div class="card-icon" style="background: var(--rose-dim); color: var(--rose);">🔴</div>
-        <h3>연결 관계 복원</h3>
-        <p style="font-size: 16px;">관련 문서 간 연결 복구 — 검색 정확도 향상</p>
-      </div>
-      <div class="card" style="border-color: var(--rose-dim);">
-        <div class="card-icon" style="background: var(--rose-dim); color: var(--rose);">🔴</div>
-        <h3>사용 패턴 분석</h3>
-        <p style="font-size: 16px;">어떤 파일을 자주 읽는지 — 중요도 자동 조정</p>
-      </div>
-      <div class="card" style="border-color: var(--amber-dim);">
-        <div class="card-icon" style="background: var(--amber-dim); color: var(--amber);">🟡</div>
-        <h3>세분화된 점수</h3>
-        <p style="font-size: 16px;">중요도 수준 세분화 — 더 정밀한 우선순위</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 13: Thank You -->
-  <div class="slide slide-cover" data-slide="12">
+  <!-- Slide 11: Thank You -->
+  <div class="slide slide-cover" data-slide="10">
     <div class="slide-label">Thank You</div>
     <h1 style="font-size: 56px; color: var(--accent);">세미나 완료</h1>
     <p class="subtitle" style="margin-top: 20px; font-size: 20px;">
-      📎 자료: <code>docs/seminar.md</code><br>
-      🌐 GitHub: <code>pheanor-agent.github.io/knowledge-system</code>
+      핵심 참고 자료<br>
+      📖 지식 중요도 분류: <code>https://...</code><br>
+      📖 Karpathy 3 층 구조: <code>https://karpathy.github.io/...</code>
     </p>
     <div class="cover-meta" style="margin-top: 40px;">
       <span><span class="dot"></span>에이전트 메모리 시스템</span>
       <span><span class="dot"></span>2026.06.04</span>
+      <span><span class="dot"></span>🌐 pheanor-agent.github.io/knowledge-system</span>
     </div>
   </div>
 
@@ -911,7 +961,7 @@
 <div class="nav">
   <button onclick="prevSlide()" aria-label="Previous">‹</button>
   <div class="nav-dots" id="navDots"></div>
-  <span class="nav-counter" id="navCounter">1 / 13</span>
+  <span class="nav-counter" id="navCounter">1 / 11</span>
   <button onclick="nextSlide()" aria-label="Next">›</button>
   <div class="nav-minimap" id="navMinimap"></div>
 </div>
@@ -924,7 +974,7 @@
   const counter = document.getElementById('navCounter');
   const minimapContainer = document.getElementById('navMinimap');
 
-  const slideTitles = ['Cover', '문제', '비유', '3 층 기억', '본론', '개요', '3 단계 구조', '자동화', '중요도', '주제 분류', '검색', '개선 방향', 'Thank You'];
+  const slideTitles = ['Cover', '문제', '비유', '3 층 기억', '시스템', '3 단계 구조', '자동화', '중요도', '주제 분류', '검색', 'Thank You'];
 
   for (let i = 0; i < total; i++) {
     const dot = document.createElement('div');
@@ -991,9 +1041,7 @@
       </div>
       <div class="popup-section">
         <h4>상세 내용</h4>
-        <p><strong>1. 회사 백과사전 외우기 (모델 학습):</strong> LLM 이 pre-training 과정을 통해 세계 지식을 학습합니다. 이는 변경 불가능한 고정 지식입니다.</p>
-        <p><strong>2. 개인 노트 작성하기 (에이전트 메모리):</strong> 에이전트가 작업 경험을 파일로 기록합니다. 계속 추가되고 수정 가능한 지식입니다.</p>
-        <p><strong>3. 참고 자료 책상 위에 준비 (RAG):</strong> 외부 지식을 미리 벡터 데이터베이스에 저장해두고, 질문 시 유사도 검색으로 참조합니다.</p>
+        <p>실제 기업에서 신입사원 교육 시 3 가지 방법 모두 교육합니다. 백과사전 외우기 (기억), 개인 노트 작성하기 (기록), 참고 자료 준비 (참조).</p>
       </div>
     `,
     ai3layer: `
@@ -1004,7 +1052,7 @@
       </div>
       <div class="popup-section">
         <h4>상세 내용</h4>
-        <p><strong>모델 학습 (학습한 지식):</strong> LLM 이 학습 완료 시점拥有的 지식. 세계사, 과학, 언어 등. 변경 불가.</p>
+        <p><strong>모델 학습 (학습한 지식):</strong> LLM 이 학습 완료 시점 학습한 지식. 세계사, 과학, 언어 등. 변경 불가.</p>
         <p><strong>에이전트 메모리 (파일로 저장하는 지식):</strong> 에이전트가 경험을 파일로 기록. 프로젝트 기록, 사용자 선호, 작업 교훈. 계속 추가됨.</p>
         <p><strong>RAG (준비해둔 참고 자료):</strong> 외부 지식을 미리 저장해두기. 회사 매뉴얼, 제품 문서, 연구 자료. 상황에 따라 바로 참조.</p>
       </div>
@@ -1012,19 +1060,7 @@
         † LLM(Large Language Model): 대규모 언어 모델. 수조 개의 파라미터를 가진 AI 모델.
       </div>
     `,
-    today: `
-      <h3>오늘 주제: 파일 기반 지식 시스템</h3>
-      <div class="popup-section">
-        <h4>기본 내용</h4>
-        <p>에이전트 메모리가 왜 중요한지, 파일로 지식을 관리하는 방법을 소개합니다.</p>
-      </div>
-      <div class="popup-section">
-        <h4>상세 내용</h4>
-        <p>에이전트 메모리 시스템은 AI 가 작업을 수행하면서 발생하는 지식을 파일로 저장하고, 필요 시 검색하여 활용하는 시스템입니다.</p>
-        <p>이 시스템은 3 단계 구조 (원본 → 정리 → 규칙) 로 운영되며, 매일 자동으로 파일을 정리하고 분류합니다.</p>
-      </div>
-    `,
-    overview: `
+    system: `
       <h3>에이전트 메모리 시스템</h3>
       <div class="popup-section">
         <h4>기본 내용</h4>
@@ -1032,9 +1068,13 @@
       </div>
       <div class="popup-section">
         <h4>상세 내용</h4>
-        <p><strong>3 단계 파일 정리:</strong> 원본 데이터 수집 → AI 가 요약/분류 → 중요도/태그 규칙 적용</p>
-        <p><strong>10 개 주제 분류:</strong> 에이전트, 시스템, 메모리, 대화, 지식, 이미지, 소설, 참조, 개발, 일반</p>
-        <p><strong>3 단계 중요도:</strong> T1(핵심, 항상 노출), T2(일상, 상황별), T3(참고, 요청 시)</p>
+        <p><strong>Karpathy 3 층 구조:</strong> Raw Sources → Wiki → Schema. 원본 데이터는 불변, AI 가 가공, 규칙으로 관리.</p>
+        <p><strong>append-only:</strong> 원본 데이터는 수정/삭제 없이 추가만. 원본 보존을 위해 사용.</p>
+        <p><strong>metadata.json:</strong> 파일 인덱스 (tags, domain, source). 3,651 개 파일 메타데이터 저장.</p>
+        <p><strong>scores.json:</strong> 중요도 점수 (score, priority, recency, usage). 각 파일별 점수 저장.</p>
+      </div>
+      <div class="popup-footnote">
+        † Karpathy 3 층: AI 연구자 Andrej Karpathy 가 제안한 3 단계 지식 처리 구조.
       </div>
     `,
     arch: `
@@ -1061,29 +1101,32 @@
       </div>
       <div class="popup-section">
         <h4>상세 내용</h4>
-        <p><strong>수집:</strong> 대화 기록, 작업 내용 등 원본 데이터를 수집합니다.</p>
-        <p><strong>분류:</strong> 주제별로 분류하고 태그를 부착합니다.</p>
-        <p><strong>점수 매기기:</strong> 중요도, 최신성, 사용량을 기반으로 점수를 계산합니다.</p>
-        <p><strong>노출:</strong> 계산된 점수 기반으로 index.md 와 도메인/태그 인덱스를 생성합니다.</p>
+        <p><strong>sync-all.sh:</strong> 매일 04:00 실행 (metadata → graph → scores 순차)</p>
+        <p><strong>fetch.sh:</strong> 06:00, 18:00 실행 (외부 피드 수집)</p>
+        <p><strong>build-metadata.sh:</strong> pages/ 전량 스캔 → metadata.json</p>
+        <p><strong>build-graph.sh:</strong> wikilinks 파싱 → graph_edges.json</p>
+        <p><strong>build-scores.sh:</strong> 점수 계산 + index.md 재생성</p>
+        <p><strong>점수 계산 공식:</strong> score = (0.3 × priority) + (0.2 × recency) + (0.3 × usage) + (0.1 × hub)</p>
       </div>
       <div class="popup-footnote">
-        † index.md: AI 가 지식을 탐색할 때 시작하는 메인 카탈로그 파일.
+        † wikilinks: 미디어위키 스타일의 문서 간 링크. [[문서명]] 형식.
       </div>
     `,
     priority: `
-      <h3>3 단계 중요도 시스템</h3>
+      <h3>점수에 따라 3 단계 중요도로 분류합니다</h3>
       <div class="popup-section">
         <h4>기본 내용</h4>
         <p>T1(핵심), T2(일상), T3(참고) 의 3 단계로 중요도를 분류합니다.</p>
       </div>
       <div class="popup-section">
         <h4>상세 내용</h4>
-        <p><strong>T1(핵심):</strong> 항상 노출되는 중요 문서. AI 의 핵심 작업에 필수. 점수 ≥ 0.7</p>
-        <p><strong>T2(일상):</strong> 상황에 따라 노출. 주기적으로 참조되는 정보. 점수 0.4-0.7</p>
-        <p><strong>T3(참고):</strong> 요청 시 제공. 보조적인 배경 정보. 점수 < 0.4</p>
+        <p><strong>점수 계산 공식:</strong> score = (0.3 × priority) + (0.2 × recency) + (0.3 × usage) + (0.1 × hub)</p>
+        <p><strong>recency_decay:</strong> 90 일 이상 + usage=0 → 0.3</p>
+        <p><strong>threshold:</strong> 0.7, 0.4 (고정값). 점수가 이 값을 기준으로 T1/T2/T3 로 분류됨.</p>
+        <p><strong>.usage.db:</strong> SQLite 기반 사용량 추적 (filepath/count/last_accessed)</p>
       </div>
       <div class="popup-footnote">
-        † 점수 계산: (0.3 × 중요도) + (0.2 × 최신성) + (0.3 × 사용량) + (0.1 × 허브 점수)
+        † threshold: 경계값. 점수가 이 값을 기준으로 T1/T2/T3 로 분류됨.
       </div>
     `,
     domains: `
@@ -1094,16 +1137,16 @@
       </div>
       <div class="popup-section">
         <h4>상세 내용</h4>
-        <p><strong>에이전트:</strong> 작업 과정, 규칙, 자동화</p>
-        <p><strong>시스템:</strong> 인프라, 설정, 구성</p>
-        <p><strong>메모리:</strong> 사용자 선호, 경험 교훈</p>
-        <p><strong>대화:</strong> 대화 기록, 컨텍스트</p>
-        <p><strong>지식:</strong> 연구, 학습 자료</p>
-        <p><strong>이미지:</strong> 이미지 생성, 디자인</p>
-        <p><strong>소설:</strong> 창작, 집필</p>
-        <p><strong>참조:</strong> 외부 링크, 자료</p>
-        <p><strong>개발:</strong> 스크립트, 도구</p>
-        <p><strong>일반:</strong> 기타</p>
+        <p><strong>에이전트 (1,029 개):</strong> 작업 과정, 규칙, 자동화</p>
+        <p><strong>시스템 (786 개):</strong> 인프라, 설정, 구성</p>
+        <p><strong>메모리 (254 개):</strong> 사용자 선호, 경험 교훈</p>
+        <p><strong>대화 (204 개):</strong> 대화 기록, 컨텍스트</p>
+        <p><strong>지식 (122 개):</strong> 연구, 학습 자료</p>
+        <p><strong>이미지 (258 개):</strong> 이미지 생성, 디자인</p>
+        <p><strong>소설 (129 개):</strong> 창작, 집필</p>
+        <p><strong>참조 (35 개):</strong> 외부 링크, 자료</p>
+        <p><strong>개발 (33 개):</strong> 스크립트, 도구</p>
+        <p><strong>일반 (744 개):</strong> 기타</p>
       </div>
     `,
     exposure: `
@@ -1115,28 +1158,12 @@
       <div class="popup-section">
         <h4>상세 내용</h4>
         <p><strong>1 단계: 진입점</strong> - AI 가 시작하는 곳. knowledge-navigation 스킬.</p>
-        <p><strong>2 단계: 목록</strong> - 정리된 지식 목록. index.md 파일.</p>
+        <p><strong>2 단계: 목록</strong> - 정리된 지식 목록. index.md 파일 (약 75KB).</p>
         <p><strong>3 단계: 필터</strong> - 주제/태그로 검색. domain-*.md, tag-*.md 파일.</p>
         <p><strong>4 단계: 상세</strong> - 전체 내용 확인. pages/*.md 파일.</p>
       </div>
       <div class="popup-footnote">
         † knowledge-navigation: AI 가 지식을 탐색할 때 사용하는 스킬. 진입점과 워크플로우를 정의.
-      </div>
-    `,
-    challenges: `
-      <h3>현재 과제</h3>
-      <div class="popup-section">
-        <h4>기본 내용</h4>
-        <p>연결 관계 복원, 사용 패턴 분석, 세분화된 점수 계산이 현재 과제입니다.</p>
-      </div>
-      <div class="popup-section">
-        <h4>상세 내용</h4>
-        <p><strong>연결 관계 복원:</strong> 관련 문서 간 연결 (wikilinks) 을 파싱하여 그래프 구조를 복원. 현재 허브 54 개 존재 but 에지 0 개.</p>
-        <p><strong>사용 패턴 분석:</strong> .usage.db SQLite 에 파일 접근 기록을 저장. 현재 0 회 기록.</p>
-        <p><strong>세분화된 점수:</strong> 현재 0.34/0.54/0.74 이산값만 사용. 더 세분화된 스케일링 적용 필요.</p>
-      </div>
-      <div class="popup-footnote">
-        † wikilinks: 미디어위키 스타일의 문서 간 링크. [[문서명]] 형식.
       </div>
     `
   };
