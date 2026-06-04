@@ -1,12 +1,9 @@
 ---
 slide_number: 1
 label: 에이전트 메모리 시스템
-title: "AI 에게 기억을 선물하다"
-subtitle: "챗봇에서 파일 기반 지식 시스템으로"
-description: "사용자의 입력을 체계적으로 저장하고 활용하는 방법"
-meta:
-  date: 2026-06-04
-  presenter: pheanor
+title: AI 에게 기억을 선물하다
+subtitle: 챗봇에서 파일 기반 지식 시스템으로
+description: 사용자의 입력을 체계적으로 저장하고 활용하는 방법
 ---
 
 ## 본문
