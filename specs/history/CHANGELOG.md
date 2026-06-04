@@ -183,3 +183,17 @@ index 57e0550..9909a35 100644
 - **상태**: proposed
 - **초기 생성**: P0-Test-Component
 - **Spec 파일**: specs/active/components/p0-test-component.md
+
+## [0.1.0] SPEC-B1 — 2026-06-04
+
+- **변경 유형**: Added
+- **상태**: proposed
+- **초기 생성**: P0-Test-Component
+- **Spec 파일**: specs/active/components/p0-test-component.md
+
+## [0.1.0] SPEC-B1 — 2026-06-04
+
+- **변경 유형**: Added
+- **상태**: proposed
+- **초기 생성**: P0-Test2
+- **Spec 파일**: specs/active/components/p0-test2.md

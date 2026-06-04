@@ -40,29 +40,6 @@
         "conformance_score": 0.85
       }
     },
-    "SPEC-B1": {
-      "title": "P0-Test-Component",
-      "type": "component",
-      "status": "proposed",
-      "version": "0.1.0",
-      "version_history": [
-        {
-          "version": "0.1.0",
-          "date": "2026-06-04",
-          "status": "proposed",
-          "summary": "초기 생성"
-        }
-      ],
-      "created": "2026-06-04",
-      "code_refs": [],
-      "test_refs": [],
-      "job_refs": [],
-      "coverage": {
-        "code_coverage_pct": 0,
-        "test_pass_rate": 0,
-        "conformance_score": 0
-      }
-    },
     "SPEC-B2": {
       "title": "지식 가공 파이프라인",
       "type": "component",
