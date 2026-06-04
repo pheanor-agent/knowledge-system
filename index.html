@@ -1,65 +1,94 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 에게 기억을 선물하다 | 파일 기반 지식 시스템</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
-  :root {
-    --bg: #ffffff; --bg-card: #f9fafb; --bg-card-hover: #f3f4f6; --border: #e5e7eb;
-    --text: #1a1a1a; --text-dim: #666666; --text-bright: #000000;
-    --accent: #2563eb; --accent-dim: rgba(37,99,235,0.1);
-    --green: #059669; --green-dim: rgba(5,150,105,0.1);
-    --purple: #7c3aed; --purple-dim: rgba(124,58,237,0.1);
-    --amber: #d97706; --amber-dim: rgba(217,119,6,0.1);
-    --rose: #e11d48; --rose-dim: rgba(225,29,72,0.1);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', 'Inter', sans-serif; overflow: hidden; height: 100vh; width: 100vw; }
-  .slides { width: 100vw; height: 100vh; position: relative; }
-  .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 80px 100px; opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; pointer-events: none; overflow: hidden; }
-  .slide.active { opacity: 1; transform: translateY(0); pointer-events: all; }
-  .slide-label { font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; opacity: 0.8; }
-  h1 { font-size: 56px; font-weight: 900; line-height: 1.15; color: var(--text-bright); margin-bottom: 16px; text-align: center; }
-  h2 { font-size: 44px; font-weight: 800; line-height: 1.2; color: var(--text-bright); margin-bottom: 32px; text-align: center; }
-  p, .subtitle { font-size: 16px; color: var(--text-dim); line-height: 1.7; text-align: center; }
-  .slide-cover h1 { color: var(--accent); font-size: 64px; }
-  .cover-meta { margin-top: 40px; display: flex; gap: 40px; font-size: 16px; color: var(--text-dim); }
-  .cover-meta span { display: flex; align-items: center; gap: 10px; }
-  .cover-meta .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-  .content-grid { display: grid; gap: 20px; margin-top: 16px; width: 100%; max-width: 1200px; }
-  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; text-align: center; }
-  .diagram { display: flex; align-items: center; gap: 12px; margin: 24px 0; flex-wrap: wrap; justify-content: center; }
-  .diagram-node { background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; padding: 16px 24px; text-align: center; font-size: 16px; font-weight: 600; }
-  .diagram-node.accent { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
-  .diagram-node.green { border-color: var(--green); background: var(--green-dim); color: var(--green); }
-  .diagram-node.purple { border-color: var(--purple); background: var(--purple-dim); color: var(--purple); }
-  .diagram-arrow { font-size: 24px; color: var(--text-dim); opacity: 0.5; }
-  .diagram-label { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
-  .popup-trigger { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent-dim); color: var(--accent); font-size: 12px; font-weight: 700; cursor: pointer; margin-left: 6px; vertical-align: middle; }
-  .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; display: none; justify-content: center; align-items: center; padding: 40px; }
-  .popup-overlay.active { display: flex; }
-  .popup-content { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 36px; max-width: 900px; max-height: 80vh; overflow-y: auto; position: relative; text-align: left; }
-  .popup-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-dim); font-size: 24px; cursor: pointer; }
-  .popup-content h4 { font-size: 18px; margin-bottom: 12px; color: var(--accent); }
-  .popup-content p { text-align: left; margin-bottom: 14px; }
-  .nav { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 100px; padding: 10px 24px; }
-  .nav button { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 20px; width: 36px; height: 36px; border-radius: 50%; }
-  .nav-counter { font-family: 'Inter', monospace; font-size: 14px; color: var(--text-dim); min-width: 60px; text-align: center; }
-  .nav-dots { display: flex; gap: 4px; }
-  .nav-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--border); cursor: pointer; }
-  .nav-dot.active { background: var(--accent); width: 20px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>에이전트 메모리 시스템</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+        }
+        .slide {
+            display: none;
+            max-width: 1200px;
+            padding: 40px;
+        }
+        .slide.active {
+            display: block;
+        }
+        h1 { font-size: 56px; }
+        h2 { font-size: 44px; }
+        p { font-size: 16px; line-height: 1.7; }
+    </style>
 </head>
 <body>
-<div class="slides" id="slides">
-<div class="slide" data-slide="1"><div class="slide-label">에이전트 메모리 시스템</div><div class="slide-cover"><h1>AI 에게 기억을 선물하다</h1><p class="subtitle">챗봇에서 파일 기반 지식 시스템으로<br>사용자의 입력을 체계적으로 저장하고 활용하는 방법</p><div class="cover-meta"><span><span class="dot"></span></span><span><span class="dot"></span></span></div></div></div><div class="slide" data-slide="2"><div class="slide-label">문제</div><h2>왜 AI 에게 파일이 필요한가요?<span class="popup-trigger" onclick="showPopup('문제')">?</span></h2><p>에이전트에게 무조건 많은 정보를 한 번에 주입하면 부작용이 발생합니다.
+
+<div class="slide" data-slide="1">
+    <span class="label">에이전트 메모리 시스템</span>
+    <h1>AI 에게 기억을 선물하다</h1>
+    <div class="body">
+        사용자의 입력을 체계적으로 저장하고 활용하는 방법
+    </div>
+</div>
+
+<div class="slide" data-slide="2">
+    <span class="label">문제</span>
+    <h1>왜 AI 에게 파일이 필요한가요?</h1>
+    <div class="body">
+        에이전트에게 무조건 많은 정보를 한 번에 주입하면 부작용이 발생합니다.
 자료가 방대해질수록 정작 중요한 지시 사항은 망각하게 되며 효율성이 급감합니다.
-이를 해결하기 위해 물리적인 파일 형태의 선택적 기억 장치가 필요합니다.</p></div><div class="slide" data-slide="3"><div class="slide-label">비유</div><h2>신입사원이 배우는 3 가지 지식 관리 방법<span class="popup-trigger" onclick="showPopup('비유')">?</span></h2><p>계층 1: 회사 백과사전 외우기 (고정 지식)
+이를 해결하기 위해 물리적인 파일 형태의 선택적 기억 장치가 필요합니다.
+    </div>
+</div>
+
+<div class="slide" data-slide="3">
+    <span class="label">비유</span>
+    <h1>신입사원이 배우는 3 가지 지식 관리 방법</h1>
+    <div class="body">
+        계층 1: 회사 백과사전 외우기 (고정 지식)
 계층 2: 개인 노트 작성하기 (계속 추가됨) ← 중요
-계층 3: 참고 자료 책상 위에 준비 (상황별 참조)</p></div><div class="slide" data-slide="4"><div class="slide-label">AI 의 3 층 기억</div><h2>신입사원이 배우듯, AI 도 3 가지 방식을 활용합니다<span class="popup-trigger" onclick="showPopup('ai_의_3_층_기억')">?</span></h2><p>좌측: 신입사원 3 가지 방법
+계층 3: 참고 자료 책상 위에 준비 (상황별 참조)
+    </div>
+</div>
+
+<div class="slide" data-slide="3">
+    <span class="label">비유</span>
+    <h1>신입사원이 배우는 3 가지 지식 관리 방법</h1>
+    <div class="body">
+        계층 1: 회사 백과사전 외우기 (고정 지식)
+계층 2: 개인 노트 작성하기 (계속 추가됨) ← 중요
+계층 3: 참고 자료 책상 위에 준비 (상황별 참조)
+    </div>
+</div>
+
+<div class="slide" data-slide="4">
+    <span class="label">AI 의 3 층 기억</span>
+    <h1>신입사원이 배우듯, AI 도 3 가지 방식을 활용합니다</h1>
+    <div class="body">
+        좌측: 신입사원 3 가지 방법
+  - 1: 백과사전 외우기
+  - 2: 개인 노트 작성하기 ← 오늘 주제
+  - 3: 참고 자료 준비
+우측: AI 3 가지 방식
+  - 1: 모델 학습 (학습한 지식)
+  - 2: 에이전트 메모리 (파일로 저장하는 지식) ← 오늘 주제
+  - 3: RAG (준비해둔 참고 자료)
+하단: 오늘은 2 번 에이전트 메모리에 해당하는 파일 기반 지식 시스템을 다룹니다
+    </div>
+</div>
+
+<div class="slide" data-slide="4">
+    <span class="label">AI 의 3 층 기억</span>
+    <h1>신입사원이 배우듯, AI 도 3 가지 방식을 활용합니다</h1>
+    <div class="body">
+        좌측: 신입사원 3 가지 방법
 - 1: 백과사전 외우기
 - 2: 개인 노트 작성하기 ← 오늘 주제
 - 3: 참고 자료 준비
@@ -67,91 +96,166 @@
 - 1: 사전 학습 모델 (Model Training)
 - 2: 에이전트 메모리 (File System) ← 오늘 주제
 - 3: 문서 참조 (Retrieval-Augmented Generation)
-하단: 오늘은 2 번 '에이전트 메모리' 에 해당하는 파일 기반 지식 시스템을 다룹니다.</p></div><div class="slide" data-slide="5"><div class="slide-label">시스템 개요</div><h2>에이전트 메모리 시스템<span class="popup-trigger" onclick="showPopup('시스템_개요')">?</span></h2><p>수집된 경험을 바탕으로 시스템이 스스로 분류 기준을 세우고 탐색 체계를 구축합니다.</p><div class="diagram"><div class="diagram-node purple">원본 데이터(대화 수집)</div><div class="diagram-arrow">→</div><div class="diagram-node purple">AI 가공(요약 분류)</div><div class="diagram-arrow">→</div><div class="diagram-node accent">구조화된 지식(인덱싱)</div></div></div><div class="slide" data-slide="6"><div class="slide-label">컴파일 워크플로우</div><h2>지식을 파일로 저장하는 3 단계 과정<span class="popup-trigger" onclick="showPopup('컴파일_워크플로우')">?</span></h2><p>대화가 종료되면 의미 있는 정보를 식별하여 분리하고, 연관성을 찾아 묶어준 뒤, 규칙에 맞게 다듬습니다.</p><div class="diagram"><div class="diagram-node purple">Ingest(지식 추출)</div><div class="diagram-arrow">→</div><div class="diagram-node purple">Link(관계 연결)</div><div class="diagram-arrow">→</div><div class="diagram-node purple">Lint(무결성 검증)</div></div></div><div class="slide" data-slide="7"><div class="slide-label">자동화</div><h2>자동으로 파일을 정리하는 과정<span class="popup-trigger" onclick="showPopup('자동화')">?</span></h2><p>사람의 개입 없이 정해진 스케줄에 따라 파이프라인이 구동되어 최신 상태를 유지합니다.</p><div class="diagram"><div class="diagram-node purple">배치 스크립트(주기적 실행)</div><div class="diagram-arrow">→</div><div class="diagram-node purple">메타데이터(태그 스캔)</div><div class="diagram-arrow">→</div><div class="diagram-node purple">점수화(가중치 갱신)</div></div></div><div class="slide" data-slide="8"><div class="slide-label">중요도</div><h2>동적 점수에 따른 3 단계 분류<span class="popup-trigger" onclick="showPopup('중요도')">?</span></h2><p>T1: 항상 참조해야 하는 핵심 행동 규칙
+하단: 오늘은 2 번 '에이전트 메모리' 에 해당하는 파일 기반 지식 시스템을 다룹니다.
+    </div>
+</div>
+
+<div class="slide" data-slide="5">
+    <span class="label">시스템 개요</span>
+    <h1>에이전트 메모리 시스템</h1>
+    <div class="body">
+        수집된 경험을 바탕으로 시스템이 스스로 분류 기준을 세우고 탐색 체계를 구축합니다.
+    </div>
+</div>
+
+<div class="slide" data-slide="5">
+    <span class="label">시스템 개요</span>
+    <h1>에이전트 메모리 시스템</h1>
+    <div class="body">
+        통계: 3 단계 파일 정리, 10 개 주제 분류, 3 단계 중요도 레벨
+    </div>
+</div>
+
+<div class="slide" data-slide="6">
+    <span class="label">3 단계 구조</span>
+    <h1>파일을 정리하는 3 단계</h1>
+    <div class="body">
+        카드 3 개:
+  - 원본 데이터: 대화 기록, 작업 내용 (불변 원본)
+  - 정리된 지식: AI 가 요약한 문서 (검색 가능)
+  - 분류 규칙: 중요도, 태그 (자동 분류)
+    </div>
+</div>
+
+<div class="slide" data-slide="6">
+    <span class="label">컴파일 워크플로우</span>
+    <h1>지식을 파일로 저장하는 3 단계 과정</h1>
+    <div class="body">
+        대화가 종료되면 의미 있는 정보를 식별하여 분리하고, 연관성을 찾아 묶어준 뒤, 규칙에 맞게 다듬습니다.
+    </div>
+</div>
+
+<div class="slide" data-slide="7">
+    <span class="label">자동화</span>
+    <h1>자동으로 파일을 정리하는 과정</h1>
+    <div class="body">
+        사람의 개입 없이 정해진 스케줄에 따라 파이프라인이 구동되어 최신 상태를 유지합니다.
+    </div>
+</div>
+
+<div class="slide" data-slide="7">
+    <span class="label">자동화</span>
+    <h1>자동으로 파일을 정리하는 과정</h1>
+    <div class="body">
+        카드: 매일 자동 실행 (대화 기록 수집, 주제별 분류, 중요도 점수 계산, 검색용 인덱스 생성)
+    </div>
+</div>
+
+<div class="slide" data-slide="8">
+    <span class="label">중요도</span>
+    <h1>동적 점수에 따른 3 단계 분류</h1>
+    <div class="body">
+        T1: 항상 참조해야 하는 핵심 행동 규칙
 T2: 특정 상황에 직면했을 때 꺼내보는 일상 지식
-T3: 요청이 있을 때만 제공되는 보조 배경 정보</p><div class="diagram"><div class="diagram-node purple">Score 계산(다중 변수 종합)</div><div class="diagram-arrow">→</div><div class="diagram-node purple">Tier 배정(T1/T2/T3)</div><div class="diagram-arrow">→</div><div class="diagram-node purple">Context 로딩(전략적 배치)</div></div></div><div class="slide" data-slide="9"><div class="slide-label">주제 분류</div><h2>지식을 주제별로 분류하는 체계<span class="popup-trigger" onclick="showPopup('주제_분류')">?</span></h2><p>특정 도메인에 종속되지 않고 다양한 주제를 수용할 수 있는 카테고리 확장을 지원합니다.</p><div class="diagram"><div class="diagram-node purple">에이전트(작업 프로세스) / 시스템(인프라 설정) / 메모리(선호도 및 교훈) / 지식(연구 자료)</div></div></div><div class="slide" data-slide="10"><div class="slide-label">계층적 탐색</div><h2>AI 가 지식을 찾는 4 단계 과정<span class="popup-trigger" onclick="showPopup('계층적_탐색')">?</span></h2><p>전체 자료를 무분별하게 읽어오지 않고, 지도 역할을 하는 최상위 파일부터 상세 문서까지 단계적으로 좁혀가며 필요한 정보만 정확히 찾아냅니다.</p><div class="diagram"><div class="diagram-node purple">Navigation(탐색 도구 실행)</div><div class="diagram-arrow">→</div><div class="diagram-node green">Index Scan(전체 맵 확인)</div><div class="diagram-arrow">→</div><div class="diagram-node purple">Domain Filter(범위 좁히기)</div><div class="diagram-arrow">→</div><div class="diagram-node accent">Detail Read(상세 내용 로드)</div></div></div><div class="slide" data-slide="11"><div class="slide-label">Thank You</div><h2>세미나 완료</h2><p>경험이 쌓일수록 스스로 지능을 고도화하는 아키텍처</p></div>
+T3: 요청이 있을 때만 제공되는 보조 배경 정보
+    </div>
 </div>
-<div class="popup-overlay" id="popupOverlay" onclick="hidePopup()">
-  <div class="popup-content" id="popupContent" onclick="event.stopPropagation()">
-    <button class="popup-close" onclick="hidePopup()">×</button>
-    <div id="popupBody"></div>
-  </div>
+
+<div class="slide" data-slide="8">
+    <span class="label">중요도</span>
+    <h1>점수에 따라 3 단계 중요도로 분류합니다</h1>
+    <div class="body">
+        카드 3 개:
+  - T1 핵심 (0.7 점 이상): 항상 노출
+  - T2 일상 (0.4-0.7 점): 상황별 노출
+  - T3 참고 (0.4 점 미만): 요청 시 제공
+    </div>
 </div>
-<div class="nav">
-  <button onclick="prevSlide()">‹</button>
-  <div class="nav-dots" id="navDots"></div>
-  <span class="nav-counter" id="navCounter">1 / 11</span>
-  <button onclick="nextSlide()">›</button>
+
+<div class="slide" data-slide="9">
+    <span class="label">주제 분류</span>
+    <h1>지식을 주제별로 분류하는 체계</h1>
+    <div class="body">
+        특정 도메인에 종속되지 않고 다양한 주제를 수용할 수 있는 카테고리 확장을 지원합니다.
+    </div>
 </div>
+
+<div class="slide" data-slide="9">
+    <span class="label">주제 분류</span>
+    <h1>지식을 주제별로 분류하는 체계</h1>
+    <div class="body">
+        카드 6 개:
+  - 에이전트: 작업 과정, 규칙, 자동화
+  - 시스템: 인프라, 설정, 구성
+  - 메모리: 사용자 선호, 경험 교훈
+  - 대화: 대화 기록, 컨텍스트
+  - 지식: 연구, 학습 자료
+  - 외 5 개 주제
+    </div>
+</div>
+
+<div class="slide" data-slide="10">
+    <span class="label">계층적 탐색</span>
+    <h1>AI 가 지식을 찾는 4 단계 과정</h1>
+    <div class="body">
+        전체 자료를 무분별하게 읽어오지 않고, 지도 역할을 하는 최상위 파일부터 상세 문서까지 단계적으로 좁혀가며 필요한 정보만 정확히 찾아냅니다.
+    </div>
+</div>
+
+<div class="slide" data-slide="10">
+    <span class="label">검색</span>
+    <h1>AI 가 지식을 찾는 과정</h1>
+    <div class="body">
+        카드 4 개:
+  - 1 단계 진입점: knowledge-navigation 스킬
+  - 2 단계 목록: index.md 파일
+  - 3 단계 필터: domain-*.md, tag-*.md
+  - 4 단계 상세: pages/*.md
+    </div>
+</div>
+
+<div class="slide" data-slide="11">
+    <span class="label">Thank You</span>
+    <h1>세미나 완료</h1>
+    <div class="body">
+        핵심 참고 자료:
+  - 지식 중요도 분류: 링크
+  - Karpathy 3 층 구조: 링크
+메타: 에이전트 메모리 시스템, 날짜, GitHub 링크
+    </div>
+</div>
+
+<div class="slide" data-slide="11">
+    <span class="label">Thank You</span>
+    <h1>세미나 완료</h1>
+    <div class="body">
+        경험이 쌓일수록 스스로 지능을 고도화하는 아키텍처
+    </div>
+</div>
+
 <script>
-  const popupData = {'에이전트_메모리_시스템': '(없음)', '문제': '<h4>Context Bloat & Lost in the Middle</h4>\n<p>LLM 은 Context Window 가 길어질수록 중앙부(Middle)의 Attention 가중치가 하락하여 핵심 지시 사항을 누락하는 <strong>Lost in the Middle</strong> 현상이 발생합니다.</p>\n<p>또한 매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되므로, 필요한 정보만 필터링하여 로딩하는 시스템이 필수적입니다.</p>', '비유': '<h4>Concept Mapping</h4>\n<p>실제 업무 환경에서 문서를 다루는 방식과 AI 의 데이터 처리 레이어를 일치시킵니다.</p>', 'ai_의_3_층_기억': '<h4>Data Hierarchy</h4>\n<p>Pre-trained Data(변경 불가), Agent Storage(실시간 추가), Document Database(외부 연동)의 독립적 역할을 정의합니다.</p>', '시스템_개요': '<h4>Knowledge Engineering</h4>\n<p>단편적인 String 형태의 대화를 구조화된 JSON 과 Markdown 으로 치환하여 영구 보존합니다.</p>', '컴파일_워크플로우': '<h4>Knowledge Compile Workflow</h4>\n<p><strong>1. Ingest:</strong> 대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.<br>\n<strong>2. Link:</strong> 기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 [[문서명]] 형태의 Wiki-links 를 자동 생성합니다.<br>\n<strong>3. Lint:</strong> 신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.</p>', '자동화': '<h4>Automated Batch Process</h4>\n<p>Shell Script 와 CronJob 을 통해 주기적으로 메타데이터를 갱신하고 의존성을 재평가합니다.</p>', '중요도': '<h4>Scoring Logic & Mathematical Decay</h4>\n<p><strong>Score Formula:</strong><br><code>Score = (0.3 × Priority) + (0.2 × Recency) + (0.3 × Usage) + (0.1 × Hub)</code></p>\n<p><strong>Recency Decay (감가상각 알고리즘):</strong><br><code>Recency = e<sup>-λ·t</strong></code><br>(t: 마지막 접근 후 경과 시간, λ: Decay constant)</p>\n<p>90일 이상 미사용 시 최하점(0.3)으로 수렴하도록 설계하여 불필요한 Context 의 메모리 점유를 수학적으로 방지합니다.</p>', '주제_분류': '<h4>Domain Classification</h4>\n<p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p>', '계층적_탐색': '<h4>Hierarchical Search Protocol</h4>\n<p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p>\n<p>최상위 <code>index.md</code> 만 먼저 Context 에 로드하여 도메인 위치를 파악하고, 관심 주제 필터(<code>domain-*.md</code>)를 거친 후, 수 KB 내외의 최종 <code>pages/*.md</code> 만 정밀 판독합니다.</p>', 'thank_you': '(없음)'}
-  // 팝업 데이터 처리 (Python dict -> JS object)
-  const pData = {
-    "에이전트_메모리_시스템": `(없음)`,
-    "문제": `<h4>Context Bloat & Lost in the Middle</h4>
-<p>LLM 은 Context Window 가 길어질수록 중앙부(Middle)의 Attention 가중치가 하락하여 핵심 지시 사항을 누락하는 <strong>Lost in the Middle</strong> 현상이 발생합니다.</p>
-<p>또한 매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되므로, 필요한 정보만 필터링하여 로딩하는 시스템이 필수적입니다.</p>`,
-    "비유": `<h4>Concept Mapping</h4>
-<p>실제 업무 환경에서 문서를 다루는 방식과 AI 의 데이터 처리 레이어를 일치시킵니다.</p>`,
-    "ai_의_3_층_기억": `<h4>Data Hierarchy</h4>
-<p>Pre-trained Data(변경 불가), Agent Storage(실시간 추가), Document Database(외부 연동)의 독립적 역할을 정의합니다.</p>`,
-    "시스템_개요": `<h4>Knowledge Engineering</h4>
-<p>단편적인 String 형태의 대화를 구조화된 JSON 과 Markdown 으로 치환하여 영구 보존합니다.</p>`,
-    "컴파일_워크플로우": `<h4>Knowledge Compile Workflow</h4>
-<p><strong>1. Ingest:</strong> 대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.<br>
-<strong>2. Link:</strong> 기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 [[문서명]] 형태의 Wiki-links 를 자동 생성합니다.<br>
-<strong>3. Lint:</strong> 신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.</p>`,
-    "자동화": `<h4>Automated Batch Process</h4>
-<p>Shell Script 와 CronJob 을 통해 주기적으로 메타데이터를 갱신하고 의존성을 재평가합니다.</p>`,
-    "중요도": `<h4>Scoring Logic & Mathematical Decay</h4>
-<p><strong>Score Formula:</strong><br><code>Score = (0.3 × Priority) + (0.2 × Recency) + (0.3 × Usage) + (0.1 × Hub)</code></p>
-<p><strong>Recency Decay (감가상각 알고리즘):</strong><br><code>Recency = e<sup>-λ·t</strong></code><br>(t: 마지막 접근 후 경과 시간, λ: Decay constant)</p>
-<p>90일 이상 미사용 시 최하점(0.3)으로 수렴하도록 설계하여 불필요한 Context 의 메모리 점유를 수학적으로 방지합니다.</p>`,
-    "주제_분류": `<h4>Domain Classification</h4>
-<p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p>`,
-    "계층적_탐색": `<h4>Hierarchical Search Protocol</h4>
-<p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p>
-<p>최상위 <code>index.md</code> 만 먼저 Context 에 로드하여 도메인 위치를 파악하고, 관심 주제 필터(<code>domain-*.md</code>)를 거친 후, 수 KB 내외의 최종 <code>pages/*.md</code> 만 정밀 판독합니다.</p>`,
-    "thank_you": `(없음)`,
-  };
-
-  let current = 0;
-  const slides = document.querySelectorAll('.slide');
-  const total = slides.length;
-  const dotsContainer = document.getElementById('navDots');
-  const counter = document.getElementById('navCounter');
-
-  for (let i = 0; i < total; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-    dot.onclick = () => goTo(i);
-    dotsContainer.appendChild(dot);
-  }
-
-  function goTo(n) {
-    slides[current].classList.remove('active');
-    dotsContainer.children[current].classList.remove('active');
-    current = ((n % total) + total) % total;
-    slides[current].classList.add('active');
-    dotsContainer.children[current].classList.add('active');
-    counter.textContent = `${current + 1} / ${total}`;
-  }
-
-  function nextSlide() { goTo(current + 1); }
-  function prevSlide() { goTo(current - 1); }
-  function showPopup(key) {
-    document.getElementById('popupBody').innerHTML = pData[key] || '내용 없음';
-    document.getElementById('popupOverlay').classList.add('active');
-  }
-  function hidePopup() { document.getElementById('popupOverlay').classList.remove('active'); }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
-    if (e.key === 'Escape') { hidePopup(); }
-  });
-
-  goTo(0);
+    // 슬라이드 네비게이션
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    
+    function showSlide(n) {
+        slides.forEach(s => s.classList.remove('active'));
+        slides[n].classList.add('active');
+    }
+    
+    // 키보드 네비게이션
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            currentSlide = Math.min(currentSlide + 1, slides.length - 1);
+            showSlide(currentSlide);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            currentSlide = Math.max(currentSlide - 1, 0);
+            showSlide(currentSlide);
+        }
+    });
+    
+    // 초기화
+    showSlide(0);
 </script>
 </body>
 </html>
