@@ -6,7 +6,7 @@ updated: 2026-06-04
 
 next_spec_id:
   A: 1
-  B: 7
+  B: 8
   C: 2
   D: 1
   E: 1
@@ -48,6 +48,11 @@ specs:
     created: 2026-06-04
   - spec_id: SPEC-B6
     title: 슬라이드 버전 관리
+    type: component
+    status: active
+    created: 2026-06-04
+  - spec_id: SPEC-B7
+    title: 슬라이드 구성 규격
     type: component
     status: active
     created: 2026-06-04

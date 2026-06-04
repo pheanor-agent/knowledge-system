@@ -169,6 +169,27 @@
         "test_pass_rate": 0,
         "conformance_score": 0.9
       }
+    },
+    "SPEC-B7": {
+      "title": "슬라이드 구성 규격",
+      "type": "component",
+      "status": "active",
+      "version": "v1.0",
+      "created": "2026-06-04",
+      "code_refs": [],
+      "test_refs": [],
+      "job_refs": [
+        "JOB-1503",
+        "JOB-1504",
+        "JOB-1506",
+        "JOB-1510",
+        "JOB-1511"
+      ],
+      "coverage": {
+        "code_coverage_pct": 0,
+        "test_pass_rate": 0,
+        "conformance_score": 0.95
+      }
     }
   }
 }
