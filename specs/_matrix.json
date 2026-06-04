@@ -41,26 +41,26 @@
       }
     },
     "SPEC-B1": {
-      "title": "원본 수집",
+      "title": "P0-Test-Component",
       "type": "component",
-      "status": "active",
-      "version": "v1.0",
+      "status": "proposed",
+      "version": "0.1.0",
+      "version_history": [
+        {
+          "version": "0.1.0",
+          "date": "2026-06-04",
+          "status": "proposed",
+          "summary": "초기 생성"
+        }
+      ],
       "created": "2026-06-04",
-      "code_refs": [
-        "~/.hermes/scripts/fetch.sh",
-        "~/.hermes/scripts/process-hermes-sessions.sh",
-        "~/.hermes/scripts/process-openclaw-memory.sh"
-      ],
+      "code_refs": [],
       "test_refs": [],
-      "job_refs": [
-        "JOB-1434",
-        "JOB-1442",
-        "JOB-1497"
-      ],
+      "job_refs": [],
       "coverage": {
-        "code_coverage_pct": 100,
+        "code_coverage_pct": 0,
         "test_pass_rate": 0,
-        "conformance_score": 0.9
+        "conformance_score": 0
       }
     },
     "SPEC-B2": {
