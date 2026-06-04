@@ -45,3 +45,7 @@
 ## vv1.1 (2026-06-05 01:44)
 - Gemini 제안사항 반영 (Lost in the Middle, 컴파일 워크플로우, Decay 함수)
 - Spec-Driven 시스템 정상화 (구버전 아카이브, 검증 루프 강제)
+
+## vv1.1 (2026-06-05 01:48)
+- Gemini 제안사항 반영 (Lost in the Middle, 컴파일 워크플로우, Decay 함수)
+- Spec-Driven 시스템 정상화 (구버전 아카이브, 검증 루프 강제)
