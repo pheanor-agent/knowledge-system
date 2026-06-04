@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지식 시스템 아키텍처</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #020617;
+  color: #e2e8f0;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 24px;
+}
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 6px;
+}
+.header .dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: #22d3ee;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.header p {
+  font-size: 11px;
+  color: #64748b;
+}
+.card {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 0;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.card-body { padding: 20px; }
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+.info-card {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 16px;
+}
+.info-card h3 {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.info-card .card-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.info-card ul { list-style: none; }
+.info-card li {
+  font-size: 11px;
+  color: #94a3b8;
+  padding: 3px 0;
+}
+.info-card li span {
+  color: #e2e8f0;
+  font-weight: 700;
+}
+footer {
+  text-align: center;
+  font-size: 9px;
+  color: #475569;
+  margin-top: 24px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span class="dot"></span> Knowledge System Architecture</h1>
+  <p>Karpathy 3-Layer · Hermes Agent · 3,651 Pages · 2026-06-04</p>
+</div>
+
+<div class="card">
+  <div class="card-body" style="padding:0;">
+<svg viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg" style="width:100%; display:block;">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="arrow-cyan" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#22d3ee"/>
+    </marker>
+    <marker id="arrow-emerald" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#34d399"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#a78bfa"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrow-slate" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 6" refX="9" refY="3" markerWidth="8" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#fb923c"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="820" fill="#020617"/>
+  <rect width="1200" height="820" fill="url(#grid)"/>
+
+  <!-- Arrows (behind components) -->
+  <!-- External -> External Storage -->
+  <line x1="150" y1="120" x2="150" y2="200" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrow-slate)"/>
+  <line x1="310" y1="120" x2="310" y2="200" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrow-slate)"/>
+  
+  <!-- External Storage -> Processing -->
+  <line x1="150" y1="260" x2="150" y2="330" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+  <line x1="310" y1="260" x2="310" y2="330" stroke="#fb923c" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+  
+  <!-- Processing -> Wiki -->
+  <line x1="150" y1="500" x2="150" y2="550" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-emerald)"/>
+  <line x1="310" y1="500" x2="310" y2="550" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-emerald)"/>
+  
+  <!-- Wiki -> LLM -->
+  <line x1="230" y1="690" x2="230" y2="740" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+  
+  <!-- Data <-> Wiki -->
+  <line x1="500" y1="600" x2="530" y2="600" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow-violet)"/>
+  
+  <!-- Cron -> Processing -->
+  <line x1="750" y1="380" x2="530" y2="400" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arrow-amber)"/>
+
+  <!-- Layer labels -->
+  <text x="20" y="30" fill="#64748b" font-size="9">LAYER 1 — RAW SOURCES</text>
+  <text x="20" y="200" fill="#64748b" font-size="9">LAYER 2 — WIKI (LLM PROCESSING)</text>
+  <text x="20" y="530" fill="#64748b" font-size="9">LAYER 3 — SCHEMA</text>
+
+  <!-- LAYER 1: External Sources -->
+  <!-- HN -->
+  <rect x="60" y="40" width="180" height="60" rx="6" fill="#0f172a"/>
+  <rect x="60" y="40" width="180" height="60" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="150" y="67" fill="#94a3b8" font-size="12" text-anchor="middle" font-weight="700">Hacker News</text>
+  <text x="150" y="84" fill="#64748b" font-size="9" text-anchor="middle">뉴스 수집 · 06:00, 18:00</text>
+
+  <!-- GeekNews -->
+  <rect x="220" y="40" width="180" height="60" rx="6" fill="#0f172a"/>
+  <rect x="220" y="40" width="180" height="60" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="310" y="67" fill="#94a3b8" font-size="12" text-anchor="middle" font-weight="700">GeekNews / AI</text>
+  <text x="310" y="84" fill="#64748b" font-size="9" text-anchor="middle">기술 블로그 · fetch.sh</text>
+
+  <!-- LAYER 1: Storage -->
+  <!-- OpenClaw Memory -->
+  <rect x="60" y="120" width="180" height="60" rx="6" fill="#0f172a"/>
+  <rect x="60" y="120" width="180" height="60" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="150" y="147" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="700">OpenClaw Memory</text>
+  <text x="150" y="164" fill="#64748b" font-size="9" text-anchor="middle">260 MD · 99.6% 가공</text>
+
+  <!-- Hermes Sessions -->
+  <rect x="220" y="120" width="180" height="60" rx="6" fill="#0f172a"/>
+  <rect x="220" y="120" width="180" height="60" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="310" y="147" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="700">Hermes Sessions</text>
+  <text x="310" y="164" fill="#64748b" font-size="9" text-anchor="middle">204 JSONL · 95.1% 가공</text>
+
+  <!-- Jobs -->
+  <rect x="380" y="120" width="180" height="60" rx="6" fill="#0f172a"/>
+  <rect x="380" y="120" width="180" height="60" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="470" y="147" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="700">JOB Files</text>
+  <text x="470" y="164" fill="#64748b" font-size="9" text-anchor="middle">578 folders · 100% 가공</text>
+
+  <!-- External Refs -->
+  <rect x="540" y="120" width="180" height="60" rx="6" fill="#0f172a"/>
+  <rect x="540" y="120" width="180" height="60" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="630" y="147" fill="#a78bfa" font-size="12" text-anchor="middle" font-weight="700">External Refs</text>
+  <text x="630" y="164" fill="#64748b" font-size="9" text-anchor="middle">73 refs + 99 content</text>
+
+  <!-- LAYER 2: Processing Pipeline -->
+  <!-- Processing -->
+  <rect x="60" y="280" width="400" height="200" rx="12" fill="none" stroke="#fb923c" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="80" y="300" fill="#fb923c" font-size="10" font-weight="700">PROCESsing PIPELINE</text>
+
+  <!-- fetch.sh -->
+  <rect x="80" y="320" width="140" height="60" rx="6" fill="#0f172a"/>
+  <rect x="80" y="320" width="140" height="60" rx="6" fill="rgba(251,146,60,0.3)" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="150" y="347" fill="#fb923c" font-size="12" text-anchor="middle" font-weight="700">fetch.sh</text>
+  <text x="150" y="364" fill="#64748b" font-size="9" text-anchor="middle">외부 수집 · dedup</text>
+
+  <!-- sync-all.sh -->
+  <rect x="240" y="320" width="140" height="60" rx="6" fill="#0f172a"/>
+  <rect x="240" y="320" width="140" height="60" rx="6" fill="rgba(251,146,60,0.3)" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="310" y="347" fill="#fb923c" font-size="12" text-anchor="middle" font-weight="700">sync-all.sh</text>
+  <text x="310" y="364" fill="#64748b" font-size="9" text-anchor="middle">일일 가공 · 04:00</text>
+
+  <!-- session processing -->
+  <rect x="80" y="410" width="140" height="60" rx="6" fill="#0f172a"/>
+  <rect x="80" y="410" width="140" height="60" rx="6" fill="rgba(251,146,60,0.3)" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="150" y="437" fill="#fb923c" font-size="11" text-anchor="middle" font-weight="700">Hermes Sessions</text>
+  <text x="150" y="454" fill="#64748b" font-size="9" text-anchor="middle">JSONL → wiki entities</text>
+
+  <!-- memory processing -->
+  <rect x="240" y="410" width="140" height="60" rx="6" fill="#0f172a"/>
+  <rect x="240" y="410" width="140" height="60" rx="6" fill="rgba(251,146,60,0.3)" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="310" y="437" fill="#fb923c" font-size="11" text-anchor="middle" font-weight="700">Memory Processing</text>
+  <text x="310" y="454" fill="#64748b" font-size="9" text-anchor="middle">MD → wiki entities</text>
+
+  <!-- LAYER 2: Wiki Pages -->
+  <rect x="60" y="550" width="400" height="130" rx="12" fill="none" stroke="#34d399" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="80" y="570" fill="#34d399" font-size="10" font-weight="700">WIKI PAGES — pages/</text>
+
+  <rect x="80" y="585" width="360" height="90" rx="6" fill="#0f172a"/>
+  <rect x="80" y="585" width="360" height="90" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+  <text x="260" y="615" fill="#34d399" font-size="12" text-anchor="middle" font-weight="700">3,651 Knowledge Pages</text>
+  <text x="260" y="635" fill="#64748b" font-size="9" text-anchor="middle">T1 Core: 272 (7.4%) · T2 Working: 2,123 (58.1%) · T3 Reference: 1,256 (34.4%)</text>
+  <text x="260" y="655" fill="#64748b" font-size="9" text-anchor="middle">Tags: 3,389 (92.8%) · Domains: 10 · Avg Score: 0.463</text>
+
+  <!-- Data Store -->
+  <rect x="520" y="500" width="300" height="200" rx="12" fill="none" stroke="#a78bfa" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="540" y="520" fill="#a78bfa" font-size="10" font-weight="700">METADATA — _data/</text>
+
+  <rect x="540" y="535" width="260" height="45" rx="6" fill="#0f172a"/>
+  <rect x="540" y="535" width="260" height="45" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="670" y="556" fill="#a78bfa" font-size="11" text-anchor="middle" font-weight="700">metadata.json</text>
+  <text x="670" y="571" fill="#64748b" font-size="8" text-anchor="middle">3,651 entries · tags · domain</text>
+
+  <rect x="540" y="590" width="125" height="45" rx="6" fill="#0f172a"/>
+  <rect x="540" y="590" width="125" height="45" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="602" y="611" fill="#a78bfa" font-size="11" text-anchor="middle" font-weight="700">scores.json</text>
+  <text x="602" y="626" fill="#64748b" font-size="8" text-anchor="middle">점수 · recency · decay</text>
+
+  <rect x="675" y="590" width="125" height="45" rx="6" fill="#0f172a"/>
+  <rect x="675" y="590" width="125" height="45" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="737" y="611" fill="#a78bfa" font-size="11" text-anchor="middle" font-weight="700">graph_edges.json</text>
+  <text x="737" y="626" fill="#64748b" font-size="8" text-anchor="middle">54 hubs · wikilinks</text>
+
+  <rect x="540" y="645" width="260" height="45" rx="6" fill="#0f172a"/>
+  <rect x="540" y="645" width="260" height="45" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="670" y="666" fill="#a78bfa" font-size="11" text-anchor="middle" font-weight="700">index.md + domain/tag indexes</text>
+  <text x="670" y="681" fill="#64748b" font-size="8" text-anchor="middle">LLM 카탈로그 · 16 domain · 30 tag</text>
+
+  <!-- Schema -->
+  <rect x="60" y="710" width="340" height="50" rx="6" fill="#0f172a"/>
+  <rect x="60" y="710" width="340" height="50" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="230" y="733" fill="#22d3ee" font-size="12" text-anchor="middle" font-weight="700">SCHEMA.md</text>
+  <text x="230" y="748" fill="#64748b" font-size="9" text-anchor="middle">규칙 정의 · 프론트매터 스키마 · frontmatter · tags/domain/priority</text>
+
+  <!-- LLM Consumer -->
+  <rect x="60" y="750" width="340" height="50" rx="6" fill="#0f172a"/>
+  <rect x="60" y="750" width="340" height="50" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="230" y="773" fill="#22d3ee" font-size="12" text-anchor="middle" font-weight="700">LLM Agent (Hermes)</text>
+  <text x="230" y="788" fill="#64748b" font-size="9" text-anchor="middle">index.md → domain-*.md → pages/*.md</text>
+
+  <!-- Cron Automation -->
+  <rect x="700" y="300" width="300" height="180" rx="12" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="720" y="320" fill="#fbbf24" font-size="10" font-weight="700">CRON AUTOMATION</text>
+
+  <rect x="720" y="335" width="260" height="40" rx="6" fill="#0f172a"/>
+  <rect x="720" y="335" width="260" height="40" rx="6" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="850" y="353" fill="#fbbf24" font-size="11" text-anchor="middle" font-weight="700">sync-all.sh</text>
+  <text x="850" y="365" fill="#64748b" font-size="8" text-anchor="middle">04:00 daily · metadata → graph → scores</text>
+
+  <rect x="720" y="385" width="260" height="40" rx="6" fill="#0f172a"/>
+  <rect x="720" y="385" width="260" height="40" rx="6" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="850" y="403" fill="#fbbf24" font-size="11" text-anchor="middle" font-weight="700">fetch.sh</text>
+  <text x="850" y="415" fill="#64748b" font-size="8" text-anchor="middle">06:00, 18:00 · HN / GeekNews / AI Frontier</text>
+
+  <rect x="720" y="435" width="260" height="40" rx="6" fill="#0f172a"/>
+  <rect x="720" y="435" width="260" height="40" rx="6" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="850" y="453" fill="#fbbf24" font-size="11" text-anchor="middle" font-weight="700">daily-synthesis.sh</text>
+  <text x="850" y="465" fill="#64748b" font-size="8" text-anchor="middle">10:00 daily · 요약 생성</text>
+
+  <!-- Legend -->
+  <rect x="700" y="540" width="300" height="210" rx="10" fill="rgba(15,23,42,0.8)" stroke="#1e293b" stroke-width="1"/>
+  <text x="720" y="562" fill="#94a3b8" font-size="10" font-weight="700">LEGEND</text>
+  
+  <rect x="720" y="575" width="16" height="12" rx="3" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1"/>
+  <text x="744" y="585" fill="#94a3b8" font-size="9">External Source</text>
+  
+  <rect x="720" y="595" width="16" height="12" rx="3" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1"/>
+  <text x="744" y="605" fill="#94a3b8" font-size="9">Raw Data Store</text>
+  
+  <rect x="720" y="615" width="16" height="12" rx="3" fill="rgba(251,146,60,0.3)" stroke="#fb923c" stroke-width="1"/>
+  <text x="744" y="625" fill="#94a3b8" font-size="9">Processing Pipeline</text>
+  
+  <rect x="720" y="635" width="16" height="12" rx="3" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1"/>
+  <text x="744" y="645" fill="#94a3b8" font-size="9">Wiki Pages (LLM Output)</text>
+  
+  <rect x="720" y="655" width="16" height="12" rx="3" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1"/>
+  <text x="744" y="665" fill="#94a3b8" font-size="9">Metadata / Index</text>
+  
+  <rect x="720" y="675" width="16" height="12" rx="3" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1"/>
+  <text x="744" y="685" fill="#94a3b8" font-size="9">Schema / Consumer</text>
+  
+  <rect x="720" y="695" width="16" height="12" rx="3" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="744" y="705" fill="#94a3b8" font-size="9">Cron Automation</text>
+  
+  <text x="900" y="585" fill="#94a3b8" font-size="9">→ Solid = Data Flow</text>
+  <text x="900" y="600" fill="#94a3b8" font-size="9">→ Dashed = Trigger / Config</text>
+
+</svg>
+  </div>
+</div>
+
+<div class="cards-grid">
+  <div class="info-card">
+    <h3><span class="card-dot" style="background:#34d399"></span>Scale</h3>
+    <ul>
+      <li>Wiki Pages: <span>3,651</span></li>
+      <li>Domains: <span>10</span></li>
+      <li>Tags: <span>30 indexes</span></li>
+      <li>Jobs: <span>578</span></li>
+      <li>Sessions: <span>204 JSONL</span></li>
+      <li>OpenClaw Memory: <span>260 MD</span></li>
+    </ul>
+  </div>
+  <div class="info-card">
+    <h3><span class="card-dot" style="background:#a78bfa"></span>Tier Distribution</h3>
+    <ul>
+      <li>T1 Core (≥0.7): <span>272</span> (7.4%)</li>
+      <li>T2 Working (0.4-0.7): <span>2,123</span> (58.1%)</li>
+      <li>T3 Reference (<0.4): <span>1,256</span> (34.4%)</li>
+      <li>Avg Score: <span>0.463</span></li>
+    </ul>
+  </div>
+  <div class="info-card">
+    <h3><span class="card-dot" style="background:#fbbf24"></span>Top Domains</h3>
+    <ul>
+      <li>agent: <span>1,029</span></li>
+      <li>system: <span>786</span></li>
+      <li>general: <span>744</span></li>
+      <li>image: <span>258</span></li>
+      <li>memory: <span>254</span></li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  Knowledge System Architecture · Karpathy 3-Layer Design · Hermes Agent · 2026-06-04
+</footer>
+
+</body>
+</html>
