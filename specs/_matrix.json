@@ -175,14 +175,20 @@
     "SPEC-A1": {
       "title": "P0-Integration-Test",
       "type": "requirement",
-      "status": "proposed",
-      "version": "0.1.0",
+      "status": "approved",
+      "version": "0.2.0",
       "version_history": [
         {
           "version": "0.1.0",
           "date": "2026-06-04",
           "status": "proposed",
           "summary": "초기 생성"
+        },
+        {
+          "version": "0.2.0",
+          "date": "2026-06-04",
+          "status": "approved",
+          "summary": "proposed → approved"
         }
       ],
       "created": "2026-06-04",

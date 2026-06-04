@@ -2,13 +2,17 @@
 
 ---
 spec_id: SPEC-A1
-version: 0.1.0
+version: 0.2.0
 version_history:
+  - version: 0.2.0
+    date: 2026-06-04
+    status: approved
+    summary: "proposed → approved"
   - version: 0.1.0
     date: 2026-06-04
     status: proposed
     summary: "초기 생성"
-status: proposed
+status: approved
 priority: P?
 category: 요구사항
 related_specs: []
@@ -16,7 +20,7 @@ code_refs: []
 test_refs: []
 job_refs: []
 created: YYYY-MM-DD
-updated: YYYY-MM-DD
+updated: 2026-06-04
 ---
 
 ### [SPEC-A1] 요구사항명
