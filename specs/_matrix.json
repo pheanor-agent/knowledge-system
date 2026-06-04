@@ -19,10 +19,20 @@
       ],
       "test_refs": [],
       "job_refs": [
-        "JOB-1394", "JOB-1395", "JOB-1396", "JOB-1409",
-        "JOB-1414", "JOB-1416", "JOB-1442", "JOB-1451",
-        "JOB-1453", "JOB-1459", "JOB-1460", "JOB-1490",
-        "JOB-1496", "JOB-1497"
+        "JOB-1394",
+        "JOB-1395",
+        "JOB-1396",
+        "JOB-1409",
+        "JOB-1414",
+        "JOB-1416",
+        "JOB-1442",
+        "JOB-1451",
+        "JOB-1453",
+        "JOB-1459",
+        "JOB-1460",
+        "JOB-1490",
+        "JOB-1496",
+        "JOB-1497"
       ],
       "coverage": {
         "code_coverage_pct": 100,
@@ -42,7 +52,11 @@
         "~/.hermes/scripts/process-openclaw-memory.sh"
       ],
       "test_refs": [],
-      "job_refs": ["JOB-1434", "JOB-1442", "JOB-1497"],
+      "job_refs": [
+        "JOB-1434",
+        "JOB-1442",
+        "JOB-1497"
+      ],
       "coverage": {
         "code_coverage_pct": 100,
         "test_pass_rate": 0,
@@ -62,7 +76,12 @@
         "~/.hermes/scripts/build-scores.sh"
       ],
       "test_refs": [],
-      "job_refs": ["JOB-1451", "JOB-1453", "JOB-1459", "JOB-1497"],
+      "job_refs": [
+        "JOB-1451",
+        "JOB-1453",
+        "JOB-1459",
+        "JOB-1497"
+      ],
       "coverage": {
         "code_coverage_pct": 100,
         "test_pass_rate": 0,
@@ -81,7 +100,10 @@
         "~/.hermes/scripts/index-missing.sh"
       ],
       "test_refs": [],
-      "job_refs": ["JOB-1453", "JOB-1459"],
+      "job_refs": [
+        "JOB-1453",
+        "JOB-1459"
+      ],
       "coverage": {
         "code_coverage_pct": 100,
         "test_pass_rate": 0,
@@ -100,7 +122,11 @@
         "~/.hermes/scripts/update-usage-scores.sh"
       ],
       "test_refs": [],
-      "job_refs": ["JOB-1439", "JOB-1453", "JOB-1460"],
+      "job_refs": [
+        "JOB-1439",
+        "JOB-1453",
+        "JOB-1460"
+      ],
       "coverage": {
         "code_coverage_pct": 100,
         "test_pass_rate": 0,
@@ -117,7 +143,11 @@
         "~/.hermes/scripts/build-scores.sh"
       ],
       "test_refs": [],
-      "job_refs": ["JOB-1460", "JOB-1470", "JOB-1471"],
+      "job_refs": [
+        "JOB-1460",
+        "JOB-1470",
+        "JOB-1471"
+      ],
       "coverage": {
         "code_coverage_pct": 100,
         "test_pass_rate": 0,
@@ -132,11 +162,37 @@
       "created": "2026-06-04",
       "code_refs": [],
       "test_refs": [],
-      "job_refs": ["JOB-1470", "JOB-1471"],
+      "job_refs": [
+        "JOB-1470",
+        "JOB-1471"
+      ],
       "coverage": {
         "code_coverage_pct": 0,
         "test_pass_rate": 0,
         "conformance_score": 0.8
+      }
+    },
+    "SPEC-A1": {
+      "title": "P0-Integration-Test",
+      "type": "requirement",
+      "status": "proposed",
+      "version": "0.1.0",
+      "version_history": [
+        {
+          "version": "0.1.0",
+          "date": "2026-06-04",
+          "status": "proposed",
+          "summary": "초기 생성"
+        }
+      ],
+      "created": "2026-06-04",
+      "code_refs": [],
+      "test_refs": [],
+      "job_refs": [],
+      "coverage": {
+        "code_coverage_pct": 0,
+        "test_pass_rate": 0,
+        "conformance_score": 0
       }
     }
   }
