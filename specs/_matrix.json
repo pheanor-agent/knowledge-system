@@ -1,7 +1,143 @@
 {
   "project": "knowledge-system",
-  "spec_version": "v0.1",
+  "spec_version": "v1.0",
   "created": "2026-06-04",
   "updated": "2026-06-04",
-  "items": {}
+  "items": {
+    "SPEC-O1": {
+      "title": "지식 시스템 아키텍처",
+      "type": "architecture",
+      "status": "active",
+      "version": "v1.0",
+      "created": "2026-06-04",
+      "code_refs": [
+        "~/.hermes/scripts/sync-all.sh",
+        "~/.hermes/scripts/build-metadata.sh",
+        "~/.hermes/scripts/build-graph.sh",
+        "~/.hermes/scripts/build-scores.sh",
+        "~/.hermes/scripts/process-hermes-sessions.sh"
+      ],
+      "test_refs": [],
+      "job_refs": [
+        "JOB-1394", "JOB-1395", "JOB-1396", "JOB-1409",
+        "JOB-1414", "JOB-1416", "JOB-1442", "JOB-1451",
+        "JOB-1453", "JOB-1459", "JOB-1460", "JOB-1490",
+        "JOB-1496", "JOB-1497"
+      ],
+      "coverage": {
+        "code_coverage_pct": 100,
+        "test_pass_rate": 0,
+        "conformance_score": 0.85
+      }
+    },
+    "SPEC-B1": {
+      "title": "원본 수집",
+      "type": "component",
+      "status": "active",
+      "version": "v1.0",
+      "created": "2026-06-04",
+      "code_refs": [
+        "~/.hermes/scripts/fetch.sh",
+        "~/.hermes/scripts/process-hermes-sessions.sh",
+        "~/.hermes/scripts/process-openclaw-memory.sh"
+      ],
+      "test_refs": [],
+      "job_refs": ["JOB-1434", "JOB-1442", "JOB-1497"],
+      "coverage": {
+        "code_coverage_pct": 100,
+        "test_pass_rate": 0,
+        "conformance_score": 0.9
+      }
+    },
+    "SPEC-B2": {
+      "title": "지식 가공 파이프라인",
+      "type": "component",
+      "status": "active",
+      "version": "v1.0",
+      "created": "2026-06-04",
+      "code_refs": [
+        "~/.hermes/scripts/sync-all.sh",
+        "~/.hermes/scripts/build-metadata.sh",
+        "~/.hermes/scripts/build-graph.sh",
+        "~/.hermes/scripts/build-scores.sh"
+      ],
+      "test_refs": [],
+      "job_refs": ["JOB-1451", "JOB-1453", "JOB-1459", "JOB-1497"],
+      "coverage": {
+        "code_coverage_pct": 100,
+        "test_pass_rate": 0,
+        "conformance_score": 0.85
+      }
+    },
+    "SPEC-B3": {
+      "title": "메타데이터 관리",
+      "type": "component",
+      "status": "active",
+      "version": "v1.0",
+      "created": "2026-06-04",
+      "code_refs": [
+        "~/.hermes/scripts/build-metadata.sh",
+        "~/.hermes/scripts/rebuild-metadata.sh",
+        "~/.hermes/scripts/index-missing.sh"
+      ],
+      "test_refs": [],
+      "job_refs": ["JOB-1453", "JOB-1459"],
+      "coverage": {
+        "code_coverage_pct": 100,
+        "test_pass_rate": 0,
+        "conformance_score": 0.85
+      }
+    },
+    "SPEC-B4": {
+      "title": "그래프 및 중요도",
+      "type": "component",
+      "status": "active",
+      "version": "v1.0",
+      "created": "2026-06-04",
+      "code_refs": [
+        "~/.hermes/scripts/build-graph.sh",
+        "~/.hermes/scripts/build-scores.sh",
+        "~/.hermes/scripts/update-usage-scores.sh"
+      ],
+      "test_refs": [],
+      "job_refs": ["JOB-1439", "JOB-1453", "JOB-1460"],
+      "coverage": {
+        "code_coverage_pct": 100,
+        "test_pass_rate": 0,
+        "conformance_score": 0.7
+      }
+    },
+    "SPEC-B5": {
+      "title": "인덱스 및 노출 구조",
+      "type": "component",
+      "status": "active",
+      "version": "v1.0",
+      "created": "2026-06-04",
+      "code_refs": [
+        "~/.hermes/scripts/build-scores.sh"
+      ],
+      "test_refs": [],
+      "job_refs": ["JOB-1460", "JOB-1470", "JOB-1471"],
+      "coverage": {
+        "code_coverage_pct": 100,
+        "test_pass_rate": 0,
+        "conformance_score": 0.9
+      }
+    },
+    "SPEC-C1": {
+      "title": "지식 시스템 인터페이스",
+      "type": "interface",
+      "status": "active",
+      "version": "v1.0",
+      "created": "2026-06-04",
+      "code_refs": [],
+      "test_refs": [],
+      "job_refs": ["JOB-1470", "JOB-1471"],
+      "coverage": {
+        "code_coverage_pct": 0,
+        "test_pass_rate": 0,
+        "conformance_score": 0.8
+      }
+    }
+  }
 }
