@@ -2,8 +2,12 @@
 
 ---
 spec_id: SPEC-A1
-version: 0.2.3
+version: 0.2.4
 version_history:
+  - version: 0.2.4
+    date: 2026-06-04
+    status: deprecated
+    summary: "verified → deprecated"
   - version: 0.2.3
     date: 2026-06-04
     status: verified
@@ -24,7 +28,7 @@ version_history:
     date: 2026-06-04
     status: proposed
     summary: "초기 생성"
-status: verified
+status: deprecated
 priority: P?
 category: 요구사항
 related_specs: []
