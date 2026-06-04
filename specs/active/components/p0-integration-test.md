@@ -2,8 +2,12 @@
 
 ---
 spec_id: SPEC-A1
-version: 0.2.0
+version: 0.2.1
 version_history:
+  - version: 0.2.1
+    date: 2026-06-04
+    status: in_progress
+    summary: "approved → in_progress"
   - version: 0.2.0
     date: 2026-06-04
     status: approved
@@ -12,7 +16,7 @@ version_history:
     date: 2026-06-04
     status: proposed
     summary: "초기 생성"
-status: approved
+status: in_progress
 priority: P?
 category: 요구사항
 related_specs: []

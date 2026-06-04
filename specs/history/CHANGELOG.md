@@ -5,6 +5,33 @@
 
 ## [0.1.0] SPEC-A1 — 2026-06-04
 \n## [0.2.0] SPEC-A1 — 2026-06-04\n\n- **변경 유형**: Added\n- **전환**: `proposed` → `approved`\n- **버전**: `0.1.0` → `0.2.0` (minor)\n- **작업**: JOB-JOB-1506\n- **Spec 파일**: specs/active/components/p0-integration-test.md\n\n### 변경 내용 (git diff)\n```diff\ndiff --git a/specs/active/components/p0-integration-test.md b/specs/active/components/p0-integration-test.md
+\n## [0.2.1] SPEC-A1 — 2026-06-04\n\n- **변경 유형**: Changed\n- **전환**: `approved` → `in_progress`\n- **버전**: `0.2.0` → `0.2.1` (patch)\n- **작업**: JOB-JOB-1506\n- **Spec 파일**: specs/active/components/p0-integration-test.md\n\n### 변경 내용 (git diff)\n```diff\ndiff --git a/specs/active/components/p0-integration-test.md b/specs/active/components/p0-integration-test.md
+index 9909a35..bb21849 100644
+--- a/specs/active/components/p0-integration-test.md
++++ b/specs/active/components/p0-integration-test.md
+@@ -2,8 +2,12 @@
+ 
+ ---
+ spec_id: SPEC-A1
+-version: 0.2.0
++version: 0.2.1
+ version_history:
++  - version: 0.2.1
++    date: 2026-06-04
++    status: in_progress
++    summary: "approved → in_progress"
+   - version: 0.2.0
+     date: 2026-06-04
+     status: approved
+@@ -12,7 +16,7 @@ version_history:
+     date: 2026-06-04
+     status: proposed
+     summary: "초기 생성"
+-status: approved
++status: in_progress
+ priority: P?
+ category: 요구사항
+ related_specs: []\n```\n
 index 57e0550..9909a35 100644
 --- a/specs/active/components/p0-integration-test.md
 +++ b/specs/active/components/p0-integration-test.md
