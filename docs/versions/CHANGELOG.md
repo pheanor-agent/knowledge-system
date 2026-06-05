@@ -48,4 +48,10 @@
 
 ## vv1.1 (2026-06-05 01:48)
 - Gemini 제안사항 반영 (Lost in the Middle, 컴파일 워크플로우, Decay 함수)
+
+## v1.6-layout (2026-06-05)
+- 레이아웃 다양화: 카드형, 2열 비교, 도메인 카드 4개
+- 색상 코딩: T1/Rose, T2/Amber, T3/Green
+- 다이어그램 개선: 단계별 레이블 추가, 색상 다양화
+- Anti-Pattern 해결: Text Wall → Card, Bullet Hell → Grid
 - Spec-Driven 시스템 정상화 (구버전 아카이브, 검증 루프 강제)
