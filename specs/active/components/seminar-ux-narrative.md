@@ -1,5 +1,21 @@
 # Seminar UX & Narrative Specification
 
+---
+spec_id: SPEC-B8
+version: v1.0
+status: active
+priority: P1
+category: 세미나 UX/서사
+related_specs:
+  - "SPEC-B7"  # 슬라이드 구성 규격
+code_refs: []
+test_refs: []
+job_refs:
+  - "JOB-1538"
+  - "JOB-1539"
+  - "JOB-1543"
+---
+
 ## 1. Narrative Arc (서사 구조)
 
 본 세미나 자료는 기술적 구현 나열이 아닌, **"왜 이 시스템이 필요한가"**에서 시작하여 **"어떤 가치를 제공하는가"**로 끝나는 서사 구조를 따릅니다.
