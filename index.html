@@ -601,7 +601,7 @@ const pData = {
   
   "s4_rag": "<h4>RAG (Retrieval-Augenerated Generation)</h4><p>외부 문서 저장소로, 필요 시 검색하여 참조합니다.</p><pre>1. Query 인코딩 (Embedding)\n2. Vector DB 검색 (Cosine Similarity)\n3. Top-K 문서 반환 (K=5)\n4. Context 에 주입</pre><p>RAG 는 사전 학습된 지식을 보완하는 외부 지식원입니다.</p>",
   
-  "s6_ingest": "<h4>Ingest: 지식 추출</h4><p>대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.</p><pre>{\n  "type": "memory",\n  "content": "사용자 선호사항...",\n  "tags": ["user", "preference"],\n  "score": 75,\n  "timestamp": "2026-06-09T19:00:00Z"\n}</pre><ul><li>실행 시점: 세션 종료 후 5 분</li><li>처리량: 분당 10~20 건</li><li>성공률: 95% 이상</li></ul>",
+  "s6_ingest": "<h4>Ingest: 지식 추출</h4><p>대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.</p><pre>{\n  'type': 'memory',\n  'content': '사용자 선호사항...',\n  'tags': ['user', 'preference'],\n  'score': 75,\n  'timestamp': '2026-06-09T19:00:00Z'\n}</pre><ul><li>실행 시점: 세션 종료 후 5 분</li><li>처리량: 분당 10~20 건</li><li>성공률: 95% 이상</li></ul>",
   
   "s6_link": "<h4>Link: 관계 연결</h4><p>기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 Wiki-links 형태를 자동 생성합니다.</p><pre>[[에이전트 메모리]] → [[지식 시스템]]\n[[workflow-gate.sh]] → [[JOB 관리]]\n[[spec-driven-dev]] → [[사양서]]</pre><p>이 과정을 통해 지식 간 관계가 그래프 구조로 형성됩니다.</p>",
   
@@ -611,7 +611,13 @@ const pData = {
   
   "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ × days)\nλ = 0.01 (90 일 후 40% 감소)\n최소 점수: 10 (완전 소멸 방지)</pre><p>이 알고리즘은 불필요한 Context 의 메모리 점유를 방지합니다.</p>",
   
-  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p><pre>metadata.json:\n{\n  "tags": ["agent", "memory"],\n  "domain": "system",\n  "priority": "T2",\n  "created": "2026-06-09",\n  "updated": "2026-06-09"\n}</pre><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
+  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p><pre>metadata.json:\n{
+  'tags': ['agent', 'memory'],
+  'domain': 'system',
+  'priority': 'T2',
+  'created': '2026-06-09',
+  'updated': '2026-06-09'
+}</pre><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
   
   "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
 };
