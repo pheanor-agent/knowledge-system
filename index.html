@@ -586,62 +586,29 @@ h2.slide-title {
 </div>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
 const pData = {
   "s2_context_bloat": "<h4>Context Bloat</h4><p>매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되는 현상입니다.</p><pre>예시: 100 턴 대화 × 2,000 토큰/턴 = 200,000 토큰</pre><p>이 현상은 Conversation Length 가 증가할수록 기하급수적으로 비용이 증가합니다.</p>",
   
   "s2_lost_in_middle": "<h4>Lost in the Middle</h4><p>LLM 의 Context Window 가 길어질수록 중앙부의 Attention 가중치가 하락하여 핵심 지시 사항을 누락하는 현상입니다.</p><pre>Attention Score: 앞쪽 0.9 → 중앙 0.3 → 뒷쪽 0.8</pre><p>이 현상을 해결하기 위해 Selective Context Loading 이 필요합니다.</p>",
   
-  "s4_agent_memory": "<h4>에이전트 메모리 (L2)</h4><p>에이전트가 실시간으로 기록하는 개인 메모리로, 파일 시스템 기반으로 관리됩니다.</p><pre>~/.hermes/memory/
-├── MEMORY.md      # 시스템 메모리
-├── USER.md        # 사용자 선호사항
-├── skills/        # 스킬 정의
-└── cron/          # 주기적 작업</pre><p>이 메모리는 매 대화마다 로드되어 에이전트의 행동 기준이 됩니다.</p>",
+  "s4_agent_memory": "<h4>에이전트 메모리 (L2)</h4><p>에이전트가 실시간으로 기록하는 개인 메모리로, 파일 시스템 기반으로 관리됩니다.</p><pre>~/.hermes/memory/\n├── MEMORY.md      # 시스템 메모리\n├── USER.md        # 사용자 선호사항\n├── skills/        # 스킬 정의\n└── cron/          # 주기적 작업</pre><p>이 메모리는 매 대화마다 로드되어 에이전트의 행동 기준이 됩니다.</p>",
   
-  "s4_rag": "<h4>RAG (Retrieval-Augenerated Generation)</h4><p>외부 문서 저장소로, 필요 시 검색하여 참조합니다.</p><pre>1. Query 인코딩 (Embedding)
-2. Vector DB 검색 (Cosine Similarity)
-3. Top-K 문서 반환 (K=5)
-4. Context 에 주입</pre><p>RAG 는 사전 학습된 지식을 보완하는 외부 지식원입니다.</p>",
+  "s4_rag": "<h4>RAG (Retrieval-Augenerated Generation)</h4><p>외부 문서 저장소로, 필요 시 검색하여 참조합니다.</p><pre>1. Query 인코딩 (Embedding)\n2. Vector DB 검색 (Cosine Similarity)\n3. Top-K 문서 반환 (K=5)\n4. Context 에 주입</pre><p>RAG 는 사전 학습된 지식을 보완하는 외부 지식원입니다.</p>",
   
-  "s6_ingest": "<h4>Ingest: 지식 추출</h4><p>대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.</p><pre>{
-  "type": "memory",
-  "content": "사용자 선호사항...",
-  "tags": ["user", "preference"],
-  "score": 75,
-  "timestamp": "2026-06-09T19:00:00Z"
-}</pre><ul><li>실행 시점: 세션 종료 후 5 분</li><li>처리량: 분당 10~20 건</li><li>성공률: 95% 이상</li></ul>",
+  "s6_ingest": "<h4>Ingest: 지식 추출</h4><p>대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.</p><pre>{\n  "type": "memory",\n  "content": "사용자 선호사항...",\n  "tags": ["user", "preference"],\n  "score": 75,\n  "timestamp": "2026-06-09T19:00:00Z"\n}</pre><ul><li>실행 시점: 세션 종료 후 5 분</li><li>처리량: 분당 10~20 건</li><li>성공률: 95% 이상</li></ul>",
   
-  "s6_link": "<h4>Link: 관계 연결</h4><p>기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 Wiki-links 형태를 자동 생성합니다.</p><pre>[[에이전트 메모리]] → [[지식 시스템]]
-[[workflow-gate.sh]] → [[JOB 관리]]
-[[spec-driven-dev]] → [[사양서]]</pre><p>이 과정을 통해 지식 간 관계가 그래프 구조로 형성됩니다.</p>",
+  "s6_link": "<h4>Link: 관계 연결</h4><p>기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 Wiki-links 형태를 자동 생성합니다.</p><pre>[[에이전트 메모리]] → [[지식 시스템]]\n[[workflow-gate.sh]] → [[JOB 관리]]\n[[spec-driven-dev]] → [[사양서]]</pre><p>이 과정을 통해 지식 간 관계가 그래프 구조로 형성됩니다.</p>",
   
-  "s6_lint": "<h4>Lint: 무결성 검증</h4><p>신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.</p><pre>✓ Schema 유효성 검사
-✓ 중복 콘텐츠 체크
-✓ 모순 탐지 (Conflict Detection)
-✓ 버전 병합 (Merge)
-✓ 변경 이력 기록 (Append-only)</pre><p>검증 실패 시 Ingest 단계로 되돌아갑니다.</p>",
+  "s6_lint": "<h4>Lint: 무결성 검증</h4><p>신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.</p><pre>✓ Schema 유효성 검사\n✓ 중복 콘텐츠 체크\n✓ 모순 탐지 (Conflict Detection)\n✓ 버전 병합 (Merge)\n✓ 변경 이력 기록 (Append-only)</pre><p>검증 실패 시 Ingest 단계로 되돌아갑니다.</p>",
   
-  "s8_scoring": "<h4>점수 계산 알고리즘</h4><p>우선순위, 최신성, 사용 빈도, 허브 노드 점수 등을 종합하여 Tier(T1/T2/T3) 를 배정합니다.</p><pre>Score = (priority × 0.4) + 
-        (recency × 0.3) + 
-        (usage × 0.2) + 
-        (hub × 0.1)</pre><p>각 요소는 0~100 점 스케일로 정규화됩니다.</p>",
+  "s8_scoring": "<h4>점수 계산 알고리즘</h4><p>우선순위, 최신성, 사용 빈도, 허브 노드 점수 등을 종합하여 Tier(T1/T2/T3) 를 배정합니다.</p><pre>Score = (priority × 0.4) + \n        (recency × 0.3) + \n        (usage × 0.2) + \n        (hub × 0.1)</pre><p>각 요소는 0~100 점 스케일로 정규화됩니다.</p>",
   
-  "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ × days)
-λ = 0.01 (90 일 후 40% 감소)
-최소 점수: 10 (완전 소멸 방지)</pre><p>이 알고리즘은 불필요한 Context 의 메모리 점유를 방지합니다.</p>",
+  "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ × days)\nλ = 0.01 (90 일 후 40% 감소)\n최소 점수: 10 (완전 소멸 방지)</pre><p>이 알고리즘은 불필요한 Context 의 메모리 점유를 방지합니다.</p>",
   
-  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p><pre>metadata.json:
-{
-  "tags": ["agent", "memory"],
-  "domain": "system",
-  "priority": "T2",
-  "created": "2026-06-09",
-  "updated": "2026-06-09"
-}</pre><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
+  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p><pre>metadata.json:\n{\n  "tags": ["agent", "memory"],\n  "domain": "system",\n  "priority": "T2",\n  "created": "2026-06-09",\n  "updated": "2026-06-09"\n}</pre><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
   
-  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)
-2. Index Scan: 도메인 필터 (100 토큰)
-3. Domain Filter: 관련 문서 선택 (200 토큰)
-4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
+  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
 };
 
 let current = 0;
@@ -686,6 +653,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 goTo(0);
+});
 </script>
 </body>
 </html>
