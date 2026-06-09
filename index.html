@@ -586,7 +586,12 @@ h2.slide-title {
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+let current = 0;
+let slides;
+let total;
+let dotsContainer;
+let counter;
+
 const pData = {
   "s2_context_bloat": "<h4>Context Bloat</h4><p>매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되는 현상입니다.</p><pre>예시: 100 턴 대화 × 2,000 토큰/턴 = 200,000 토큰</pre><p>이 현상은 Conversation Length 가 증가할수록 기하급수적으로 비용이 증가합니다.</p>",
   
@@ -611,20 +616,24 @@ const pData = {
   "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
 };
 
-let current = 0;
-const slides = document.querySelectorAll('.slide');
-const total = slides.length;
-const dotsContainer = document.getElementById('navDots');
-const counter = document.getElementById('navCounter');
+function init() {
+  slides = document.querySelectorAll('.slide');
+  total = slides.length;
+  dotsContainer = document.getElementById('navDots');
+  counter = document.getElementById('navCounter');
 
-for (let i = 0; i < total; i++) {
-  const dot = document.createElement('div');
-  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-  dot.onclick = () => goTo(i);
-  dotsContainer.appendChild(dot);
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  goTo(0);
 }
 
 function goTo(n) {
+  if (!slides || slides.length === 0) return;
   slides[current].classList.remove('active');
   dotsContainer.children[current].classList.remove('active');
   current = ((n % total) + total) % total;
@@ -652,8 +661,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') { hidePopup(); }
 });
 
-goTo(0);
-});
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
