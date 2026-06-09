@@ -137,6 +137,77 @@ h2.slide-title {
 .hierarchy-level.l2 { background: #eff6ff; border: 2px solid #2563eb; color: #1e40af; }
 .hierarchy-level.l3 { background: #f0fdf4; border: 2px solid #22c55e; color: #166534; }
 
+/* Flow Chart with branches */
+.flow-chart { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 20px; }
+.flow-row { display: flex; gap: 16px; align-items: center; }
+.flow-node {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 20px;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  min-width: 120px;
+  text-align: center;
+}
+.flow-node.start { border-color: #f59e0b; background: #fffbeb; }
+.flow-node.process { border-color: #8b5cf6; background: #f5f3ff; }
+.flow-node.end { border-color: #22c55e; background: #f0fdf4; }
+.flow-arrow { font-size: 20px; color: var(--text-dim); }
+.flow-branch { display: flex; gap: 24px; margin-top: 8px; }
+.flow-condition {
+  background: #fef2f2;
+  border: 2px solid #ef4444;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Cycle Diagram */
+.cycle-diagram { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+.cycle-top { display: flex; gap: 16px; align-items: center; }
+.cycle-arrow-down { font-size: 24px; color: var(--text-dim); margin: 8px 0; }
+.cycle-bottom { display: flex; gap: 16px; align-items: center; }
+.cycle-feedback {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: var(--t1);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px;
+}
+
+/* Tree Diagram */
+.tree-diagram { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 20px; }
+.tree-root {
+  background: var(--gradient-start);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+.tree-branches { display: flex; gap: 20px; }
+.tree-branch {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  min-width: 150px;
+}
+.tree-branch h4 { font-size: 15px; margin-bottom: 8px; }
+.tree-branch p { font-size: 12px; color: var(--text-dim); }
+
+/* Image container */
+.slide-image {
+  max-width: 900px;
+  width: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  margin-top: 16px;
+}
+
 /* Popup */
 .popup-trigger {
   display: inline-flex; align-items: center; justify-content: center;
@@ -160,8 +231,8 @@ h2.slide-title {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 36px;
-  max-width: 600px;
-  max-height: 70vh;
+  max-width: 700px;
+  max-height: 80vh;
   overflow-y: auto;
   position: relative;
   text-align: left;
@@ -173,9 +244,11 @@ h2.slide-title {
   font-size: 24px; cursor: pointer;
 }
 .popup-content h4 { font-size: 20px; margin-bottom: 16px; color: var(--accent); }
-.popup-content p { font-size: 15px; line-height: 1.7; }
+.popup-content p { font-size: 15px; line-height: 1.7; margin-bottom: 12px; }
 .popup-content pre { background: #f3f4f6; padding: 12px; border-radius: 8px; overflow-x: auto; margin: 12px 0; }
 .popup-content code { font-family: monospace; font-size: 13px; }
+.popup-content ul { margin: 8px 0 8px 20px; }
+.popup-content li { font-size: 14px; line-height: 1.6; margin: 4px 0; }
 
 /* Navigation */
 .nav {
@@ -204,6 +277,9 @@ h2.slide-title {
 /* Cover */
 .slide-cover { text-align: center; }
 .slide-cover .subtitle { font-size: 20px; color: var(--text-dim); margin-top: 16px; line-height: 1.6; }
+
+/* Two column layout */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; max-width: 1100px; margin-top: 20px; }
 </style>
 </head>
 <body>
@@ -222,23 +298,28 @@ h2.slide-title {
 <div class="slide" data-slide="2">
   <div class="slide-label">문제</div>
   <h2 class="slide-title">왜 AI 에게 파일이 필요한가요?</h2>
-  <div class="diagram">
-    <div class="diagram-node amber">Context Bloat<span class="popup-trigger" onclick="showPopup('s2_context_bloat')">?</span></div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node purple">Token 비용 증가</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node blue">응답 속도 저하</div>
-  </div>
-  <div class="card-grid grid-2" style="margin-top:24px;">
-    <div class="card">
-      <div class="card-icon">📚</div>
-      <h3>Lost in the Middle<span class="popup-trigger" onclick="showPopup('s2_lost_in_middle')">?</span></h3>
-      <p>Context Window 가 길어질수록<br>중앙부 Attention 이 하락</p>
+  <div class="two-col">
+    <div>
+      <img src="images/s2-token-cost.png" alt="Token Cost Graph" class="slide-image" onerror="this.style.display='none'">
+      <div class="diagram" style="margin-top:16px;">
+        <div class="diagram-node amber">Context Bloat<span class="popup-trigger" onclick="showPopup('s2_context_bloat')">?</span></div>
+        <div class="diagram-arrow">→</div>
+        <div class="diagram-node purple">Token 비용 ↑</div>
+        <div class="diagram-arrow">→</div>
+        <div class="diagram-node blue">속도 ↓</div>
+      </div>
     </div>
-    <div class="card highlight">
-      <div class="card-icon">💾</div>
-      <h3>해결책: 파일 기반 기억</h3>
-      <p>선택적 저장 + 검색<br>불필요한 Context 제거</p>
+    <div class="card-grid" style="grid-template-columns:1fr;">
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h3>Lost in the Middle<span class="popup-trigger" onclick="showPopup('s2_lost_in_middle')">?</span></h3>
+        <p>Context Window 가 길어질수록 중앙부 Attention 이 하락하여 핵심 지시가 누락됩니다</p>
+      </div>
+      <div class="card highlight">
+        <div class="card-icon">💾</div>
+        <h3>해결책: 파일 기반 기억</h3>
+        <p>선택적 저장 + 검색으로 불필요한 Context 를 제거하고 효율성을 높입니다</p>
+      </div>
     </div>
   </div>
   <div class="tip-badge"><span>💡Tip:</span> 매 대화마다 과거 이력 전체를 포함하면 비용이 기하급수적으로 증가합니다.</div>
@@ -272,23 +353,25 @@ h2.slide-title {
 <div class="slide" data-slide="4">
   <div class="slide-label">AI 의 3 층 기억</div>
   <h2 class="slide-title">AI 도 3 가지 기억 방식을 활용합니다</h2>
-  <div class="hierarchy">
-    <div class="hierarchy-level l1">L1: 사전 학습 모델 (Pre-trained) - 변경 불가 고정 지식</div>
-    <div class="hierarchy-level l2">L2: 에이전트 메모리 (File System) - 실시간 추가 개인 메모리 <span class="popup-trigger" onclick="showPopup('s4_agent_memory')">?</span></div>
-    <div class="hierarchy-level l3">L3: 문서 참조 (RAG) - 외부 연동 참조 자료 <span class="popup-trigger" onclick="showPopup('s4_rag')">?</span></div>
-  </div>
-  <div class="card-grid grid-3" style="margin-top:20px;">
-    <div class="card">
-      <h3>L1: Model</h3>
-      <p>학습 시점: 2024 년<br>데이터량: 수 TB</p>
+  <div class="two-col">
+    <div class="hierarchy">
+      <div class="hierarchy-level l1">L1: 사전 학습 (Pre-trained)</div>
+      <div class="hierarchy-level l2">L2: 에이전트 메모리 (File System)<span class="popup-trigger" onclick="showPopup('s4_agent_memory')">?</span></div>
+      <div class="hierarchy-level l3">L3: 문서 참조 (RAG)<span class="popup-trigger" onclick="showPopup('s4_rag')">?</span></div>
     </div>
-    <div class="card highlight">
-      <h3>L2: Memory ← 주제</h3>
-      <p>학습 시점: 실시간<br>데이터량: 수 MB~GB</p>
-    </div>
-    <div class="card">
-      <h3>L3: Retrieval</h3>
-      <p>학습 시점: 필요 시<br>데이터량: 수 GB~TB</p>
+    <div class="card-grid" style="grid-template-columns:1fr;">
+      <div class="card">
+        <h3>L1: Model</h3>
+        <p>학습 시점: 2024 년<br>데이터량: 수 TB<br><small>변경 불가 고정 지식</small></p>
+      </div>
+      <div class="card highlight">
+        <h3>L2: Memory ← 주제</h3>
+        <p>학습 시점: 실시간<br>데이터량: 수 MB~GB<br><small>개인별 동적记忆</small></p>
+      </div>
+      <div class="card">
+        <h3>L3: Retrieval</h3>
+        <p>학습 시점: 필요 시<br>데이터량: 수 GB~TB<br><small>외부 문서 검색</small></p>
+      </div>
     </div>
   </div>
   <div class="tip-badge"><span>💡Tip:</span> 오늘은 L2 '에이전트 메모리' 에 해당하는 파일 기반 지식 시스템을 다룹니다.</div>
@@ -298,25 +381,21 @@ h2.slide-title {
 <div class="slide" data-slide="5">
   <div class="slide-label">시스템 개요</div>
   <h2 class="slide-title">에이전트 메모리 시스템</h2>
-  <div class="diagram">
-    <div class="diagram-node amber">💬 대화</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node purple">🔍 지식 추출</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node blue">📂 분류 저장</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node green">🔎 검색 노출</div>
-  </div>
-  <div class="card-grid grid-2" style="margin-top:24px;">
-    <div class="card">
-      <div class="card-icon">📊</div>
-      <h3>처리 통계</h3>
-      <p>일일 처리: 50~100 건<br>저장율: 20~30% (의미 있는 정보만)</p>
+  <div class="two-col">
+    <div>
+      <img src="images/s5-pipeline.png" alt="Knowledge Pipeline" class="slide-image" onerror="this.style.display='none'">
     </div>
-    <div class="card highlight">
-      <div class="card-icon">⚡</div>
-      <h3>처리 시간</h3>
-      <p>추출: 2~5 초<br>분류: 1~3 초<br>총 처리: 5~10 초</p>
+    <div class="card-grid" style="grid-template-columns:1fr;">
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>처리 통계</h3>
+        <p>일일 처리: 50~100 건<br>저장율: 20~30% (의미 있는 정보만)</p>
+      </div>
+      <div class="card highlight">
+        <div class="card-icon">⚡</div>
+        <h3>처리 시간</h3>
+        <p>추출: 2~5 초<br>분류: 1~3 초<br>총 처리: 5~10 초</p>
+      </div>
     </div>
   </div>
   <div class="tip-badge"><span>💡Tip:</span> 단편적인 대화는 구조화된 데이터로 치환되어 영구 보존됩니다.</div>
@@ -326,12 +405,17 @@ h2.slide-title {
 <div class="slide" data-slide="6">
   <div class="slide-label">컴파일 워크플로우</div>
   <h2 class="slide-title">지식을 파일로 저장하는 3 단계</h2>
-  <div class="diagram">
-    <div class="diagram-node amber">Ingest<span class="popup-trigger" onclick="showPopup('s6_ingest')">?</span></div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node purple">Link<span class="popup-trigger" onclick="showPopup('s6_link')">?</span></div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node green">Lint<span class="popup-trigger" onclick="showPopup('s6_lint')">?</span></div>
+  <div class="cycle-diagram">
+    <div class="cycle-top">
+      <div class="diagram-node amber">Ingest<span class="popup-trigger" onclick="showPopup('s6_ingest')">?</span></div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node purple">Link<span class="popup-trigger" onclick="showPopup('s6_link')">?</span></div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node green">Lint<span class="popup-trigger" onclick="showPopup('s6_lint')">?</span></div>
+    </div>
+    <div class="cycle-arrow-down">↓</div>
+    <div class="flow-condition">검증 실패 시 재실행</div>
+    <div class="flow-arrow">←</div>
   </div>
   <div class="card-grid grid-3" style="margin-top:20px;">
     <div class="card">
@@ -340,11 +424,11 @@ h2.slide-title {
     </div>
     <div class="card">
       <h3>2. Link</h3>
-      <p>기존知识与 교차 참조 생성<br><small>Wiki-links 자동 연결</small></p>
+      <p>기존知识和 교차 참조 생성<br><small>Wiki-links 자동 연결</small></p>
     </div>
     <div class="card">
       <h3>3. Lint</h3>
-      <p>Schema 규칙 검증<br><small>Hallucination 모순 체크</small></p>
+      <p>Schema 규칙 검증<br><small>모순 탐지 후 병합</small></p>
     </div>
   </div>
   <div class="tip-badge"><span>💡Tip:</span> 세 단계가 완료되면 지식이 영구 파일로 저장됩니다.</div>
@@ -354,20 +438,27 @@ h2.slide-title {
 <div class="slide" data-slide="7">
   <div class="slide-label">자동화</div>
   <h2 class="slide-title">자동으로 파일을 정리하는 과정</h2>
-  <div class="diagram">
-    <div class="diagram-node amber">⏰ CronJob</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node purple">📜 Script 실행</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node blue">🔄 파이프라인</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node green">✅ 완료</div>
+  <div class="flow-chart">
+    <div class="flow-row">
+      <div class="flow-node start">⏰ CronJob</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node process">📜 Script 실행</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node process">🔄 파이프라인</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node end">✅ 완료</div>
+    </div>
+    <div class="flow-branch">
+      <div class="flow-condition">5 분 간격 실행</div>
+      <div class="flow-condition">실패 시 재시도</div>
+      <div class="flow-condition">완료 시 알림</div>
+    </div>
   </div>
   <div class="card-grid grid-2" style="margin-top:24px;">
     <div class="card">
       <div class="card-icon">📅</div>
       <h3>실행 스케줄</h3>
-      <p>5 분 간격 배치 처리<br><small>메타데이터 갱신 + 의존성 재평가</small></p>
+      <p>5 분 간격 배치 처리<br>메타데이터 갱신 + 의존성 재평가</p>
     </div>
     <div class="card highlight">
       <div class="card-icon">📊</div>
@@ -413,26 +504,25 @@ h2.slide-title {
 <div class="slide" data-slide="9">
   <div class="slide-label">주제 분류</div>
   <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
-  <div class="card-grid grid-4">
-    <div class="card">
-      <div class="card-icon">🤖</div>
-      <h3>에이전트</h3>
-      <p>워크플로우, 스킬, 도구</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">⚙️</div>
-      <h3>시스템</h3>
-      <p>인프라, 설정, 보안</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">🧠</div>
-      <h3>메모리</h3>
-      <p>지식, 학습, 기억</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">📚</div>
-      <h3>지식</h3>
-      <p>위키, 리퍼런스, 가이드</p>
+  <div class="tree-diagram">
+    <div class="tree-root">📚 지식 시스템</div>
+    <div class="tree-branches">
+      <div class="tree-branch">
+        <h4>🤖 에이전트</h4>
+        <p>워크플로우, 스킬, 도구</p>
+      </div>
+      <div class="tree-branch">
+        <h4>⚙️ 시스템</h4>
+        <p>인프라, 설정, 보안</p>
+      </div>
+      <div class="tree-branch">
+        <h4>🧠 메모리</h4>
+        <p>지식, 학습, 기억</p>
+      </div>
+      <div class="tree-branch">
+        <h4>📖 참고 자료</h4>
+        <p>위키, 리퍼런스, 가이드</p>
+      </div>
     </div>
   </div>
   <div class="card" style="margin-top:20px; max-width:800px;">
@@ -446,14 +536,16 @@ h2.slide-title {
 <div class="slide" data-slide="10">
   <div class="slide-label">계층적 탐색</div>
   <h2 class="slide-title">AI 가 지식을 찾는 4 단계</h2>
-  <div class="diagram">
-    <div class="diagram-node amber">🗺️ Navigation</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node purple">📋 Index Scan</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node blue">🔍 Domain Filter</div>
-    <div class="diagram-arrow">→</div>
-    <div class="diagram-node green">📖 Detail Read</div>
+  <div class="flow-chart">
+    <div class="flow-row">
+      <div class="flow-node start">🗺️ Navigation</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node process">📋 Index Scan</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node process">🔍 Domain Filter</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node end">📖 Detail Read</div>
+    </div>
   </div>
   <div class="card-grid grid-2" style="margin-top:24px;">
     <div class="card">
@@ -497,17 +589,61 @@ h2.slide-title {
 
 <script>
 const pData = {
-  "s2_context_bloat": "<h4>Context Bloat</h4><p>매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되는 현상입니다.</p><pre>예시: 100 턴 대화 × 2,000 토큰/턴 = 200,000 토큰</pre>",
-  "s2_lost_in_middle": "<h4>Lost in the Middle</h4><p>LLM 의 Context Window 가 길어질수록 중앙부의 Attention 가중치가 하락하여 핵심 지시 사항을 누락하는 현상입니다.</p><pre>Attention Score: 앞쪽 0.9 → 중앙 0.3 → 뒷쪽 0.8</pre>",
-  "s4_agent_memory": "<h4>에이전트 메모리 (L2)</h4><p>에이전트가 실시간으로 기록하는 개인 메모리로, 파일 시스템 기반으로 관리됩니다.</p><pre>~/.hermes/memory/\n├── MEMORY.md\n├── USER.md\n└── skills/</pre>",
-  "s4_rag": "<h4>RAG (Retrieval-Augmented Generation)</h4><p>외부 문서 저장소로, 필요 시 검색하여 참조합니다.</p><pre>1. Query 인코딩\n2. Vector DB 검색\n3. Top-K 문서 반환\n4. Context 에 주입</pre>",
-  "s6_ingest": "<h4>Ingest: 지식 추출</h4><p>대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.</p><pre>{\n  \"type\": \"memory\",\n  \"content\": \"사용자 선호사항...\",\n  \"tags\": [\"user\", \"preference\"]\n}</pre>",
-  "s6_link": "<h4>Link: 관계 연결</h4><p>기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 Wiki-links 형태를 자동 생성합니다.</p><pre>[[에이전트 메모리]] → [[지식 시스템]]\n[[workflow-gate.sh]] → [[JOB 관리]]</pre>",
-  "s6_lint": "<h4>Lint: 무결성 검증</h4><p>신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.</p><pre>✓ Schema 유효성\n✓ 중복 체크\n✓ 모순 탐지\n✓ 버전 병합</pre>",
-  "s8_scoring": "<h4>점수 계산 알고리즘</h4><p>우선순위, 최신성, 사용 빈도, 허브 노드 점수 등을 종합하여 Tier(T1/T2/T3) 를 배정합니다.</p><pre>Score = (priority×0.4) + (recency×0.3) + (usage×0.2) + (hub×0.1)</pre>",
-  "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ×days)\nλ = 0.01 (90 일 후 40% 감소)</pre>",
-  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p><pre>metadata.json:\n{\n  \"tags\": [\"agent\", \"memory\"],\n  \"domain\": \"system\",\n  \"priority\": \"T2\"\n}</pre>",
-  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre>"
+  "s2_context_bloat": "<h4>Context Bloat</h4><p>매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되는 현상입니다.</p><pre>예시: 100 턴 대화 × 2,000 토큰/턴 = 200,000 토큰</pre><p>이 현상은 Conversation Length 가 증가할수록 기하급수적으로 비용이 증가합니다.</p>",
+  
+  "s2_lost_in_middle": "<h4>Lost in the Middle</h4><p>LLM 의 Context Window 가 길어질수록 중앙부의 Attention 가중치가 하락하여 핵심 지시 사항을 누락하는 현상입니다.</p><pre>Attention Score: 앞쪽 0.9 → 중앙 0.3 → 뒷쪽 0.8</pre><p>이 현상을 해결하기 위해 Selective Context Loading 이 필요합니다.</p>",
+  
+  "s4_agent_memory": "<h4>에이전트 메모리 (L2)</h4><p>에이전트가 실시간으로 기록하는 개인 메모리로, 파일 시스템 기반으로 관리됩니다.</p><pre>~/.hermes/memory/
+├── MEMORY.md      # 시스템 메모리
+├── USER.md        # 사용자 선호사항
+├── skills/        # 스킬 정의
+└── cron/          # 주기적 작업</pre><p>이 메모리는 매 대화마다 로드되어 에이전트의 행동 기준이 됩니다.</p>",
+  
+  "s4_rag": "<h4>RAG (Retrieval-Augenerated Generation)</h4><p>외부 문서 저장소로, 필요 시 검색하여 참조합니다.</p><pre>1. Query 인코딩 (Embedding)
+2. Vector DB 검색 (Cosine Similarity)
+3. Top-K 문서 반환 (K=5)
+4. Context 에 주입</pre><p>RAG 는 사전 학습된 지식을 보완하는 외부 지식원입니다.</p>",
+  
+  "s6_ingest": "<h4>Ingest: 지식 추출</h4><p>대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.</p><pre>{
+  \"type\": \"memory\",
+  \"content\": \"사용자 선호사항...\",
+  \"tags\": [\"user\", \"preference\"],
+  \"score\": 75,
+  \"timestamp\": \"2026-06-09T19:00:00Z\"
+}</pre><ul><li>실행 시점: 세션 종료 후 5 분</li><li>처리량: 분당 10~20 건</li><li>성공률: 95% 이상</li></ul>",
+  
+  "s6_link": "<h4>Link: 관계 연결</h4><p>기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 Wiki-links 형태를 자동 생성합니다.</p><pre>[[에이전트 메모리]] → [[지식 시스템]]
+[[workflow-gate.sh]] → [[JOB 관리]]
+[[spec-driven-dev]] → [[사양서]]</pre><p>이 과정을 통해 지식 간 관계가 그래프 구조로 형성됩니다.</p>",
+  
+  "s6_lint": "<h4>Lint: 무결성 검증</h4><p>신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.</p><pre>✓ Schema 유효성 검사
+✓ 중복 콘텐츠 체크
+✓ 모순 탐지 (Conflict Detection)
+✓ 버전 병합 (Merge)
+✓ 변경 이력 기록 (Append-only)</pre><p>검증 실패 시 Ingest 단계로 되돌아갑니다.</p>",
+  
+  "s8_scoring": "<h4>점수 계산 알고리즘</h4><p>우선순위, 최신성, 사용 빈도, 허브 노드 점수 등을 종합하여 Tier(T1/T2/T3) 를 배정합니다.</p><pre>Score = (priority × 0.4) + 
+        (recency × 0.3) + 
+        (usage × 0.2) + 
+        (hub × 0.1)</pre><p>각 요소는 0~100 점 스케일로 정규화됩니다.</p>",
+  
+  "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ × days)
+λ = 0.01 (90 일 후 40% 감소)
+최소 점수: 10 (완전 소멸 방지)</pre><p>이 알고리즘은 불필요한 Context 의 메모리 점유를 방지합니다.</p>",
+  
+  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p><pre>metadata.json:
+{
+  \"tags\": [\"agent\", \"memory\"],
+  \"domain\": \"system\",
+  \"priority\": \"T2\",
+  \"created\": \"2026-06-09\",
+  \"updated\": \"2026-06-09\"
+}</pre><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
+  
+  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)
+2. Index Scan: 도메인 필터 (100 토큰)
+3. Domain Filter: 관련 문서 선택 (200 토큰)
+4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
 };
 
 let current = 0;
@@ -529,7 +665,7 @@ function goTo(n) {
   current = ((n % total) + total) % total;
   slides[current].classList.add('active');
   dotsContainer.children[current].classList.add('active');
-  counter.textContent = `${current + 1} / ${total}`;
+  counter.textContent = \`${current + 1} / \${total}\`;
 }
 
 function nextSlide() { goTo(current + 1); }
