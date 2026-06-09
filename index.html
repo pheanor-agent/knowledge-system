@@ -726,6 +726,8 @@ function zoomImage(delta) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  init();
+
   // Image click handlers
   document.querySelectorAll('.slide-image').forEach(img => {
     img.addEventListener('click', () => openImageViewer(img.src));
@@ -753,6 +755,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Keyboard handlers
   document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
     if (e.key === 'Escape') { closeImageViewer(); hidePopup(); }
     if (e.key === '+' || e.key === '=') zoomImage(0.2);
     if (e.key === '-') zoomImage(-0.2);
