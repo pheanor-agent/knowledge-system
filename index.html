@@ -690,6 +690,30 @@ function goTo(n) {
 
 function nextSlide() { goTo(current + 1); }
 function prevSlide() { goTo(current - 1); }
+function openImageViewer(src) {
+  imageScale = 1; imageX = 0; imageY = 0;
+  const img = document.getElementById('viewerImage');
+  img.src = src;
+  img.style.transform = 'scale(1) translate(0,0)';
+  document.getElementById('imageViewer').classList.add('active');
+}
+function closeImageViewer() {
+  document.getElementById('imageViewer').classList.remove('active');
+}
+function zoomImage(delta) {
+  imageScale = Math.max(0.5, Math.min(5, imageScale + delta));
+  const img = document.getElementById('viewerImage');
+  img.style.transform = `scale(${imageScale}) translate(${imageX}px, ${imageY}px)`;
+}
+
+// Register to global scope for inline onclick handlers
+window.nextSlide = nextSlide;
+window.prevSlide = prevSlide;
+window.openImageViewer = openImageViewer;
+window.closeImageViewer = closeImageViewer;
+window.zoomImage = zoomImage;
+window.showPopup = showPopup;
+window.hidePopup = hidePopup;
 
 function showPopup(key) {
   const content = pData[key] || '내용 없음';
@@ -706,24 +730,6 @@ let imageScale = 1;
 let imageX = 0, imageY = 0;
 let isDragging = false;
 let startX, startY;
-
-function openImageViewer(src) {
-  imageScale = 1; imageX = 0; imageY = 0;
-  const img = document.getElementById('viewerImage');
-  img.src = src;
-  img.style.transform = 'scale(1) translate(0,0)';
-  document.getElementById('imageViewer').classList.add('active');
-}
-
-function closeImageViewer() {
-  document.getElementById('imageViewer').classList.remove('active');
-}
-
-function zoomImage(delta) {
-  imageScale = Math.max(0.5, Math.min(5, imageScale + delta));
-  const img = document.getElementById('viewerImage');
-  img.style.transform = `scale(${imageScale}) translate(${imageX}px, ${imageY}px)`;
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   init();
