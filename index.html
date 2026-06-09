@@ -1,86 +1,557 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>AI 에게 기억을 선물하다</title><style>
-    :root { --bg: #ffffff; --bg-card: #f9fafb; --border: #e5e7eb; --text: #1a1a1a; --text-dim: #666666; --text-bright: #000000; --accent: #2563eb; --accent-dim: rgba(37,99,235,0.1); }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans KR', sans-serif; overflow: hidden; height: 100vh; width: 100vw; }
-    .slides { width: 100vw; height: 100vh; position: relative; }
-    .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 80px 100px; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; pointer-events: none; }
-    .slide.active { opacity: 1; transform: translateY(0); pointer-events: all; }
-    .slide-label { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 24px; text-transform: uppercase; }
-    h1 { font-size: 56px; font-weight: 900; color: var(--text-bright); text-align: center; }
-    h2 { font-size: 44px; font-weight: 800; color: var(--text-bright); text-align: center; margin-bottom: 32px; }
-    p { font-size: 16px; color: var(--text-dim); line-height: 1.7; text-align: center; white-space: pre-wrap; }
-    .popup-trigger { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-dim); color: var(--accent); font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 4px; vertical-align: middle; transition: all 0.2s; }
-    .popup-trigger:hover { background: var(--accent); color: white; transform: scale(1.1); }
-    .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; display: none; justify-content: center; align-items: center; padding: 40px; backdrop-filter: blur(4px); }
-    .popup-overlay.active { display: flex; }
-    .popup-content { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 36px; max-width: 600px; max-height: 70vh; overflow-y: auto; position: relative; text-align: left; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-    .popup-close { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; }
-    .popup-content h4 { font-size: 20px; margin-bottom: 16px; color: var(--accent); border-bottom: 2px solid var(--accent-dim); padding-bottom: 8px; }
-    .nav { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(255,255,255,0.95); border: 1px solid var(--border); border-radius: 100px; padding: 10px 24px; }
-    .nav button { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 20px; width: 36px; height: 36px; border-radius: 50%; }
-    .nav-counter { font-family: monospace; font-size: 14px; color: var(--text-dim); min-width: 60px; text-align: center; }
-    .nav-dots { display: flex; gap: 4px; }
-    .nav-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--border); cursor: pointer; transition: all 0.3s; }
-    .nav-dot.active { background: var(--accent); width: 20px; }
-    </style></head><body>
-    <div class="slides" id="slides">
-    <div class="slide" data-slide="1"><div class="slide-label">에이전트 메모리 시스템</div><div class="slide-cover"><h1>AI 에게 기억을 선물하다</h1><p class="subtitle">챗봇에서 파일 기반 지식 시스템으로<br>사용자의 입력을 체계적으로 저장하고 활용하는 방법</p></div></div><div class="slide" data-slide="2"><div class="slide-label">문제</div><h2>왜 AI 에게 파일이 필요한가요?</h2><p>에이전트에게 무조건 많은 정보를 한 번에 주입하면 부작용이 발생합니다.
-Context Bloat<span class="popup-trigger" onclick="showPopup('s2_context_bloat')">?</span> 와 Lost in the Middle<span class="popup-trigger" onclick="showPopup('s2_lost_in_the_middle')">?</span> 현상이 발생하여 효율성이 급감합니다.
-이를 해결하기 위해 물리적인 파일 형태의 선택적 기억 장치가 필요합니다.</p></div><div class="slide" data-slide="3"><div class="slide-label">비유</div><h2>신입사원이 배우는 3 가지 지식 관리 방법</h2><p>계층 1: 회사 백과사전 외우기 (고정 지식)
-계층 2: 개인 노트 작성하기 (계속 추가됨)
-계층 3: 참고 자료 책상 위에 준비 (상황별 참조)
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 에게 기억을 선물하다</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-card: #f9fafb;
+  --bg-card-hover: #f3f4f6;
+  --border: #e5e7eb;
+  --text: #1a1a1a;
+  --text-dim: #666666;
+  --text-bright: #000000;
+  --accent: #2563eb;
+  --accent-dim: rgba(37,99,235,0.1);
+  --gradient-start: #6366f1;
+  --gradient-end: #8b5cf6;
+  --t1: #ef4444;
+  --t1-bg: #fef2f2;
+  --t2: #f59e0b;
+  --t2-bg: #fffbeb;
+  --t3: #22c55e;
+  --t3-bg: #f0fdf4;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 24px rgba(0,0,0,0.1);
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow: hidden;
+  height: 100vh; width: 100vw;
+  font-size: 16px;
+}
+.slides { width: 100vw; height: 100vh; position: relative; }
+.slide {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 60px 100px;
+  opacity: 0; transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+}
+.slide.active { opacity: 1; transform: translateY(0); pointer-events: all; }
+.slide-label {
+  font-size: 12px; font-weight: 700;
+  color: var(--accent); margin-bottom: 16px;
+  text-transform: uppercase; letter-spacing: 2px;
+}
+h1.slide-title {
+  font-size: 52px; font-weight: 900;
+  color: var(--text-bright); text-align: center;
+  line-height: 1.2;
+}
+h2.slide-title {
+  font-size: 38px; font-weight: 800;
+  color: var(--text-bright); text-align: center;
+  margin-bottom: 28px; line-height: 1.3;
+}
+.slide-desc {
+  font-size: 17px; color: var(--text-dim);
+  line-height: 1.8; text-align: center;
+  max-width: 800px;
+}
+.tip-badge {
+  margin-top: 24px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 14px; color: #92400e;
+  max-width: 700px; text-align: left;
+}
+.tip-badge span { font-weight: 700; }
 
-실제 업무 환경에서 문서를 다루는 방식은 AI 의 데이터 처리 레이어와 일치합니다.</p></div><div class="slide" data-slide="4"><div class="slide-label">AI 의 3 층 기억</div><h2>신입사원이 배우듯, AI 도 3 가지 방식을 활용합니다</h2><p>1. 사전 학습 모델 (Model Training): 변경 불가한 고정 지식.
-2. 에이전트 메모리 (File System): 실시간으로 추가되는 개인 메모리.
-3. 문서 참조 (Retrieval-Augmented Generation): 외부 연동되는 참조 자료.
+/* Cards */
+.card-grid { display: grid; gap: 20px; width: 100%; max-width: 1200px; margin-top: 20px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.card-icon { font-size: 32px; margin-bottom: 12px; }
+.card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.card p { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+.card.highlight { border-color: var(--accent); background: var(--accent-dim); }
+.card.tier-1 { border-top: 4px solid var(--t1); background: var(--t1-bg); }
+.card.tier-2 { border-top: 4px solid var(--t2); background: var(--t2-bg); }
+.card.tier-3 { border-top: 4px solid var(--t3); background: var(--t3-bg); }
 
-오늘은 2 번 '에이전트 메모리' 에 해당하는 파일 기반 지식 시스템을 다룹니다.</p></div><div class="slide" data-slide="5"><div class="slide-label">시스템 개요</div><h2>에이전트 메모리 시스템</h2><p>수집된 경험을 바탕으로 시스템이 스스로 분류 기준을 세우고 탐색 체계를 구축합니다.
-단편적인 대화는 구조화된 데이터로 치환되어 영구 보존됩니다.</p></div><div class="slide" data-slide="6"><div class="slide-label">컴파일 워크플로우</div><h2>지식을 파일로 저장하는 3 단계 과정</h2><p>대화가 종료되면 의미 있는 정보를 식별하여 분리하고, 연관성을 찾아 묶어준 뒤, 규칙에 맞게 다듬습니다.
-Ingest<span class="popup-trigger" onclick="showPopup('s6_ingest')">?</span>(지식 추출) → Link<span class="popup-trigger" onclick="showPopup('s6_link')">?</span>(관계 연결) → Lint<span class="popup-trigger" onclick="showPopup('s6_lint')">?</span>(무결성 검증)</p></div><div class="slide" data-slide="7"><div class="slide-label">자동화</div><h2>자동으로 파일을 정리하는 과정</h2><p>사람의 개입 없이 정해진 스케줄에 따라 파이프라인이 구동되어 최신 상태를 유지합니다.
-배치 스크립트(주기적 실행) → 메타데이터(태그 스캔) → 점수화(가중치 갱신)</p></div><div class="slide" data-slide="8"><div class="slide-label">중요도</div><h2>동적 점수에 따른 3 단계 분류</h2><p>T1: 항상 참조해야 하는 핵심 행동 규칙
-T2: 특정 상황에 직면했을 때 꺼내보는 일상 지식
-T3: 요청이 있을 때만 제공되는 보조 배경 정보
+/* Diagrams */
+.diagram { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; flex-wrap: wrap; }
+.diagram-node {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  min-width: 140px;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+.diagram-node.amber { border-color: #f59e0b; background: #fffbeb; color: #92400e; }
+.diagram-node.purple { border-color: #8b5cf6; background: #f5f3ff; color: #5b21b6; }
+.diagram-node.green { border-color: #22c55e; background: #f0fdf4; color: #166534; }
+.diagram-node.blue { border-color: #2563eb; background: #eff6ff; color: #1e40af; }
+.diagram-arrow { font-size: 24px; color: var(--text-dim); }
 
-점수 계산과 감가상각 알고리즘을 통해 불필요한 Context 의 메모리 점유를 방지합니다.</p></div><div class="slide" data-slide="9"><div class="slide-label">주제 분류</div><h2>지식을 주제별로 분류하는 체계</h2><p>특정 도메인에 종속되지 않고 다양한 주제를 수용할 수 있는 카테고리 확장을 지원합니다.
-에이전트 / 시스템 / 메모리 / 지식</p></div><div class="slide" data-slide="10"><div class="slide-label">계층적 탐색</div><h2>AI 가 지식을 찾는 4 단계 과정</h2><p>전체 자료를 무분별하게 읽어오지 않고, 지도 역할을 하는 최상위 파일부터 상세 문서까지 단계적으로 좁혀갑니다.
-Navigation → Index Scan → Domain Filter → Detail Read</p></div><div class="slide" data-slide="11"><div class="slide-label">Thank You</div><h2>세미나 완료</h2><p>경험이 쌓일수록 스스로 지능을 고도화하는 아키텍처</p></div>
+/* Hierarchy */
+.hierarchy { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 20px; }
+.hierarchy-level {
+  display: flex; gap: 16px; justify-content: center;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  min-width: 300px;
+  text-align: center;
+}
+.hierarchy-level.l1 { background: #fef2f2; border: 2px solid #ef4444; color: #991b1b; }
+.hierarchy-level.l2 { background: #eff6ff; border: 2px solid #2563eb; color: #1e40af; }
+.hierarchy-level.l3 { background: #f0fdf4; border: 2px solid #22c55e; color: #166534; }
+
+/* Popup */
+.popup-trigger {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent-dim); color: var(--accent);
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  margin-left: 4px; vertical-align: middle;
+}
+.popup-trigger:hover { background: var(--accent); color: white; }
+.popup-overlay {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 200; display: none;
+  justify-content: center; align-items: center;
+  padding: 40px; backdrop-filter: blur(4px);
+}
+.popup-overlay.active { display: flex; }
+.popup-content {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  max-width: 600px;
+  max-height: 70vh;
+  overflow-y: auto;
+  position: relative;
+  text-align: left;
+  box-shadow: var(--shadow-lg);
+}
+.popup-close {
+  position: absolute; top: 20px; right: 20px;
+  background: none; border: none;
+  font-size: 24px; cursor: pointer;
+}
+.popup-content h4 { font-size: 20px; margin-bottom: 16px; color: var(--accent); }
+.popup-content p { font-size: 15px; line-height: 1.7; }
+.popup-content pre { background: #f3f4f6; padding: 12px; border-radius: 8px; overflow-x: auto; margin: 12px 0; }
+.popup-content code { font-family: monospace; font-size: 13px; }
+
+/* Navigation */
+.nav {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 16px;
+  z-index: 100;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 10px 24px;
+  box-shadow: var(--shadow-md);
+}
+.nav button {
+  background: none; border: none;
+  color: var(--text-dim); cursor: pointer;
+  font-size: 20px; width: 36px; height: 36px;
+  border-radius: 50%;
+}
+.nav button:hover { background: var(--bg-card); }
+.nav-counter { font-family: monospace; font-size: 14px; color: var(--text-dim); min-width: 60px; text-align: center; }
+.nav-dots { display: flex; gap: 4px; }
+.nav-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--border); cursor: pointer; transition: all 0.3s; }
+.nav-dot.active { background: var(--accent); width: 20px; }
+
+/* Cover */
+.slide-cover { text-align: center; }
+.slide-cover .subtitle { font-size: 20px; color: var(--text-dim); margin-top: 16px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="slides" id="slides">
+
+<!-- S1: Cover -->
+<div class="slide" data-slide="1">
+  <div class="slide-label">에이전트 메모리 시스템</div>
+  <div class="slide-cover">
+    <h1 class="slide-title">AI 에게 기억을 선물하다</h1>
+    <p class="subtitle">챗봇에서 파일 기반 지식 시스템으로<br>사용자의 입력을 체계적으로 저장하고 활용하는 방법</p>
+  </div>
+</div>
+
+<!-- S2: Problem -->
+<div class="slide" data-slide="2">
+  <div class="slide-label">문제</div>
+  <h2 class="slide-title">왜 AI 에게 파일이 필요한가요?</h2>
+  <div class="diagram">
+    <div class="diagram-node amber">Context Bloat<span class="popup-trigger" onclick="showPopup('s2_context_bloat')">?</span></div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node purple">Token 비용 증가</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node blue">응답 속도 저하</div>
+  </div>
+  <div class="card-grid grid-2" style="margin-top:24px;">
+    <div class="card">
+      <div class="card-icon">📚</div>
+      <h3>Lost in the Middle<span class="popup-trigger" onclick="showPopup('s2_lost_in_middle')">?</span></h3>
+      <p>Context Window 가 길어질수록<br>중앙부 Attention 이 하락</p>
     </div>
-    <div class="popup-overlay" id="popupOverlay" onclick="hidePopup()"><div class="popup-content" id="popupContent" onclick="event.stopPropagation()"><button class="popup-close" onclick="hidePopup()">×</button><div id="popupBody"></div></div></div>
-    <div class="nav"><button onclick="prevSlide()">‹</button><div class="nav-dots" id="navDots"></div><span class="nav-counter" id="navCounter">1 / 11</span><button onclick="nextSlide()">›</button></div>
-    <script>
-    const pData = {"s2_context_bloat": "매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되는 현상입니다.", "s2_lost_in_the_middle": "LLM 의 Context Window 가 길어질수록 중앙부의 Attention 가중치가 하락하여 핵심 지시 사항을 누락하는 현상입니다.", "s3_concept_mapping": "실제 업무 환경에서 문서를 다루는 방식과 AI 의 데이터 처리 레이어를 일치시키는 비유입니다.", "s4_pre-trained_data": "모델 학습 단계에서 습득한 지식으로, 변경이 불가능하며 전역적인 상식으로 작용합니다.", "s4_agent_storage": "에이전트가 실시간으로 기록하는 개인 메모리로, 파일 시스템 기반으로 관리됩니다.", "s4_document_database": "외부 문서 저장소로, RAG 를 통해 필요 시 검색하여 참조합니다.", "s5_knowledge_engineering": "단편적인 String 형태의 대화를 구조화된 JSON 과 Markdown 으로 치환하여 영구 보존하는 과정입니다.", "s6_ingest": "대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.", "s6_link": "기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 Wiki-links 형태를 자동 생성합니다.", "s6_lint": "신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.", "s7_automated_batch_process": "Shell Script 와 CronJob 을 통해 주기적으로 메타데이터를 갱신하고 의존성을 재평가합니다.", "s8_scoring_logic": "우선순위, 최신성, 사용 빈도, 허브 노드 점수 등을 종합하여 Tier(T1/T2/T3) 를 배정합니다.", "s8_mathematical_decay": "90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.", "s9_domain_classification": "물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.", "s10_hierarchical_search_protocol": "대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다. 최상위 Index 만 먼저 로드하여 도메인을 파악한 후, 수 KB 내외의 최종 페이지만 정밀 판독합니다."};
-    let current = 0;
-    const slides = document.querySelectorAll('.slide');
-    const total = slides.length;
-    const dotsContainer = document.getElementById('navDots');
-    const counter = document.getElementById('navCounter');
-    for (let i = 0; i < total; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-        dot.onclick = () => goTo(i);
-        dotsContainer.appendChild(dot);
-    }
-    function goTo(n) {
-        slides[current].classList.remove('active');
-        dotsContainer.children[current].classList.remove('active');
-        current = ((n % total) + total) % total;
-        slides[current].classList.add('active');
-        dotsContainer.children[current].classList.add('active');
-        counter.textContent = `${current + 1} / ${total}`;
-    }
-    function nextSlide() { goTo(current + 1); }
-    function prevSlide() { goTo(current - 1); }
-    function showPopup(key) {
-        const content = pData[key] || '내용 없음';
-        document.getElementById('popupBody').innerHTML = `<h4>${key.split('_').slice(1).join(' ').toUpperCase()}</h4><p>${content}</p>`;
-        document.getElementById('popupOverlay').classList.add('active');
-    }
-    function hidePopup() { document.getElementById('popupOverlay').classList.remove('active'); }
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
-        if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
-        if (e.key === 'Escape') { hidePopup(); }
-    });
-    goTo(0);
-    </script>
-    </body></html>
+    <div class="card highlight">
+      <div class="card-icon">💾</div>
+      <h3>해결책: 파일 기반 기억</h3>
+      <p>선택적 저장 + 검색<br>불필요한 Context 제거</p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 매 대화마다 과거 이력 전체를 포함하면 비용이 기하급수적으로 증가합니다.</div>
+</div>
+
+<!-- S3: Analogy -->
+<div class="slide" data-slide="3">
+  <div class="slide-label">비유</div>
+  <h2 class="slide-title">신입사원이 배우는 3 가지 지식 관리</h2>
+  <div class="card-grid grid-3">
+    <div class="card">
+      <div class="card-icon">📖</div>
+      <h3>계층 1: 백과사전</h3>
+      <p>회사 규정, 매뉴얼 외우기<br><small>변경 불가 고정 지식</small></p>
+    </div>
+    <div class="card highlight">
+      <div class="card-icon">📝</div>
+      <h3>계층 2: 개인 노트 ← 주제</h3>
+      <p>매일 새롭게 추가하는 메모<br><small>실시간 기록, 검색 가능</small></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗂️</div>
+      <h3>계층 3: 참고 자료</h3>
+      <p>책상 위에 준비된 문서<br><small>상황별 선택적 참조</small></p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 실제 업무에서 문서를 다루는 방식이 AI 의 데이터 처리 레이어와 일치합니다.</div>
+</div>
+
+<!-- S4: AI 3-Layer Memory -->
+<div class="slide" data-slide="4">
+  <div class="slide-label">AI 의 3 층 기억</div>
+  <h2 class="slide-title">AI 도 3 가지 기억 방식을 활용합니다</h2>
+  <div class="hierarchy">
+    <div class="hierarchy-level l1">L1: 사전 학습 모델 (Pre-trained) - 변경 불가 고정 지식</div>
+    <div class="hierarchy-level l2">L2: 에이전트 메모리 (File System) - 실시간 추가 개인 메모리 <span class="popup-trigger" onclick="showPopup('s4_agent_memory')">?</span></div>
+    <div class="hierarchy-level l3">L3: 문서 참조 (RAG) - 외부 연동 참조 자료 <span class="popup-trigger" onclick="showPopup('s4_rag')">?</span></div>
+  </div>
+  <div class="card-grid grid-3" style="margin-top:20px;">
+    <div class="card">
+      <h3>L1: Model</h3>
+      <p>학습 시점: 2024 년<br>데이터량: 수 TB</p>
+    </div>
+    <div class="card highlight">
+      <h3>L2: Memory ← 주제</h3>
+      <p>학습 시점: 실시간<br>데이터량: 수 MB~GB</p>
+    </div>
+    <div class="card">
+      <h3>L3: Retrieval</h3>
+      <p>학습 시점: 필요 시<br>데이터량: 수 GB~TB</p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 오늘은 L2 '에이전트 메모리' 에 해당하는 파일 기반 지식 시스템을 다룹니다.</div>
+</div>
+
+<!-- S5: System Overview -->
+<div class="slide" data-slide="5">
+  <div class="slide-label">시스템 개요</div>
+  <h2 class="slide-title">에이전트 메모리 시스템</h2>
+  <div class="diagram">
+    <div class="diagram-node amber">💬 대화</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node purple">🔍 지식 추출</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node blue">📂 분류 저장</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node green">🔎 검색 노출</div>
+  </div>
+  <div class="card-grid grid-2" style="margin-top:24px;">
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h3>처리 통계</h3>
+      <p>일일 처리: 50~100 건<br>저장율: 20~30% (의미 있는 정보만)</p>
+    </div>
+    <div class="card highlight">
+      <div class="card-icon">⚡</div>
+      <h3>처리 시간</h3>
+      <p>추출: 2~5 초<br>분류: 1~3 초<br>총 처리: 5~10 초</p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 단편적인 대화는 구조화된 데이터로 치환되어 영구 보존됩니다.</div>
+</div>
+
+<!-- S6: Compile Workflow -->
+<div class="slide" data-slide="6">
+  <div class="slide-label">컴파일 워크플로우</div>
+  <h2 class="slide-title">지식을 파일로 저장하는 3 단계</h2>
+  <div class="diagram">
+    <div class="diagram-node amber">Ingest<span class="popup-trigger" onclick="showPopup('s6_ingest')">?</span></div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node purple">Link<span class="popup-trigger" onclick="showPopup('s6_link')">?</span></div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node green">Lint<span class="popup-trigger" onclick="showPopup('s6_lint')">?</span></div>
+  </div>
+  <div class="card-grid grid-3" style="margin-top:20px;">
+    <div class="card">
+      <h3>1. Ingest</h3>
+      <p>대화에서 핵심 정보 적출<br><small>JSON/Markdown 포맷</small></p>
+    </div>
+    <div class="card">
+      <h3>2. Link</h3>
+      <p>기존知识与 교차 참조 생성<br><small>Wiki-links 자동 연결</small></p>
+    </div>
+    <div class="card">
+      <h3>3. Lint</h3>
+      <p>Schema 규칙 검증<br><small>Hallucination 모순 체크</small></p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 세 단계가 완료되면 지식이 영구 파일로 저장됩니다.</div>
+</div>
+
+<!-- S7: Automation -->
+<div class="slide" data-slide="7">
+  <div class="slide-label">자동화</div>
+  <h2 class="slide-title">자동으로 파일을 정리하는 과정</h2>
+  <div class="diagram">
+    <div class="diagram-node amber">⏰ CronJob</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node purple">📜 Script 실행</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node blue">🔄 파이프라인</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node green">✅ 완료</div>
+  </div>
+  <div class="card-grid grid-2" style="margin-top:24px;">
+    <div class="card">
+      <div class="card-icon">📅</div>
+      <h3>실행 스케줄</h3>
+      <p>5 분 간격 배치 처리<br><small>메타데이터 갱신 + 의존성 재평가</small></p>
+    </div>
+    <div class="card highlight">
+      <div class="card-icon">📊</div>
+      <h3>처리 대상</h3>
+      <p>신규 파일 스캔<br>기존 파일 점수 갱신<br>불필요 파일 아카이브</p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 사람의 개입 없이 정해진 스케줄에 따라 자동으로 구동됩니다.</div>
+</div>
+
+<!-- S8: Priority -->
+<div class="slide" data-slide="8">
+  <div class="slide-label">중요도</div>
+  <h2 class="slide-title">동적 점수에 따른 3 단계 분류</h2>
+  <div class="card-grid grid-3">
+    <div class="card tier-1">
+      <h3>T1: 핵심 규칙</h3>
+      <p>항상 참조해야 하는 행동 규칙<br><small>점수: 80~100</small></p>
+    </div>
+    <div class="card tier-2">
+      <h3>T2: 일상 지식</h3>
+      <p>특정 상황에 꺼내보는 지식<br><small>점수: 40~79</small></p>
+    </div>
+    <div class="card tier-3">
+      <h3>T3: 보조 정보</h3>
+      <p>요청 시 제공되는 배경 정보<br><small>점수: 0~39</small></p>
+    </div>
+  </div>
+  <div class="card-grid grid-2" style="margin-top:20px;">
+    <div class="card">
+      <h3>점수 계산<span class="popup-trigger" onclick="showPopup('s8_scoring')">?</span></h3>
+      <p>우선순위 + 최신성 + 사용빈도 + 허브노드</p>
+    </div>
+    <div class="card">
+      <h3>감가상각<span class="popup-trigger" onclick="showPopup('s8_decay')">?</span></h3>
+      <p>90 일 이상 미사용 시 점수 감소</p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 점수 계산과 감가상각 알고리즘을 통해 불필요한 Context 의 메모리 점유를 방지합니다.</div>
+</div>
+
+<!-- S9: Topic Classification -->
+<div class="slide" data-slide="9">
+  <div class="slide-label">주제 분류</div>
+  <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
+  <div class="card-grid grid-4">
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h3>에이전트</h3>
+      <p>워크플로우, 스킬, 도구</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚙️</div>
+      <h3>시스템</h3>
+      <p>인프라, 설정, 보안</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <h3>메모리</h3>
+      <p>지식, 학습, 기억</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📚</div>
+      <h3>지식</h3>
+      <p>위키, 리퍼런스, 가이드</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:20px; max-width:800px;">
+    <h3>태그 기반 분류<span class="popup-trigger" onclick="showPopup('s9_tagging')">?</span></h3>
+    <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 특정 도메인에 종속되지 않고 다양한 주제를 수용할 수 있는 카테고리 확장을 지원합니다.</div>
+</div>
+
+<!-- S10: Hierarchical Search -->
+<div class="slide" data-slide="10">
+  <div class="slide-label">계층적 탐색</div>
+  <h2 class="slide-title">AI 가 지식을 찾는 4 단계</h2>
+  <div class="diagram">
+    <div class="diagram-node amber">🗺️ Navigation</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node purple">📋 Index Scan</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node blue">🔍 Domain Filter</div>
+    <div class="diagram-arrow">→</div>
+    <div class="diagram-node green">📖 Detail Read</div>
+  </div>
+  <div class="card-grid grid-2" style="margin-top:24px;">
+    <div class="card">
+      <h3>탐색 프로토콜<span class="popup-trigger" onclick="showPopup('s10_protocol')">?</span></h3>
+      <p>최상위 Index 먼저 로드<br>도메인 파악 후 수 KB 페이지만 정밀 판독</p>
+    </div>
+    <div class="card highlight">
+      <h3>토큰 최적화</h3>
+      <p>전체 DB 조회: 10,000+ 토큰<br>계층 탐색: 500 토큰 미만</p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</div>
+</div>
+
+<!-- S11: Thank You -->
+<div class="slide" data-slide="11">
+  <div class="slide-label">Thank You</div>
+  <h2 class="slide-title">세미나 완료</h2>
+  <div class="card" style="max-width:600px; margin-top:20px;">
+    <p>경험이 쌓일수록 스스로 지능을 고도화하는 아키텍처</p>
+  </div>
+</div>
+
+</div>
+
+<!-- Popup Overlay -->
+<div class="popup-overlay" id="popupOverlay" onclick="hidePopup()">
+  <div class="popup-content" id="popupContent" onclick="event.stopPropagation()">
+    <button class="popup-close" onclick="hidePopup()">×</button>
+    <div id="popupBody"></div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">‹</button>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="nav-counter" id="navCounter">1 / 11</span>
+  <button onclick="nextSlide()">›</button>
+</div>
+
+<script>
+const pData = {
+  "s2_context_bloat": "<h4>Context Bloat</h4><p>매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되는 현상입니다.</p><pre>예시: 100 턴 대화 × 2,000 토큰/턴 = 200,000 토큰</pre>",
+  "s2_lost_in_middle": "<h4>Lost in the Middle</h4><p>LLM 의 Context Window 가 길어질수록 중앙부의 Attention 가중치가 하락하여 핵심 지시 사항을 누락하는 현상입니다.</p><pre>Attention Score: 앞쪽 0.9 → 중앙 0.3 → 뒷쪽 0.8</pre>",
+  "s4_agent_memory": "<h4>에이전트 메모리 (L2)</h4><p>에이전트가 실시간으로 기록하는 개인 메모리로, 파일 시스템 기반으로 관리됩니다.</p><pre>~/.hermes/memory/\n├── MEMORY.md\n├── USER.md\n└── skills/</pre>",
+  "s4_rag": "<h4>RAG (Retrieval-Augmented Generation)</h4><p>외부 문서 저장소로, 필요 시 검색하여 참조합니다.</p><pre>1. Query 인코딩\n2. Vector DB 검색\n3. Top-K 문서 반환\n4. Context 에 주입</pre>",
+  "s6_ingest": "<h4>Ingest: 지식 추출</h4><p>대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.</p><pre>{\n  \"type\": \"memory\",\n  \"content\": \"사용자 선호사항...\",\n  \"tags\": [\"user\", \"preference\"]\n}</pre>",
+  "s6_link": "<h4>Link: 관계 연결</h4><p>기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 Wiki-links 형태를 자동 생성합니다.</p><pre>[[에이전트 메모리]] → [[지식 시스템]]\n[[workflow-gate.sh]] → [[JOB 관리]]</pre>",
+  "s6_lint": "<h4>Lint: 무결성 검증</h4><p>신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.</p><pre>✓ Schema 유효성\n✓ 중복 체크\n✓ 모순 탐지\n✓ 버전 병합</pre>",
+  "s8_scoring": "<h4>점수 계산 알고리즘</h4><p>우선순위, 최신성, 사용 빈도, 허브 노드 점수 등을 종합하여 Tier(T1/T2/T3) 를 배정합니다.</p><pre>Score = (priority×0.4) + (recency×0.3) + (usage×0.2) + (hub×0.1)</pre>",
+  "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ×days)\nλ = 0.01 (90 일 후 40% 감소)</pre>",
+  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p><pre>metadata.json:\n{\n  \"tags\": [\"agent\", \"memory\"],\n  \"domain\": \"system\",\n  \"priority\": \"T2\"\n}</pre>",
+  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre>"
+};
+
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+const dotsContainer = document.getElementById('navDots');
+const counter = document.getElementById('navCounter');
+
+for (let i = 0; i < total; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goTo(i);
+  dotsContainer.appendChild(dot);
+}
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  dotsContainer.children[current].classList.remove('active');
+  current = ((n % total) + total) % total;
+  slides[current].classList.add('active');
+  dotsContainer.children[current].classList.add('active');
+  counter.textContent = `${current + 1} / ${total}`;
+}
+
+function nextSlide() { goTo(current + 1); }
+function prevSlide() { goTo(current - 1); }
+
+function showPopup(key) {
+  const content = pData[key] || '내용 없음';
+  document.getElementById('popupBody').innerHTML = content;
+  document.getElementById('popupOverlay').classList.add('active');
+}
+
+function hidePopup() {
+  document.getElementById('popupOverlay').classList.remove('active');
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'Escape') { hidePopup(); }
+});
+
+goTo(0);
+</script>
+</body>
+</html>
