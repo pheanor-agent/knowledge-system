@@ -372,7 +372,7 @@ h2.slide-title {
       <h3>계층 2: 매뉴얼 & 위키</h3>
       <p>상황별 검색, 실시간 참조<br><small>외부 문서 선택적 로드</small></p>
     </div>
-    <div class="card highlight">
+    <div class="card">
       <div class="card-icon">📝</div>
       <h3>계층 3: 개인 노트</h3>
       <p>매일 새롭게 추가하는 메모<br><small>실시간 기록, 검색 가능</small></p>
@@ -386,22 +386,17 @@ h2.slide-title {
   <div class="slide-label">AI 의 3 층 기억</div>
   <h2 class="slide-title">AI 도 3 가지 기억 방식을 활용합니다</h2>
   <div class="hierarchy" style="max-width:800px;">
-    <div class="hierarchy-level l1">L1: 사전 학습 (Pre-trained)</div>
-    <div class="hierarchy-level l2">L2: 에이전트 메모리 (File System)<span class="popup-trigger" onclick="showPopup('s4_agent_memory')">?</span></div>
-    <div class="hierarchy-level l3">L3: 문서 참조 (RAG)<span class="popup-trigger" onclick="showPopup('s4_rag')">?</span></div>
-  </div>
-  <div class="card-grid grid-3" style="margin-top:20px;">
-    <div class="card">
-      <h3>L1: Model</h3>
-      <p>학습 시점: 2024 년<br>데이터량: 수 TB<br><small>변경 불가 고정 지식</small></p>
+    <div class="hierarchy-level l1">
+      <div>L1: 사전 학습 (Pre-trained)</div>
+      <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 2024 년 / 데이터량: 수 TB</div>
     </div>
-    <div class="card highlight">
-      <h3>L2: Memory</h3>
-      <p>학습 시점: 실시간<br>데이터량: 수 MB~GB<br><small>개인별 동적 기억</small></p>
+    <div class="hierarchy-level l3">
+      <div>L3: 문서 참조 (RAG)<span class="popup-trigger" onclick="showPopup('s4_rag')">?</span></div>
+      <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 필요 시 / 데이터량: 수 GB~TB</div>
     </div>
-    <div class="card">
-      <h3>L3: Retrieval</h3>
-      <p>학습 시점: 필요 시<br>데이터량: 수 GB~TB<br><small>외부 문서 검색</small></p>
+    <div class="hierarchy-level l2">
+      <div>L2: 에이전트 메모리 (File System)<span class="popup-trigger" onclick="showPopup('s4_agent_memory')">?</span></div>
+      <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 실시간 / 데이터량: 수 MB~GB</div>
     </div>
   </div>
   <div class="tip-badge"><span>💡Tip:</span> L1 이 없으면 기초 언어 이해가 불가능하고, L2 가 없으면 실시간 상황 판단이 불가능하며, L3 가 없으면 전문 분야 심화 분석이 불가능합니다. 오늘은 L2 '에이전트 메모리' 를 다룹니다.</div>
