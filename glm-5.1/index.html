@@ -684,17 +684,15 @@ cursor: zoom-in;
   <div class="tip-badge"><span>💡Tip:</span> 점수 계산과 감가상각 알고리즘을 통해 불필요한 Context 의 메모리 점유를 방지합니다.</div>
 </div>
 
-<!-- S9: Topic Classification (glm-5.1) -->
+<!-- S9: Topic Classification (Tree Diagram) -->
 <div class="slide" data-slide="9">
   <div class="slide-label">주제 분류</div>
   <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
-  <div class="tree-diagram" style="max-width: 900px;">
+  <div class="tree-diagram" style="display: flex; flex-direction: column; align-items: center;">
     <div class="tree-root">📚 지식 시스템</div>
-    <div class="tree-connector" style="width: 2px; height: 20px; background: var(--border);"></div>
-    <div class="tree-hbar" style="display: flex; justify-content: center; gap: 20px; position: relative;">
-      <div style="position: absolute; top: 0; left: 12.5%; right: 12.5%; height: 2px; background: var(--border);"></div>
-    </div>
-    <div class="tree-branches" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 2vw, 20px); width: 100%;">
+    <div class="tree-connector"></div>
+    <div class="tree-hbar"></div>
+    <div class="tree-branches">
       <div class="tree-branch" data-branch="agent">
         <div class="tree-branch-icon">🤖</div>
         <h4>에이전트</h4>
