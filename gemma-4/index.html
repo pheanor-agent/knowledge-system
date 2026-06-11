@@ -728,16 +728,19 @@ cursor: zoom-in;
   <div class="tip-badge"><span>💡Tip:</span> 지식을 주제별로 분류하면 관련 영역만 빠르게 찾을 수 있고, 컨텍스트 오염을 방지하여 효율적인 검색이 가능합니다.</div>
 </div>
 
-<!-- S10: Hierarchical Search (glm-5.1) -->
+<!-- S10: Hierarchical Search (Gemma 4) -->
 <div class="slide" data-slide="10">
   <div class="slide-label">계층적 탐색</div>
   <h2 class="slide-title">AI 가 지식을 찾는 4 단계</h2>
   <div class="flow-chart" style="max-width: 900px;">
-    <div class="flow-row" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1.5vw, 16px); align-items: center;">
-      <div class="flow-node start" style="min-width: unset;">🗺️<br><small>Navigation</small></div>
-      <div class="flow-node process" style="min-width: unset;">📋<br><small>Index Scan</small></div>
-      <div class="flow-node process" style="min-width: unset;">🔍<br><small>Domain Filter</small></div>
-      <div class="flow-node end" style="min-width: unset;">📖<br><small>Detail Read</small></div>
+    <div class="flow-row" style="display: flex; justify-content: center; gap: clamp(8px, 1vw, 12px);">
+      <div class="flow-node start" style="min-width: clamp(100px, 12vw, 130px);">🗺️<br><small>Navigation</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node process" style="min-width: clamp(100px, 12vw, 130px);">📋<br><small>Index Scan</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node process" style="min-width: clamp(100px, 12vw, 130px);">🔍<br><small>Domain Filter</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node end" style="min-width: clamp(100px, 12vw, 130px);">📖<br><small>Detail Read</small></div>
     </div>
   </div>
   <div class="card-grid grid-2" style="margin-top:24px;">
