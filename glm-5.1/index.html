@@ -694,7 +694,7 @@ cursor: zoom-in;
     <div class="tree-hbar" style="display: flex; justify-content: center; gap: 20px; position: relative;">
       <div style="position: absolute; top: 0; left: 12.5%; right: 12.5%; height: 2px; background: var(--border);"></div>
     </div>
-    <div class="tree-branches" style="display: flex; justify-content: center; gap: clamp(12px, 2vw, 20px); width: 100%;">
+    <div class="tree-branches" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 2vw, 20px); width: 100%;">
       <div class="tree-branch" data-branch="agent">
         <div class="tree-branch-icon">🤖</div>
         <h4>에이전트</h4>
