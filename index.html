@@ -28,6 +28,11 @@
   --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
   --shadow-lg: 0 12px 24px rgba(0,0,0,0.1);
   --radius: 12px;
+  /* 반응형 폰트 스케일 (1920x1080 기준) */
+  --font-base: clamp(14px, 1.2vw, 18px);
+  --font-card: clamp(12px, 1vw, 16px);
+  --font-title: clamp(28px, 3vw, 48px);
+  --font-heading: clamp(20px, 2.2vw, 36px);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -36,176 +41,277 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
   overflow: hidden;
   height: 100vh; width: 100vw;
-  font-size: 16px;
+  font-size: var(--font-base);
 }
-.slides { width: 100vw; height: 100vh; position: relative; }
+.slides { 
+  width: 100vw; 
+  height: 100vh; 
+  position: relative; 
+}
 .slide {
   position: absolute; top: 0; left: 0;
   width: 100%; height: 100%;
   display: flex; flex-direction: column;
   justify-content: center; align-items: center;
-  padding: 60px 100px;
+  padding: clamp(30px, 4vh, 60px) clamp(40px, 6vw, 120px);
   opacity: 0; visibility: hidden; transform: translateY(20px);
   transition: opacity 0.5s, transform 0.5s, visibility 0.5s;
   pointer-events: none;
 }
 .slide.active { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: all; }
 .slide-label {
-  font-size: 12px; font-weight: 700;
-  color: var(--accent); margin-bottom: 16px;
-  text-transform: uppercase; letter-spacing: 2px;
+  font-size: clamp(11px, 1vw, 14px); font-weight: 700;
+  color: var(--accent); margin-bottom: clamp(10px, 1.5vh, 16px);
+  text-transform: uppercase; letter-spacing: clamp(1px, 0.5vw, 2px);
 }
 h1.slide-title {
-  font-size: 52px; font-weight: 900;
+  font-size: var(--font-title); font-weight: 900;
   color: var(--text-bright); text-align: center;
   line-height: 1.2;
 }
 h2.slide-title {
-  font-size: 38px; font-weight: 800;
+  font-size: var(--font-heading); font-weight: 800;
   color: var(--text-bright); text-align: center;
-  margin-bottom: 28px; line-height: 1.3;
+  margin-bottom: clamp(16px, 2vh, 28px); line-height: 1.3;
 }
 .slide-desc {
-  font-size: 17px; color: var(--text-dim);
+  font-size: clamp(15px, 1.4vw, 19px); color: var(--text-dim);
   line-height: 1.8; text-align: center;
   max-width: 800px;
 }
 .tip-badge {
-  margin-top: 24px;
+  margin-top: clamp(12px, 2vh, 24px);
   background: #fffbeb;
   border: 1px solid #fde68a;
   border-radius: 8px;
-  padding: 12px 20px;
-  font-size: 14px; color: #92400e;
+  padding: clamp(8px, 1vh, 12px) clamp(14px, 2vw, 20px);
+  font-size: clamp(12px, 1.1vw, 15px); color: #92400e;
   max-width: 700px; text-align: left;
 }
 .tip-badge span { font-weight: 700; }
 
 /* Cards */
-.card-grid { display: grid; gap: 20px; width: 100%; max-width: 1200px; margin-top: 20px; }
-.grid-2 { grid-template-columns: 1fr 1fr; }
-.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-.grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.card-grid { 
+  display: grid; 
+  gap: clamp(12px, 1.5vw, 20px); 
+  width: 100%; 
+  max-width: 1200px; 
+  margin-top: clamp(12px, 2vh, 20px); 
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(250px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(200px, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(180px, 1fr)); }
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: clamp(16px, 2vw, 24px);
   text-align: center;
   box-shadow: var(--shadow-sm);
   transition: all 0.2s ease;
 }
 .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.card-icon { font-size: 32px; margin-bottom: 12px; }
-.card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-.card p { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+.card-icon { font-size: clamp(24px, 2.5vw, 32px); margin-bottom: clamp(8px, 1vh, 12px); }
+.card h3 { font-size: clamp(15px, 1.5vw, 19px); font-weight: 700; margin-bottom: clamp(4px, 0.5vh, 8px); }
+.card p { font-size: clamp(12px, 1.1vw, 15px); color: var(--text-dim); line-height: 1.6; }
 .card.highlight { border-color: var(--accent); background: var(--accent-dim); }
 .card.tier-1 { border-top: 4px solid var(--t1); background: var(--t1-bg); }
 .card.tier-2 { border-top: 4px solid var(--t2); background: var(--t2-bg); }
 .card.tier-3 { border-top: 4px solid var(--t3); background: var(--t3-bg); }
 
 /* Diagrams */
-.diagram { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; flex-wrap: wrap; }
+.diagram { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: clamp(10px, 1.5vw, 16px); 
+  margin-top: clamp(12px, 2vh, 20px); 
+  flex-wrap: wrap; 
+}
 .diagram-node {
   background: var(--bg-card);
   border: 2px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px 24px;
-  min-width: 140px;
+  padding: clamp(10px, 1.2vw, 16px) clamp(14px, 2vw, 24px);
+  min-width: clamp(100px, 12vw, 140px);
   text-align: center;
   font-weight: 600;
+  font-size: clamp(12px, 1.2vw, 15px);
   box-shadow: var(--shadow-sm);
 }
-.diagram-node.amber { border-color: #f59e0b; background: #fffbeb; color: #92400e; }
-.diagram-node.purple { border-color: #8b5cf6; background: #f5f3ff; color: #5b21b6; }
-.diagram-node.green { border-color: #22c55e; background: #f0fdf4; color: #166534; }
-.diagram-node.blue { border-color: #2563eb; background: #eff6ff; color: #1e40af; }
-.diagram-arrow { font-size: 24px; color: var(--text-dim); }
+.diagram-arrow { font-size: clamp(18px, 2vw, 24px); color: var(--text-dim); }
 
 /* Hierarchy */
-.hierarchy { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 20px; }
-.hierarchy-level {
-  display: flex; gap: 16px; justify-content: center;
-  padding: 12px 24px;
-  border-radius: var(--radius);
-  font-weight: 600;
-  min-width: 300px;
-  text-align: center;
+.hierarchy { 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+gap: clamp(8px, 1vh, 12px); 
+margin-top: clamp(12px, 2vh, 20px); 
 }
-.hierarchy-level.l1 { background: #fef2f2; border: 2px solid #ef4444; color: #991b1b; }
-.hierarchy-level.l2 { background: #eff6ff; border: 2px solid #2563eb; color: #1e40af; }
-.hierarchy-level.l3 { background: #f0fdf4; border: 2px solid #22c55e; color: #166534; }
+.hierarchy-level {
+display: flex; gap: clamp(10px, 1.5vw, 16px); justify-content: center;
+padding: clamp(8px, 1vh, 12px) clamp(16px, 3vw, 24px);
+border-radius: var(--radius);
+font-weight: 600;
+font-size: clamp(13px, 1.3vw, 16px);
+min-width: clamp(250px, 30vw, 300px);
+text-align: center;
+box-shadow: var(--shadow-sm);
+}
 
 /* Flow Chart with branches */
-.flow-chart { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 20px; }
-.flow-row { display: flex; gap: 16px; align-items: center; }
-.flow-node {
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px 20px;
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
-  min-width: 120px;
-  text-align: center;
+.flow-chart { 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+gap: clamp(4px, 0.8vh, 8px); 
+margin-top: clamp(12px, 2vh, 20px); 
 }
-.flow-node.start { border-color: #f59e0b; background: #fffbeb; }
-.flow-node.process { border-color: #8b5cf6; background: #f5f3ff; }
-.flow-node.end { border-color: #22c55e; background: #f0fdf4; }
-.flow-arrow { font-size: 20px; color: var(--text-dim); }
-.flow-branch { display: flex; gap: 24px; margin-top: 8px; }
+.flow-row { display: flex; gap: clamp(10px, 1.5vw, 16px); align-items: center; }
+.flow-node {
+background: var(--bg-card);
+border: 2px solid var(--border);
+border-radius: var(--radius);
+padding: clamp(8px, 1vw, 12px) clamp(14px, 2vw, 20px);
+font-weight: 600;
+font-size: clamp(12px, 1.2vw, 15px);
+box-shadow: var(--shadow-sm);
+min-width: clamp(90px, 10vw, 120px);
+text-align: center;
+}
+.flow-arrow { font-size: clamp(16px, 1.8vw, 20px); color: var(--text-dim); }
+.flow-branch { display: flex; gap: clamp(14px, 2vw, 24px); margin-top: clamp(4px, 0.8vh, 8px); }
 .flow-condition {
-  background: #fef2f2;
-  border: 2px solid #ef4444;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 600;
+background: #fef2f2;
+border: 2px solid #ef4444;
+border-radius: 8px;
+padding: clamp(6px, 0.8vh, 8px) clamp(10px, 1.5vw, 16px);
+font-size: clamp(11px, 1.1vw, 14px);
+font-weight: 600;
 }
 
 /* Cycle Diagram */
-.cycle-diagram { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
-.cycle-top { display: flex; gap: 16px; align-items: center; }
-.cycle-arrow-down { font-size: 24px; color: var(--text-dim); margin: 8px 0; }
-.cycle-bottom { display: flex; gap: 16px; align-items: center; }
+.cycle-diagram { 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+margin-top: clamp(12px, 2vh, 20px); 
+}
+.cycle-top { display: flex; gap: clamp(10px, 1.5vw, 16px); align-items: center; }
+.cycle-arrow-down { font-size: clamp(18px, 2vw, 24px); color: var(--text-dim); margin: clamp(4px, 0.8vh, 8px) 0; }
+.cycle-bottom { display: flex; gap: clamp(10px, 1.5vw, 16px); align-items: center; }
 .cycle-feedback {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  color: var(--t1);
-  font-weight: 600;
-  font-size: 13px;
-  padding: 8px;
+writing-mode: vertical-rl;
+text-orientation: mixed;
+color: var(--t1);
+font-weight: 600;
+font-size: clamp(11px, 1vw, 13px);
+padding: clamp(6px, 0.8vh, 8px);
 }
 
 /* Tree Diagram */
-.tree-diagram { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 20px; }
-.tree-root {
-  background: var(--gradient-start);
-  color: white;
-  padding: 12px 24px;
-  border-radius: var(--radius);
-  font-weight: 700;
+.tree-diagram { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 0;
+  margin-top: clamp(12px, 2vh, 20px); 
+  width: 100%;
+  max-width: 1000px;
 }
-.tree-branches { display: flex; gap: 20px; }
+.tree-root {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: white;
+  padding: clamp(12px, 1.5vw, 16px) clamp(24px, 4vw, 36px);
+  border-radius: var(--radius);
+  font-weight: 800;
+  font-size: clamp(15px, 1.5vw, 20px);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 2;
+}
+/* Vertical connector from root to branches */
+.tree-connector {
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(20px, 3vh, 36px);
+  background: linear-gradient(to bottom, var(--gradient-start), var(--border));
+  position: relative;
+}
+/* Horizontal bar connecting all branches */
+.tree-hbar {
+  height: clamp(2px, 0.3vw, 3px);
+  background: var(--border);
+  width: 90%;
+  max-width: 800px;
+  position: relative;
+}
+.tree-hbar::before, .tree-hbar::after {
+  content: '';
+  position: absolute;
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+}
+.tree-hbar::before { left: 5%; top: -10px; }
+.tree-hbar::after { right: 5%; top: -10px; }
+/* Branch connectors */
+.tree-branch-conn {
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+  position: absolute;
+  top: 0;
+}
+.tree-branches { 
+  display: flex; 
+  gap: clamp(12px, 2vw, 20px); 
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  padding-top: clamp(10px, 1.5vh, 18px);
+}
 .tree-branch {
   background: var(--bg-card);
   border: 2px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: clamp(12px, 1.5vw, 18px) clamp(10px, 1.5vw, 16px);
   text-align: center;
-  min-width: 150px;
+  min-width: clamp(100px, 16vw, 180px);
+  flex: 1;
+  max-width: clamp(140px, 20vw, 220px);
+  position: relative;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
 }
-.tree-branch h4 { font-size: 15px; margin-bottom: 8px; }
-.tree-branch p { font-size: 12px; color: var(--text-dim); }
+.tree-branch:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.tree-branch::before {
+  content: '';
+  position: absolute;
+  top: -clamp(10px, 1.5vh, 18px);
+  left: 50%;
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+  transform: translateX(-50%);
+}
+.tree-branch[data-branch="agent"] { border-top: 4px solid #6366f1; }
+.tree-branch[data-branch="system"] { border-top: 4px solid #f59e0b; }
+.tree-branch[data-branch="memory"] { border-top: 4px solid #22c55e; }
+.tree-branch[data-branch="reference"] { border-top: 4px solid #ec4899; }
+.tree-branch-icon { font-size: clamp(20px, 2.2vw, 28px); margin-bottom: clamp(4px, 0.5vh, 8px); }
+.tree-branch h4 { font-size: clamp(13px, 1.3vw, 16px); margin-bottom: clamp(4px, 0.5vh, 8px); font-weight: 700; }
+.tree-branch p { font-size: clamp(11px, 1vw, 13px); color: var(--text-dim); line-height: 1.5; }
+.tree-branch-items { font-size: clamp(10px, 0.9vw, 12px); color: var(--text-dim); margin-top: clamp(2px, 0.3vh, 4px); line-height: 1.6; }
 
 /* Image container */
 .slide-image {
-  max-width: 900px;
-  width: 100%;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  margin-top: 16px;
-  cursor: zoom-in;
+max-width: 900px;
+width: 100%;
+border-radius: var(--radius);
+box-shadow: var(--shadow-md);
+margin-top: clamp(8px, 1.5vh, 16px);
+cursor: zoom-in;
 }
 
 /* Image Viewer Modal */
@@ -307,11 +413,60 @@ h2.slide-title {
 .nav-dot.active { background: var(--accent); width: 20px; }
 
 /* Cover */
-.slide-cover { text-align: center; }
-.slide-cover .subtitle { font-size: 20px; color: var(--text-dim); margin-top: 16px; line-height: 1.6; }
+.slide-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(12px, 2vh, 24px);
+  flex: 1 0 auto;
+}
+.slide-cover .slide-title {
+  margin-bottom: 0;
+}
+.slide-cover .subtitle {
+  font-size: clamp(16px, 1.6vw, 22px);
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 700px;
+}
 
 /* Two column layout */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; max-width: 1100px; margin-top: 20px; }
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  width: 100%;
+  max-width: 1100px;
+  margin-top: clamp(12px, 2vh, 20px);
+}
+
+/* Responsive adjustments for tree diagram on small screens */
+@media (max-width: 768px) {
+  .tree-branches {
+    flex-wrap: wrap;
+    gap: clamp(8px, 1.5vw, 12px);
+  }
+  .tree-branch {
+    min-width: clamp(80px, 40vw, 140px);
+    max-width: clamp(120px, 45vw, 180px);
+    padding: clamp(8px, 1vw, 12px) clamp(6px, 1vw, 10px);
+  }
+  .tree-branch-icon { font-size: clamp(16px, 4vw, 22px); }
+  .tree-branch h4 { font-size: clamp(11px, 2.5vw, 14px); }
+  .tree-branch p { font-size: clamp(9px, 2vw, 12px); }
+  .tree-branch-items { font-size: clamp(8px, 1.8vw, 11px); }
+  .tree-hbar { display: none; }
+  .tree-branch-conn { display: none; }
+  .tree-branch::before { display: none; }
+}
+@media (max-height: 600px) {
+  .tree-connector { height: clamp(12px, 2vh, 20px); }
+  .tree-branch-conn { height: clamp(6px, 1vh, 12px); }
+  .tree-branches { padding-top: clamp(6px, 1vh, 12px); }
+  .tree-branch::before { height: clamp(6px, 1vh, 12px); }
+}
 </style>
 </head>
 <body>
@@ -390,13 +545,13 @@ h2.slide-title {
       <div>L1: 사전 학습 (Pre-trained)</div>
       <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 2024 년 / 데이터량: 수 TB</div>
     </div>
-    <div class="hierarchy-level l3">
-      <div>L3: 문서 참조 (RAG)<span class="popup-trigger" onclick="showPopup('s4_rag')">?</span></div>
-      <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 필요 시 / 데이터량: 수 GB~TB</div>
-    </div>
     <div class="hierarchy-level l2">
       <div>L2: 에이전트 메모리 (File System)<span class="popup-trigger" onclick="showPopup('s4_agent_memory')">?</span></div>
       <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 실시간 / 데이터량: 수 MB~GB</div>
+    </div>
+    <div class="hierarchy-level l3">
+      <div>L3: 문서 참조 (RAG)<span class="popup-trigger" onclick="showPopup('s4_rag')">?</span></div>
+      <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 필요 시 / 데이터량: 수 GB~TB</div>
     </div>
   </div>
   <div class="tip-badge"><span>💡Tip:</span> L1 이 없으면 기초 언어 이해가 불가능하고, L2 가 없으면 실시간 상황 판단이 불가능하며, L3 가 없으면 전문 분야 심화 분석이 불가능합니다. 오늘은 L2 '에이전트 메모리' 를 다룹니다.</div>
@@ -533,47 +688,56 @@ h2.slide-title {
 <div class="slide" data-slide="9">
   <div class="slide-label">주제 분류</div>
   <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
-  <div class="tree-diagram">
+  <div class="tree-diagram" style="max-width: 900px;">
     <div class="tree-root">📚 지식 시스템</div>
-    <div class="tree-branches">
-      <div class="tree-branch">
-        <h4>🤖 에이전트</h4>
+    <div class="tree-connector" style="width: 2px; height: 20px; background: var(--border);"></div>
+    <div class="tree-hbar" style="display: flex; justify-content: center; gap: 20px; position: relative;">
+      <div style="position: absolute; top: 0; left: 12.5%; right: 12.5%; height: 2px; background: var(--border);"></div>
+    </div>
+    <div class="tree-branches" style="display: flex; justify-content: center; gap: clamp(12px, 2vw, 20px); width: 100%;">
+      <div class="tree-branch" data-branch="agent">
+        <div class="tree-branch-icon">🤖</div>
+        <h4>에이전트</h4>
         <p>워크플로우, 스킬, 도구</p>
+        <div class="tree-branch-items">스킬 · 플러그인 · 워크플로우</div>
       </div>
-      <div class="tree-branch">
-        <h4>⚙️ 시스템</h4>
+      <div class="tree-branch" data-branch="system">
+        <div class="tree-branch-icon">⚙️</div>
+        <h4>시스템</h4>
         <p>인프라, 설정, 보안</p>
+        <div class="tree-branch-items">설정 · 인프라 · Cron</div>
       </div>
-      <div class="tree-branch">
-        <h4>🧠 메모리</h4>
+      <div class="tree-branch" data-branch="memory">
+        <div class="tree-branch-icon">🧠</div>
+        <h4>메모리</h4>
         <p>지식, 학습, 기억</p>
+        <div class="tree-branch-items">메모리 · 학습 · 경험</div>
       </div>
-      <div class="tree-branch">
-        <h4>📖 참고 자료</h4>
+      <div class="tree-branch" data-branch="reference">
+        <div class="tree-branch-icon">📖</div>
+        <h4>참고 자료</h4>
         <p>위키, 리퍼런스, 가이드</p>
+        <div class="tree-branch-items">문서 · 가이드 · 레퍼런스</div>
       </div>
     </div>
   </div>
-  <div class="card" style="margin-top:20px; max-width:800px;">
+  <div class="card" style="margin-top:clamp(14px,2vh,20px); max-width:800px;">
     <h3>태그 기반 분류<span class="popup-trigger" onclick="showPopup('s9_tagging')">?</span></h3>
     <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
   </div>
   <div class="tip-badge"><span>💡Tip:</span> 지식을 주제별로 분류하면 관련 영역만 빠르게 찾을 수 있고, 컨텍스트 오염을 방지하여 효율적인 검색이 가능합니다.</div>
 </div>
 
-<!-- S10: Hierarchical Search -->
+<!-- S10: Hierarchical Search (glm-5.1) -->
 <div class="slide" data-slide="10">
   <div class="slide-label">계층적 탐색</div>
   <h2 class="slide-title">AI 가 지식을 찾는 4 단계</h2>
-  <div class="flow-chart">
-    <div class="flow-row">
-      <div class="flow-node start">🗺️ Navigation</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node process">📋 Index Scan</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node process">🔍 Domain Filter</div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node end">📖 Detail Read</div>
+  <div class="flow-chart" style="max-width: 900px;">
+    <div class="flow-row" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1.5vw, 16px); align-items: center;">
+      <div class="flow-node start" style="min-width: unset;">🗺️<br><small>Navigation</small></div>
+      <div class="flow-node process" style="min-width: unset;">📋<br><small>Index Scan</small></div>
+      <div class="flow-node process" style="min-width: unset;">🔍<br><small>Domain Filter</small></div>
+      <div class="flow-node end" style="min-width: unset;">📖<br><small>Detail Read</small></div>
     </div>
   </div>
   <div class="card-grid grid-2" style="margin-top:24px;">
@@ -652,7 +816,7 @@ const pData = {
   
   "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ × days)\nλ = 0.01 (90 일 후 40% 감소)\n최소 점수: 10 (완전 소멸 방지)</pre><p>이 알고리즘은 불필요한 Context 의 메모리 점유를 방지합니다.</p>",
   
-  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다.</p><pre>metadata.json:\\n{\\n  'tags': ['agent', 'memory'],\\n  'domain': 'system',\\n  'priority': 'T2',\\n  'created': '2026-06-09',\\n  'updated': '2026-06-09'\\n}</pre><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
+  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다. 4 개 주제 브랜치로 구조화됩니다.</p><pre>metadata.json:\n{\n  'tags': ['agent', 'memory'],\n  'domain': 'system',\n  'priority': 'T2',\n  'created': '2026-06-09',\n  'updated': '2026-06-09'\n}</pre><p>주제 브랜치:</p><ul><li>🤖 <strong>에이전트</strong> — 워크플로우, 스킬, 도구</li><li>⚙️ <strong>시스템</strong> — 인프라, 설정, 보안</li><li>🧠 <strong>메모리</strong> — 지식, 학습, 기억</li><li>📖 <strong>참고 자료</strong> — 위키, 리퍼런스, 가이드</li></ul><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
   
   "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
 };
