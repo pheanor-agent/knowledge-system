@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 에게 기억을 선물하다</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-card: #f9fafb;
+  --bg-card-hover: #f3f4f6;
+  --border: #e5e7eb;
+  --text: #1a1a1a;
+  --text-dim: #666666;
+  --text-bright: #000000;
+  --accent: #2563eb;
+  --accent-dim: rgba(37,99,235,0.1);
+  --gradient-start: #6366f1;
+  --gradient-end: #8b5cf6;
+  --t1: #ef4444;
+  --t1-bg: #fef2f2;
+  --t2: #f59e0b;
+  --t2-bg: #fffbeb;
+  --t3: #22c55e;
+  --t3-bg: #f0fdf4;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 24px rgba(0,0,0,0.1);
+  --radius: 12px;
+  /* 반응형 폰트 스케일 (1920x1080 기준) */
+  --font-base: clamp(14px, 1.2vw, 18px);
+  --font-card: clamp(12px, 1vw, 16px);
+  --font-title: clamp(28px, 3vw, 48px);
+  --font-heading: clamp(20px, 2.2vw, 36px);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow: hidden;
+  height: 100vh; width: 100vw;
+  font-size: var(--font-base);
+}
+.slides { 
+  width: 100vw; 
+  height: 100vh; 
+  position: relative; 
+}
+.slide {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: clamp(30px, 4vh, 60px) clamp(40px, 6vw, 120px);
+  opacity: 0; visibility: hidden; transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s, visibility 0.5s;
+  pointer-events: none;
+}
+.slide.active { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: all; }
+.slide-label {
+  font-size: clamp(11px, 1vw, 14px); font-weight: 700;
+  color: var(--accent); margin-bottom: clamp(10px, 1.5vh, 16px);
+  text-transform: uppercase; letter-spacing: clamp(1px, 0.5vw, 2px);
+}
+h1.slide-title {
+  font-size: var(--font-title); font-weight: 900;
+  color: var(--text-bright); text-align: center;
+  line-height: 1.2;
+}
+h2.slide-title {
+  font-size: var(--font-heading); font-weight: 800;
+  color: var(--text-bright); text-align: center;
+  margin-bottom: clamp(16px, 2vh, 28px); line-height: 1.3;
+}
+.slide-desc {
+  font-size: clamp(15px, 1.4vw, 19px); color: var(--text-dim);
+  line-height: 1.8; text-align: center;
+  max-width: 800px;
+}
+.tip-badge {
+  margin-top: clamp(12px, 2vh, 24px);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: clamp(8px, 1vh, 12px) clamp(14px, 2vw, 20px);
+  font-size: clamp(12px, 1.1vw, 15px); color: #92400e;
+  max-width: 700px; text-align: left;
+}
+.tip-badge span { font-weight: 700; }
+
+/* Cards */
+.card-grid { 
+  display: grid; 
+  gap: clamp(12px, 1.5vw, 20px); 
+  width: 100%; 
+  max-width: 1200px; 
+  margin-top: clamp(12px, 2vh, 20px); 
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(250px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(200px, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(180px, 1fr)); }
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(16px, 2vw, 24px);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.card-icon { font-size: clamp(24px, 2.5vw, 32px); margin-bottom: clamp(8px, 1vh, 12px); }
+.card h3 { font-size: clamp(15px, 1.5vw, 19px); font-weight: 700; margin-bottom: clamp(4px, 0.5vh, 8px); }
+.card p { font-size: clamp(12px, 1.1vw, 15px); color: var(--text-dim); line-height: 1.6; }
+.card.highlight { border-color: var(--accent); background: var(--accent-dim); }
+.card.tier-1 { border-top: 4px solid var(--t1); background: var(--t1-bg); }
+.card.tier-2 { border-top: 4px solid var(--t2); background: var(--t2-bg); }
+.card.tier-3 { border-top: 4px solid var(--t3); background: var(--t3-bg); }
+
+/* Diagrams */
+.diagram { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: clamp(10px, 1.5vw, 16px); 
+  margin-top: clamp(12px, 2vh, 20px); 
+  flex-wrap: wrap; 
+}
+.diagram-node {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(10px, 1.2vw, 16px) clamp(14px, 2vw, 24px);
+  min-width: clamp(100px, 12vw, 140px);
+  text-align: center;
+  font-weight: 600;
+  font-size: clamp(12px, 1.2vw, 15px);
+  box-shadow: var(--shadow-sm);
+}
+.diagram-arrow { font-size: clamp(18px, 2vw, 24px); color: var(--text-dim); }
+
+/* Hierarchy */
+.hierarchy { 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+gap: clamp(8px, 1vh, 12px); 
+margin-top: clamp(12px, 2vh, 20px); 
+}
+.hierarchy-level {
+display: flex; gap: clamp(10px, 1.5vw, 16px); justify-content: center;
+padding: clamp(8px, 1vh, 12px) clamp(16px, 3vw, 24px);
+border-radius: var(--radius);
+font-weight: 600;
+font-size: clamp(13px, 1.3vw, 16px);
+min-width: clamp(250px, 30vw, 300px);
+text-align: center;
+box-shadow: var(--shadow-sm);
+}
+
+/* Flow Chart with branches */
+.flow-chart { 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+gap: clamp(4px, 0.8vh, 8px); 
+margin-top: clamp(12px, 2vh, 20px); 
+}
+.flow-row { display: flex; gap: clamp(10px, 1.5vw, 16px); align-items: center; }
+.flow-node {
+background: var(--bg-card);
+border: 2px solid var(--border);
+border-radius: var(--radius);
+padding: clamp(8px, 1vw, 12px) clamp(14px, 2vw, 20px);
+font-weight: 600;
+font-size: clamp(12px, 1.2vw, 15px);
+box-shadow: var(--shadow-sm);
+min-width: clamp(90px, 10vw, 120px);
+text-align: center;
+}
+.flow-arrow { font-size: clamp(16px, 1.8vw, 20px); color: var(--text-dim); }
+.flow-branch { display: flex; gap: clamp(14px, 2vw, 24px); margin-top: clamp(4px, 0.8vh, 8px); }
+.flow-condition {
+background: #fef2f2;
+border: 2px solid #ef4444;
+border-radius: 8px;
+padding: clamp(6px, 0.8vh, 8px) clamp(10px, 1.5vw, 16px);
+font-size: clamp(11px, 1.1vw, 14px);
+font-weight: 600;
+}
+
+/* Cycle Diagram */
+.cycle-diagram { 
+display: flex; 
+flex-direction: column; 
+align-items: center; 
+margin-top: clamp(12px, 2vh, 20px); 
+}
+.cycle-top { display: flex; gap: clamp(10px, 1.5vw, 16px); align-items: center; }
+.cycle-arrow-down { font-size: clamp(18px, 2vw, 24px); color: var(--text-dim); margin: clamp(4px, 0.8vh, 8px) 0; }
+.cycle-bottom { display: flex; gap: clamp(10px, 1.5vw, 16px); align-items: center; }
+.cycle-feedback {
+writing-mode: vertical-rl;
+text-orientation: mixed;
+color: var(--t1);
+font-weight: 600;
+font-size: clamp(11px, 1vw, 13px);
+padding: clamp(6px, 0.8vh, 8px);
+}
+
+/* Tree Diagram */
+.tree-diagram { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 0;
+  margin-top: clamp(12px, 2vh, 20px); 
+  width: 100%;
+  max-width: 1000px;
+}
+.tree-root {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: white;
+  padding: clamp(12px, 1.5vw, 16px) clamp(24px, 4vw, 36px);
+  border-radius: var(--radius);
+  font-weight: 800;
+  font-size: clamp(15px, 1.5vw, 20px);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 2;
+}
+/* Vertical connector from root to branches */
+.tree-connector {
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(20px, 3vh, 36px);
+  background: linear-gradient(to bottom, var(--gradient-start), var(--border));
+  position: relative;
+}
+/* Horizontal bar connecting all branches */
+.tree-hbar {
+  height: clamp(2px, 0.3vw, 3px);
+  background: var(--border);
+  width: 90%;
+  max-width: 800px;
+  position: relative;
+}
+.tree-hbar::before, .tree-hbar::after {
+  content: '';
+  position: absolute;
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+}
+.tree-hbar::before { left: 5%; top: -10px; }
+.tree-hbar::after { right: 5%; top: -10px; }
+/* Branch connectors */
+.tree-branch-conn {
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+  position: absolute;
+  top: 0;
+}
+.tree-branches { 
+  display: flex; 
+  gap: clamp(12px, 2vw, 20px); 
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  padding-top: clamp(10px, 1.5vh, 18px);
+}
+.tree-branch {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(12px, 1.5vw, 18px) clamp(10px, 1.5vw, 16px);
+  text-align: center;
+  min-width: clamp(100px, 16vw, 180px);
+  flex: 1;
+  max-width: clamp(140px, 20vw, 220px);
+  position: relative;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
+}
+.tree-branch:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.tree-branch::before {
+  content: '';
+  position: absolute;
+  top: -clamp(10px, 1.5vh, 18px);
+  left: 50%;
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+  transform: translateX(-50%);
+}
+.tree-branch[data-branch="agent"] { border-top: 4px solid #6366f1; }
+.tree-branch[data-branch="system"] { border-top: 4px solid #f59e0b; }
+.tree-branch[data-branch="memory"] { border-top: 4px solid #22c55e; }
+.tree-branch[data-branch="reference"] { border-top: 4px solid #ec4899; }
+.tree-branch-icon { font-size: clamp(20px, 2.2vw, 28px); margin-bottom: clamp(4px, 0.5vh, 8px); }
+.tree-branch h4 { font-size: clamp(13px, 1.3vw, 16px); margin-bottom: clamp(4px, 0.5vh, 8px); font-weight: 700; }
+.tree-branch p { font-size: clamp(11px, 1vw, 13px); color: var(--text-dim); line-height: 1.5; }
+.tree-branch-items { font-size: clamp(10px, 0.9vw, 12px); color: var(--text-dim); margin-top: clamp(2px, 0.3vh, 4px); line-height: 1.6; }
+
+/* Image container */
+.slide-image {
+max-width: 900px;
+width: 100%;
+border-radius: var(--radius);
+box-shadow: var(--shadow-md);
+margin-top: clamp(8px, 1.5vh, 16px);
+cursor: zoom-in;
+}
+
+/* Image Viewer Modal */
+.image-viewer {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  z-index: 300; display: none;
+  justify-content: center; align-items: center;
+  cursor: grab;
+}
+.image-viewer.active { display: flex; }
+.image-viewer img {
+  max-width: 90%; max-height: 90%;
+  object-fit: contain;
+  transition: transform 0.1s;
+  cursor: grab;
+}
+.image-viewer-close {
+  position: absolute; top: 20px; right: 20px;
+  background: rgba(255,255,255,0.2); border: none;
+  color: white; font-size: 28px; width: 44px; height: 44px;
+  border-radius: 50%; cursor: pointer;
+}
+.image-viewer-zoom {
+  position: absolute; bottom: 20px; right: 20px;
+  display: flex; gap: 8px;
+}
+.image-viewer-zoom button {
+  background: rgba(255,255,255,0.2); border: none;
+  color: white; font-size: 20px; width: 40px; height: 40px;
+  border-radius: 50%; cursor: pointer;
+}
+
+/* Popup */
+.popup-trigger {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent-dim); color: var(--accent);
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  margin-left: 4px; vertical-align: middle;
+}
+.popup-trigger:hover { background: var(--accent); color: white; }
+.popup-overlay {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 200; display: none;
+  justify-content: center; align-items: center;
+  padding: 40px; backdrop-filter: blur(4px);
+}
+.popup-overlay.active { display: flex; }
+.popup-content {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  text-align: left;
+  box-shadow: var(--shadow-lg);
+}
+.popup-close {
+  position: absolute; top: 20px; right: 20px;
+  background: none; border: none;
+  font-size: 24px; cursor: pointer;
+}
+.popup-content h4 { font-size: 20px; margin-bottom: 16px; color: var(--accent); }
+.popup-content p { font-size: 15px; line-height: 1.7; margin-bottom: 12px; }
+.popup-content pre { background: #f3f4f6; padding: 12px; border-radius: 8px; overflow-x: auto; margin: 12px 0; }
+.popup-content code { font-family: monospace; font-size: 13px; }
+.popup-content ul { margin: 8px 0 8px 20px; }
+.popup-content li { font-size: 14px; line-height: 1.6; margin: 4px 0; }
+
+/* Navigation */
+.nav {
+  position: fixed; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 16px;
+  z-index: 100;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 10px 24px;
+  box-shadow: var(--shadow-md);
+}
+.nav button {
+  background: none; border: none;
+  color: var(--text-dim); cursor: pointer;
+  font-size: 20px; width: 36px; height: 36px;
+  border-radius: 50%;
+}
+.nav button:hover { background: var(--bg-card); }
+.nav-counter { font-family: monospace; font-size: 14px; color: var(--text-dim); min-width: 60px; text-align: center; }
+.nav-dots { display: flex; gap: 4px; }
+.nav-dot { width: 6px; height: 6px; border-radius: 3px; background: var(--border); cursor: pointer; transition: all 0.3s; }
+.nav-dot.active { background: var(--accent); width: 20px; }
+
+/* Cover */
+.slide-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(12px, 2vh, 24px);
+  flex: 1 0 auto;
+}
+.slide-cover .slide-title {
+  margin-bottom: 0;
+}
+.slide-cover .subtitle {
+  font-size: clamp(16px, 1.6vw, 22px);
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 700px;
+}
+
+/* Two column layout */
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  width: 100%;
+  max-width: 1100px;
+  margin-top: clamp(12px, 2vh, 20px);
+}
+
+/* Responsive adjustments for tree diagram on small screens */
+@media (max-width: 768px) {
+  .tree-branches {
+    flex-wrap: wrap;
+    gap: clamp(8px, 1.5vw, 12px);
+  }
+  .tree-branch {
+    min-width: clamp(80px, 40vw, 140px);
+    max-width: clamp(120px, 45vw, 180px);
+    padding: clamp(8px, 1vw, 12px) clamp(6px, 1vw, 10px);
+  }
+  .tree-branch-icon { font-size: clamp(16px, 4vw, 22px); }
+  .tree-branch h4 { font-size: clamp(11px, 2.5vw, 14px); }
+  .tree-branch p { font-size: clamp(9px, 2vw, 12px); }
+  .tree-branch-items { font-size: clamp(8px, 1.8vw, 11px); }
+  .tree-hbar { display: none; }
+  .tree-branch-conn { display: none; }
+  .tree-branch::before { display: none; }
+}
+@media (max-height: 600px) {
+  .tree-connector { height: clamp(12px, 2vh, 20px); }
+  .tree-branch-conn { height: clamp(6px, 1vh, 12px); }
+  .tree-branches { padding-top: clamp(6px, 1vh, 12px); }
+  .tree-branch::before { height: clamp(6px, 1vh, 12px); }
+}
+</style>
+</head>
+<body>
+<div class="slides" id="slides">
+
+<!-- S1: Cover -->
+<div class="slide active" data-slide="1">
+  <div class="slide-label">에이전트 메모리 시스템</div>
+  <div class="slide-cover">
+    <h1 class="slide-title">AI 에게 기억을 선물하다</h1>
+    <p class="subtitle">챗봇에서 파일 기반 지식 시스템으로<br>사용자의 입력을 체계적으로 저장하고 활용하는 방법</p>
+  </div>
+</div>
+
+<!-- S2: Problem -->
+<div class="slide" data-slide="2">
+  <div class="slide-label">문제</div>
+  <h2 class="slide-title">왜 AI 에게 파일이 필요한가요?</h2>
+  <div class="two-col">
+    <div>
+      <img src="images/s2-token-cost.png" alt="Token Cost Graph" class="slide-image" onerror="this.style.display='none'">
+      <div class="diagram" style="margin-top:16px;">
+        <div class="diagram-node amber">Context Bloat<span class="popup-trigger" onclick="showPopup('s2_context_bloat')">?</span></div>
+        <div class="diagram-arrow">→</div>
+        <div class="diagram-node purple">Token 비용 ↑</div>
+        <div class="diagram-arrow">→</div>
+        <div class="diagram-node blue">속도 ↓</div>
+      </div>
+    </div>
+    <div class="card-grid" style="grid-template-columns:1fr;">
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h3>Lost in the Middle<span class="popup-trigger" onclick="showPopup('s2_lost_in_middle')">?</span></h3>
+        <p>Context Window 가 길어질수록 중앙부 Attention 이 하락하여 핵심 지시가 누락됩니다</p>
+      </div>
+      <div class="card highlight">
+        <div class="card-icon">💾</div>
+        <h3>해결책: 파일 기반 기억</h3>
+        <p>선택적 저장 + 검색으로 불필요한 Context 를 제거하고 효율성을 높입니다</p>
+      </div>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 매 대화마다 과거 이력 전체를 포함하면 비용이 기하급수적으로 증가합니다.</div>
+</div>
+
+<!-- S3: Analogy -->
+<div class="slide" data-slide="3">
+  <div class="slide-label">비유</div>
+  <h2 class="slide-title">신입사원이 배우는 3 가지 지식 관리</h2>
+  <div class="card-grid grid-3">
+    <div class="card">
+      <div class="card-icon">📖</div>
+      <h3>계층 1: 학교 교육</h3>
+      <p>기초 지식, 공통 커리큘럼<br><small>변경 불가 고정 지식</small></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗂️</div>
+      <h3>계층 2: 매뉴얼 & 위키</h3>
+      <p>상황별 검색, 실시간 참조<br><small>외부 문서 선택적 로드</small></p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📝</div>
+      <h3>계층 3: 개인 노트</h3>
+      <p>매일 새롭게 추가하는 메모<br><small>실시간 기록, 검색 가능</small></p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 학교 교육이 없으면 기초 개념을 매번 다시 학습해야 하고, 매뉴얼이 없으면 시행착오가 반복되며, 개인 노트가 없으면 경험으로 축적되지 않습니다.</div>
+</div>
+
+<!-- S4: AI 3-Layer Memory -->
+<div class="slide" data-slide="4">
+  <div class="slide-label">AI 의 3 층 기억</div>
+  <h2 class="slide-title">AI 도 3 가지 기억 방식을 활용합니다</h2>
+  <div class="hierarchy" style="max-width:800px;">
+    <div class="hierarchy-level l1">
+      <div>L1: 사전 학습 (Pre-trained)</div>
+      <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 2024 년 / 데이터량: 수 TB</div>
+    </div>
+    <div class="hierarchy-level l2">
+      <div>L2: 에이전트 메모리 (File System)<span class="popup-trigger" onclick="showPopup('s4_agent_memory')">?</span></div>
+      <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 실시간 / 데이터량: 수 MB~GB</div>
+    </div>
+    <div class="hierarchy-level l3">
+      <div>L3: 문서 참조 (RAG)<span class="popup-trigger" onclick="showPopup('s4_rag')">?</span></div>
+      <div style="font-size:13px;font-weight:400;margin-top:4px;">학습 시점: 필요 시 / 데이터량: 수 GB~TB</div>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> L1 이 없으면 기초 언어 이해가 불가능하고, L2 가 없으면 실시간 상황 판단이 불가능하며, L3 가 없으면 전문 분야 심화 분석이 불가능합니다. 오늘은 L2 '에이전트 메모리' 를 다룹니다.</div>
+</div>
+
+<!-- S5: System Overview -->
+<div class="slide" data-slide="5">
+  <div class="slide-label">시스템 개요</div>
+  <h2 class="slide-title">에이전트 메모리 시스템</h2>
+  <div class="two-col">
+    <div>
+      <img src="images/s5-pipeline.png" alt="Knowledge Pipeline" class="slide-image" onerror="this.style.display='none'">
+    </div>
+    <div class="card-grid" style="grid-template-columns:1fr;">
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>처리 통계</h3>
+        <p>일일 처리: 50~100 건<br>저장율: 20~30% (의미 있는 정보만)</p>
+      </div>
+      <div class="card highlight">
+        <div class="card-icon">⚡</div>
+        <h3>처리 시간</h3>
+        <p>추출: 2~5 초<br>분류: 1~3 초<br>총 처리: 5~10 초</p>
+      </div>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 단편적인 대화는 구조화된 데이터로 치환되어 영구 보존됩니다.</div>
+</div>
+
+<!-- S6: Compile Workflow -->
+<div class="slide" data-slide="6">
+  <div class="slide-label">컴파일 워크플로우</div>
+  <h2 class="slide-title">지식을 파일로 저장하는 3 단계</h2>
+  <div class="cycle-diagram">
+    <div class="cycle-top">
+      <div class="diagram-node amber">Ingest<span class="popup-trigger" onclick="showPopup('s6_ingest')">?</span></div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node purple">Link<span class="popup-trigger" onclick="showPopup('s6_link')">?</span></div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-node green">Lint<span class="popup-trigger" onclick="showPopup('s6_lint')">?</span></div>
+    </div>
+    <div class="cycle-arrow-down">↓</div>
+    <div class="flow-condition">검증 실패 시 재실행</div>
+    <div class="flow-arrow">←</div>
+  </div>
+  <div class="card-grid grid-3" style="margin-top:20px;">
+    <div class="card">
+      <h3>1. Ingest</h3>
+      <p>대화에서 핵심 정보 적출<br><small>JSON/Markdown 포맷</small></p>
+    </div>
+    <div class="card">
+      <h3>2. Link</h3>
+      <p>기존 지식과 교차 참조 생성<br><small>Wiki-links 자동 연결</small></p>
+    </div>
+    <div class="card">
+      <h3>3. Lint</h3>
+      <p>Schema 규칙 검증<br><small>모순 탐지 후 병합</small></p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 세 단계가 완료되면 지식이 영구 파일로 저장됩니다.</div>
+</div>
+
+<!-- S7: Automation -->
+<div class="slide" data-slide="7">
+  <div class="slide-label">자동화</div>
+  <h2 class="slide-title">자동으로 파일을 정리하는 과정</h2>
+  <div class="flow-chart">
+    <div class="flow-row">
+      <div class="flow-node start">⏰ 자동 스케줄러</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node process">📜 작업 명령어</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node process">🔄 3 단계 연결</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node end">✅ 완료</div>
+    </div>
+    <div class="flow-branch">
+      <div class="flow-condition">5 분 간격 실행</div>
+      <div class="flow-condition">실패 시 재시도</div>
+      <div class="flow-condition">완료 시 알림</div>
+    </div>
+  </div>
+  <div class="card-grid grid-2" style="margin-top:24px;">
+    <div class="card">
+      <div class="card-icon">📅</div>
+      <h3>실행 스케줄</h3>
+      <p>5 분 간격 배치 처리<br>메타데이터 갱신 + 의존성 재평가</p>
+    </div>
+    <div class="card highlight">
+      <div class="card-icon">📊</div>
+      <h3>처리 대상</h3>
+      <p>신규 파일 스캔<br>기존 파일 점수 갱신<br>불필요 파일 아카이브</p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 사람의 개입 없이 정해진 스케줄에 따라 자동으로 구동됩니다.</div>
+</div>
+
+<!-- S8: Priority -->
+<div class="slide" data-slide="8">
+  <div class="slide-label">중요도</div>
+  <h2 class="slide-title">동적 점수에 따른 3 단계 분류</h2>
+  <div class="card-grid grid-3">
+    <div class="card tier-1">
+      <h3>T1: 핵심 규칙</h3>
+      <p>항상 참조해야 하는 행동 규칙<br><small>점수: 80~100</small></p>
+    </div>
+    <div class="card tier-2">
+      <h3>T2: 일상 지식</h3>
+      <p>특정 상황에 꺼내보는 지식<br><small>점수: 40~79</small></p>
+    </div>
+    <div class="card tier-3">
+      <h3>T3: 보조 정보</h3>
+      <p>요청 시 제공되는 배경 정보<br><small>점수: 0~39</small></p>
+    </div>
+  </div>
+  <div class="card-grid grid-2" style="margin-top:20px;">
+    <div class="card">
+      <h3>점수 계산<span class="popup-trigger" onclick="showPopup('s8_scoring')">?</span></h3>
+      <p>우선순위 + 최신성 + 사용빈도 + 허브노드</p>
+    </div>
+    <div class="card">
+      <h3>감가상각<span class="popup-trigger" onclick="showPopup('s8_decay')">?</span></h3>
+      <p>90 일 이상 미사용 시 점수 감소</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px; max-width:700px;">
+    <h3>참조 방식<span class="popup-trigger" onclick="showPopup('s8_tier_ref')">?</span></h3>
+    <p>T1: 매 대화 자동 로드 / T2: 키워드 검색 시 로드 / T3: 명시적 요청 시만 로드</p>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 점수 계산과 감가상각 알고리즘을 통해 불필요한 Context 의 메모리 점유를 방지합니다.</div>
+</div>
+
+<!-- S9: Topic Classification (Gemma 4) -->
+<div class="slide" data-slide="9">
+  <div class="slide-label">주제 분류</div>
+  <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
+  <div class="tree-diagram" style="max-width: 900px;">
+    <div class="tree-root">📚 지식 시스템</div>
+    <div class="tree-connector" style="width: 2px; height: 20px; background: var(--border);"></div>
+    <div class="tree-hbar" style="display: flex; justify-content: center; gap: 20px; position: relative;">
+      <div style="position: absolute; top: 0; left: 12.5%; right: 12.5%; height: 2px; background: var(--border);"></div>
+    </div>
+    <div class="tree-branches" style="display: flex; justify-content: center; gap: clamp(12px, 2vw, 20px); width: 100%;">
+      <div class="tree-branch" data-branch="agent">
+        <div class="tree-branch-icon">🤖</div>
+        <h4>에이전트</h4>
+        <p>워크플로우, 스킬, 도구</p>
+        <div class="tree-branch-items">스킬 · 플러그인 · 워크플로우</div>
+      </div>
+      <div class="tree-branch" data-branch="system">
+        <div class="tree-branch-icon">⚙️</div>
+        <h4>시스템</h4>
+        <p>인프라, 설정, 보안</p>
+        <div class="tree-branch-items">설정 · 인프라 · Cron</div>
+      </div>
+      <div class="tree-branch" data-branch="memory">
+        <div class="tree-branch-icon">🧠</div>
+        <h4>메모리</h4>
+        <p>지식, 학습, 기억</p>
+        <div class="tree-branch-items">메모리 · 학습 · 경험</div>
+      </div>
+      <div class="tree-branch" data-branch="reference">
+        <div class="tree-branch-icon">📖</div>
+        <h4>참고 자료</h4>
+        <p>위키, 리퍼런스, 가이드</p>
+        <div class="tree-branch-items">문서 · 가이드 · 레퍼런스</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:clamp(14px,2vh,20px); max-width:800px;">
+    <h3>태그 기반 분류<span class="popup-trigger" onclick="showPopup('s9_tagging')">?</span></h3>
+    <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 지식을 주제별로 분류하면 관련 영역만 빠르게 찾을 수 있고, 컨텍스트 오염을 방지하여 효율적인 검색이 가능합니다.</div>
+</div>
+
+<!-- S10: Hierarchical Search (glm-5.1) -->
+<div class="slide" data-slide="10">
+  <div class="slide-label">계층적 탐색</div>
+  <h2 class="slide-title">AI 가 지식을 찾는 4 단계</h2>
+  <div class="flow-chart" style="max-width: 900px;">
+    <div class="flow-row" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1.5vw, 16px); align-items: center;">
+      <div class="flow-node start" style="min-width: unset;">🗺️<br><small>Navigation</small></div>
+      <div class="flow-node process" style="min-width: unset;">📋<br><small>Index Scan</small></div>
+      <div class="flow-node process" style="min-width: unset;">🔍<br><small>Domain Filter</small></div>
+      <div class="flow-node end" style="min-width: unset;">📖<br><small>Detail Read</small></div>
+    </div>
+  </div>
+  <div class="card-grid grid-2" style="margin-top:24px;">
+    <div class="card">
+      <h3>탐색 프로토콜<span class="popup-trigger" onclick="showPopup('s10_protocol')">?</span></h3>
+      <p>최상위 Index 먼저 로드<br>도메인 파악 후 수 KB 페이지만 정밀 판독</p>
+    </div>
+    <div class="card highlight">
+      <h3>토큰 최적화</h3>
+      <p>전체 DB 조회: 10,000+ 토큰<br>계층 탐색: 500 토큰 미만</p>
+    </div>
+  </div>
+  <div class="tip-badge"><span>💡Tip:</span> 4 단계를 거쳐 탐색하면 전체 DB 를 한 번에 읽는 것보다 95% 이상의 토큰을 절약할 수 있습니다. 넓은 구조부터 좁아지는 필터링 방식입니다.</div>
+</div>
+
+<!-- S11: Thank You -->
+<div class="slide" data-slide="11">
+  <div class="slide-label">Thank You</div>
+  <h2 class="slide-title">세미나 완료</h2>
+  <div class="card" style="max-width:600px; margin-top:20px;">
+    <p>경험이 쌓일수록 스스로 지능을 고도화하는 아키텍처</p>
+  </div>
+</div>
+
+</div>
+
+<!-- Popup Overlay -->
+<div class="popup-overlay" id="popupOverlay" onclick="hidePopup()">
+  <div class="popup-content" id="popupContent" onclick="event.stopPropagation()">
+    <button class="popup-close" onclick="hidePopup()">×</button>
+    <div id="popupBody"></div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()">‹</button>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="nav-counter" id="navCounter">1 / 11</span>
+  <button onclick="nextSlide()">›</button>
+</div>
+
+<!-- Image Viewer -->
+<div class="image-viewer" id="imageViewer">
+  <button class="image-viewer-close" onclick="closeImageViewer()">×</button>
+  <img id="viewerImage" src="" alt="Zoomed image">
+  <div class="image-viewer-zoom">
+    <button onclick="zoomImage(-0.2)">−</button>
+    <button onclick="zoomImage(0.2)">+</button>
+  </div>
+</div>
+
+<script>
+let current = 0;
+let slides;
+let total;
+let dotsContainer;
+let counter;
+
+const pData = {
+  "s2_context_bloat": "<h4>Context Bloat</h4><p>매 대화 턴마다 불필요한 과거 이력을 전부 포함하면 Token Cost Inflation 이 유발되는 현상입니다.</p><pre>예시: 100 턴 대화 × 2,000 토큰/턴 = 200,000 토큰</pre><p>이 현상은 Conversation Length 가 증가할수록 기하급수적으로 비용이 증가합니다.</p>",
+  
+  "s2_lost_in_middle": "<h4>Lost in the Middle</h4><p>LLM 의 Context Window 가 길어질수록 중앙부의 Attention 가중치가 하락하여 핵심 지시 사항을 누락하는 현상입니다.</p><pre>Attention Score: 앞쪽 0.9 → 중앙 0.3 → 뒷쪽 0.8</pre><p>이 현상을 해결하기 위해 Selective Context Loading 이 필요합니다.</p>",
+  
+  "s4_agent_memory": "<h4>에이전트 메모리 (L2)</h4><p>에이전트가 실시간으로 기록하는 개인 메모리로, 파일 시스템 기반으로 관리됩니다.</p><pre>~/.hermes/memory/\n├── MEMORY.md      # 시스템 메모리\n├── USER.md        # 사용자 선호사항\n├── skills/        # 스킬 정의\n└── cron/          # 주기적 작업</pre><p>이 메모리는 매 대화마다 로드되어 에이전트의 행동 기준이 됩니다.</p>",
+  
+  "s4_rag": "<h4>RAG (Retrieval-Augenerated Generation)</h4><p>외부 문서 저장소로, 필요 시 검색하여 참조합니다.</p><pre>1. Query 인코딩 (Embedding)\n2. Vector DB 검색 (Cosine Similarity)\n3. Top-K 문서 반환 (K=5)\n4. Context 에 주입</pre><p>RAG 는 사전 학습된 지식을 보완하는 외부 지식원입니다.</p>",
+  
+  "s6_ingest": "<h4>Ingest: 지식 추출</h4><p>대화 세션 종료 후 Background Prompt 를 통해 핵심 정보를 JSON 이나 Markdown 포맷으로 적출합니다.</p><pre>{\n  'type': 'memory',\n  'content': '사용자 선호사항...',\n  'tags': ['user', 'preference'],\n  'score': 75,\n  'timestamp': '2026-06-09T19:00:00Z'\n}</pre><ul><li>실행 시점: 세션 종료 후 5 분</li><li>처리량: 분당 10~20 건</li><li>성공률: 95% 이상</li></ul>",
+  
+  "s6_link": "<h4>Link: 관계 연결</h4><p>기존 Index 를 스캔하여 교차 참조가 필요한 키워드에 Wiki-links 형태를 자동 생성합니다.</p><pre>[[에이전트 메모리]] → [[지식 시스템]]\n[[workflow-gate.sh]] → [[JOB 관리]]\n[[spec-driven-dev]] → [[사양서]]</pre><p>이 과정을 통해 지식 간 관계가 그래프 구조로 형성됩니다.</p>",
+  
+  "s6_lint": "<h4>Lint: 무결성 검증</h4><p>신규 지식이 기존 Schema 규칙과 Hallucination 모순을 일으키지 않는지 검증하고 버전을 병합합니다.</p><pre>✓ Schema 유효성 검사\n✓ 중복 콘텐츠 체크\n✓ 모순 탐지 (Conflict Detection)\n✓ 버전 병합 (Merge)\n✓ 변경 이력 기록 (Append-only)</pre><p>검증 실패 시 Ingest 단계로 되돌아갑니다.</p>",
+  
+  "s8_scoring": "<h4>점수 계산 알고리즘</h4><p>우선순위, 최신성, 사용 빈도, 허브 노드 점수 등을 종합하여 Tier(T1/T2/T3) 를 배정합니다.</p><pre>Score = (priority × 0.4) + \n        (recency × 0.3) + \n        (usage × 0.2) + \n        (hub × 0.1)</pre><p>각 요소는 0~100 점 스케일로 정규화됩니다.</p>",
+  
+  "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ × days)\nλ = 0.01 (90 일 후 40% 감소)\n최소 점수: 10 (완전 소멸 방지)</pre><p>이 알고리즘은 불필요한 Context 의 메모리 점유를 방지합니다.</p>",
+  
+  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다. 4 개 주제 브랜치로 구조화됩니다.</p><pre>metadata.json:\n{\n  'tags': ['agent', 'memory'],\n  'domain': 'system',\n  'priority': 'T2',\n  'created': '2026-06-09',\n  'updated': '2026-06-09'\n}</pre><p>주제 브랜치:</p><ul><li>🤖 <strong>에이전트</strong> — 워크플로우, 스킬, 도구</li><li>⚙️ <strong>시스템</strong> — 인프라, 설정, 보안</li><li>🧠 <strong>메모리</strong> — 지식, 학습, 기억</li><li>📖 <strong>참고 자료</strong> — 위키, 리퍼런스, 가이드</li></ul><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
+  
+  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
+};
+
+function init() {
+  slides = document.querySelectorAll('.slide');
+  total = slides.length;
+  dotsContainer = document.getElementById('navDots');
+  counter = document.getElementById('navCounter');
+
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotsContainer.appendChild(dot);
+  }
+
+  goTo(0);
+}
+
+function goTo(n) {
+  if (!slides || slides.length === 0) return;
+  slides[current].classList.remove('active');
+  dotsContainer.children[current].classList.remove('active');
+  current = ((n % total) + total) % total;
+  slides[current].classList.add('active');
+  dotsContainer.children[current].classList.add('active');
+  counter.textContent = `${current + 1} / ${total}`;
+}
+
+function nextSlide() { goTo(current + 1); }
+function prevSlide() { goTo(current - 1); }
+function openImageViewer(src) {
+  imageScale = 1; imageX = 0; imageY = 0;
+  const img = document.getElementById('viewerImage');
+  img.src = src;
+  img.style.transform = 'scale(1) translate(0,0)';
+  document.getElementById('imageViewer').classList.add('active');
+}
+function closeImageViewer() {
+  document.getElementById('imageViewer').classList.remove('active');
+}
+function zoomImage(delta) {
+  imageScale = Math.max(0.5, Math.min(5, imageScale + delta));
+  const img = document.getElementById('viewerImage');
+  img.style.transform = `scale(${imageScale}) translate(${imageX}px, ${imageY}px)`;
+}
+
+// Register to global scope for inline onclick handlers
+window.nextSlide = nextSlide;
+window.prevSlide = prevSlide;
+window.openImageViewer = openImageViewer;
+window.closeImageViewer = closeImageViewer;
+window.zoomImage = zoomImage;
+window.showPopup = showPopup;
+window.hidePopup = hidePopup;
+
+function showPopup(key) {
+  const content = pData[key] || '내용 없음';
+  document.getElementById('popupBody').innerHTML = content;
+  document.getElementById('popupOverlay').classList.add('active');
+}
+
+function hidePopup() {
+  document.getElementById('popupOverlay').classList.remove('active');
+}
+
+/* Image Viewer */
+let imageScale = 1;
+let imageX = 0, imageY = 0;
+let isDragging = false;
+let startX, startY;
+
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+
+  // Image click handlers
+  document.querySelectorAll('.slide-image').forEach(img => {
+    img.addEventListener('click', () => openImageViewer(img.src));
+  });
+
+  // Image drag handlers
+  const viewer = document.getElementById('imageViewer');
+  const viewerImg = document.getElementById('viewerImage');
+  viewer.addEventListener('mousedown', (e) => {
+    if (e.target === viewerImg) {
+      isDragging = true;
+      startX = e.clientX - imageX;
+      startY = e.clientY - imageY;
+    }
+  });
+  viewer.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      imageX = e.clientX - startX;
+      imageY = e.clientY - startY;
+      viewerImg.style.transform = `scale(${imageScale}) translate(${imageX}px, ${imageY}px)`;
+    }
+  });
+  viewer.addEventListener('mouseup', () => isDragging = false);
+  viewer.addEventListener('mouseleave', () => isDragging = false);
+
+  // Keyboard handlers
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    if (e.key === 'Escape') { closeImageViewer(); hidePopup(); }
+    if (e.key === '+' || e.key === '=') zoomImage(0.2);
+    if (e.key === '-') zoomImage(-0.2);
+  });
+});
+</script>
+</body>
+</html>
