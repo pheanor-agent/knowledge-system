@@ -304,6 +304,74 @@ padding: clamp(6px, 0.8vh, 8px);
 .tree-branch p { font-size: clamp(11px, 1vw, 13px); color: var(--text-dim); line-height: 1.5; }
 .tree-branch-items { font-size: clamp(10px, 0.9vw, 12px); color: var(--text-dim); margin-top: clamp(2px, 0.3vh, 4px); line-height: 1.6; }
 
+/* glm-5.1: Tree sub-branches (L2) */
+.tree-sub-branches {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3px, 0.5vh, 6px);
+  margin-top: clamp(6px, 0.8vh, 10px);
+  padding-top: clamp(6px, 0.8vh, 10px);
+  border-top: 1px dashed var(--border);
+}
+.tree-sub-branch {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 0.5vw, 8px);
+  padding: clamp(3px, 0.4vh, 5px) clamp(6px, 0.8vw, 10px);
+  background: var(--bg);
+  border-radius: 6px;
+  font-size: clamp(10px, 0.9vw, 13px);
+  color: var(--text-dim);
+  transition: all 0.2s;
+}
+.tree-sub-branch:hover { background: var(--accent-dim); color: var(--accent); }
+.tree-sub-icon { font-size: clamp(12px, 1.2vw, 16px); }
+.tree-sub-label { font-weight: 600; }
+
+/* glm-5.1: Enhanced flow chart with vertical flow + conditions */
+.flow-step-label {
+  font-size: clamp(10px, 0.9vw, 13px);
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: clamp(2px, 0.3vh, 4px);
+}
+.flow-step-title {
+  font-size: clamp(13px, 1.2vw, 16px);
+  font-weight: 700;
+  margin-bottom: clamp(2px, 0.3vh, 4px);
+}
+.flow-step-desc {
+  font-size: clamp(10px, 0.9vw, 12px);
+  color: var(--text-dim);
+}
+.flow-condition {
+  background: #fef2f2;
+  border: 2px solid #fca5a5;
+  border-radius: 8px;
+  padding: clamp(6px, 0.8vh, 10px) clamp(12px, 1.5vw, 18px);
+  font-size: clamp(11px, 1vw, 14px);
+  font-weight: 600;
+  text-align: center;
+}
+.flow-condition.yes {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+.flow-condition.no {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+.flow-connector {
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(12px, 1.5vh, 20px);
+  background: var(--border);
+}
+.flow-hbar {
+  height: clamp(2px, 0.3vw, 3px);
+  background: var(--border);
+  width: 60%;
+}
+
 /* Image container */
 .slide-image {
 max-width: 900px;
@@ -684,73 +752,223 @@ cursor: zoom-in;
   <div class="tip-badge"><span>💡Tip:</span> 점수 계산과 감가상각 알고리즘을 통해 불필요한 Context 의 메모리 점유를 방지합니다.</div>
 </div>
 
-<!-- S9: Topic Classification (glm-5.1) -->
+<!-- S9: Topic Classification (glm-5.1 —从头 생성) -->
 <div class="slide" data-slide="9">
   <div class="slide-label">주제 분류</div>
   <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
-  <div class="tree-diagram" style="max-width: 900px;">
-    <div class="tree-root">📚 지식 시스템</div>
-    <div class="tree-connector" style="width: 2px; height: 20px; background: var(--border);"></div>
-    <div class="tree-hbar" style="display: flex; justify-content: center; gap: 20px; position: relative;">
-      <div style="position: absolute; top: 0; left: 12.5%; right: 12.5%; height: 2px; background: var(--border);"></div>
-    </div>
-    <div class="tree-branches" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(12px, 2vw, 20px); width: 100%;">
+
+  <!-- Tree Diagram: 3-level hierarchy with visual connectors -->
+  <div class="tree-diagram">
+    <!-- L0: Root node -->
+    <div class="tree-root">📚 지식 시스템 (Knowledge System)</div>
+
+    <!-- Vertical connector: root → horizontal bar -->
+    <div class="tree-connector"></div>
+
+    <!-- Horizontal bar spanning all L1 branches -->
+    <div class="tree-hbar"></div>
+
+    <!-- L1: Domain branches (4 domains) -->
+    <div class="tree-branches">
       <div class="tree-branch" data-branch="agent">
         <div class="tree-branch-icon">🤖</div>
-        <h4>에이전트</h4>
-        <p>워크플로우, 스킬, 도구</p>
-        <div class="tree-branch-items">스킬 · 플러그인 · 워크플로우</div>
+        <h4>에이전트 (Agent)</h4>
+        <p>AI 가 스스로 사용하는 워크플로우와 도구 정의</p>
+        <!-- L2 sub-branches -->
+        <div class="tree-sub-branches">
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">⚡</div>
+            <div class="tree-sub-label">Skills</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🔌</div>
+            <div class="tree-sub-label">Plugins</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🔀</div>
+            <div class="tree-sub-label">Workflows</div>
+          </div>
+        </div>
       </div>
+
       <div class="tree-branch" data-branch="system">
         <div class="tree-branch-icon">⚙️</div>
-        <h4>시스템</h4>
-        <p>인프라, 설정, 보안</p>
-        <div class="tree-branch-items">설정 · 인프라 · Cron</div>
+        <h4>시스템 (System)</h4>
+        <p>인프라, 설정, 보안 규칙 모음</p>
+        <div class="tree-sub-branches">
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🛠️</div>
+            <div class="tree-sub-label">Settings</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🏗️</div>
+            <div class="tree-sub-label">Infra</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">⏰</div>
+            <div class="tree-sub-label">Cron</div>
+          </div>
+        </div>
       </div>
+
       <div class="tree-branch" data-branch="memory">
         <div class="tree-branch-icon">🧠</div>
-        <h4>메모리</h4>
-        <p>지식, 학습, 기억</p>
-        <div class="tree-branch-items">메모리 · 학습 · 경험</div>
+        <h4>메모리 (Memory)</h4>
+        <p>에이전트의 누적 지식과 학습 경험</p>
+        <div class="tree-sub-branches">
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">💡</div>
+            <div class="tree-sub-label">Knowledge</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">📚</div>
+            <div class="tree-sub-label">Learning</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🔄</div>
+            <div class="tree-sub-label">Experience</div>
+          </div>
+        </div>
       </div>
+
       <div class="tree-branch" data-branch="reference">
         <div class="tree-branch-icon">📖</div>
-        <h4>참고 자료</h4>
-        <p>위키, 리퍼런스, 가이드</p>
-        <div class="tree-branch-items">문서 · 가이드 · 레퍼런스</div>
+        <h4>참고 자료 (Reference)</h4>
+        <p>외부 위키, 리퍼런스, 가이드 문서</p>
+        <div class="tree-sub-branches">
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">📄</div>
+            <div class="tree-sub-label">Docs</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🗺️</div>
+            <div class="tree-sub-label">Guides</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">📋</div>
+            <div class="tree-sub-label">Reference</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="card" style="margin-top:clamp(14px,2vh,20px); max-width:800px;">
-    <h3>태그 기반 분류<span class="popup-trigger" onclick="showPopup('s9_tagging')">?</span></h3>
-    <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
+
+  <!-- Supporting info cards (non-duplicate, unique content) -->
+  <div class="card-grid grid-3" style="margin-top:clamp(12px,2vh,20px); max-width:1000px;">
+    <div class="card">
+      <div class="card-icon">🏷️</div>
+      <h3>태그 기반 분류<span class="popup-trigger" onclick="showPopup('s9_tagging')">?</span></h3>
+      <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📁</div>
+      <h3>파일 구조<span class="popup-trigger" onclick="showPopup('s9_filetree')">?</span></h3>
+      <p>주제별 하위 카테고리 자동 생성 및 경로 매핑</p>
+    </div>
+    <div class="card highlight">
+      <div class="card-icon">🔗</div>
+      <h3>Cross-domain Link</h3>
+      <p>4 개 도메인 간 교차 참조로 지식 그래프 형성</p>
+    </div>
   </div>
-  <div class="tip-badge"><span>💡Tip:</span> 지식을 주제별로 분류하면 관련 영역만 빠르게 찾을 수 있고, 컨텍스트 오염을 방지하여 효율적인 검색이 가능합니다.</div>
+
+  <div class="tip-badge"><span>💡Tip:</span> 4 개 도메인(L1) — 12 개 하위 카테고리(L2) 체계를 통해 지식을 주제별로 분류하면 관련 영역만 빠르게 찾아 컨텍스트 오염을 방지하고, 검색 효율을 극대화할 수 있습니다.</div>
 </div>
 
-<!-- S10: Hierarchical Search (glm-5.1) -->
+<!-- S10: Hierarchical Search (glm-5.1 —从头 생성) -->
 <div class="slide" data-slide="10">
   <div class="slide-label">계층적 탐색</div>
   <h2 class="slide-title">AI 가 지식을 찾는 4 단계</h2>
-  <div class="flow-chart" style="max-width: 900px;">
-    <div class="flow-row" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(8px, 1.5vw, 16px); align-items: center;">
-      <div class="flow-node start" style="min-width: unset;">🗺️<br><small>Navigation</small></div>
-      <div class="flow-node process" style="min-width: unset;">📋<br><small>Index Scan</small></div>
-      <div class="flow-node process" style="min-width: unset;">🔍<br><small>Domain Filter</small></div>
-      <div class="flow-node end" style="min-width: unset;">📖<br><small>Detail Read</small></div>
+
+  <!-- Enhanced Flow Chart: Vertical flow with conditional branching -->
+  <div class="flow-chart" style="max-width: 950px;">
+    <!-- Step 1: Navigation -->
+    <div class="flow-row" style="justify-content: center;">
+      <div class="flow-node start" style="min-width: clamp(130px, 14vw, 170px); border-color: var(--accent);">
+        <div class="flow-step-label">STEP 1</div>
+        <div class="flow-step-title">🗺️ Navigation</div>
+        <div class="flow-step-desc">전체 구조 인덱스 로드</div>
+      </div>
+    </div>
+    <div class="flow-connector"></div>
+    <div class="flow-row" style="justify-content: center;">
+      <div class="flow-arrow">↓</div>
+    </div>
+
+    <!-- Step 2: Index Scan -->
+    <div class="flow-row" style="justify-content: center;">
+      <div class="flow-node process" style="min-width: clamp(130px, 14vw, 170px); border-color: var(--gradient-start);">
+        <div class="flow-step-label">STEP 2</div>
+        <div class="flow-step-title">📋 Index Scan</div>
+        <div class="flow-step-desc">도메인별 카테고리 필터</div>
+      </div>
+    </div>
+    <div class="flow-connector"></div>
+    <div class="flow-row" style="justify-content: center;">
+      <div class="flow-arrow">↓</div>
+    </div>
+
+    <!-- Condition: Relevant domain? -->
+    <div class="flow-row" style="justify-content: center;">
+      <div class="flow-condition" style="min-width: clamp(180px, 20vw, 240px);">
+        ❓ 관련 도메인이 존재하는가?
+      </div>
+    </div>
+
+    <!-- Branch: Yes / No -->
+    <div class="flow-branch" style="justify-content: center; gap: clamp(20px, 3vw, 40px);">
+      <!-- Yes branch -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+        <div class="flow-condition yes">✅ Yes →</div>
+        <div class="flow-connector"></div>
+        <!-- Step 3: Domain Filter -->
+        <div class="flow-node process" style="min-width: clamp(130px, 14vw, 170px); border-color: var(--t3);">
+          <div class="flow-step-label">STEP 3</div>
+          <div class="flow-step-title">🔍 Domain Filter</div>
+          <div class="flow-step-desc">관련 문서 Top-K 추출</div>
+        </div>
+        <div class="flow-connector"></div>
+        <div class="flow-arrow">↓</div>
+        <!-- Step 4: Detail Read -->
+        <div class="flow-node end" style="min-width: clamp(130px, 14vw, 170px); border-color: var(--gradient-end); background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); color: white;">
+          <div class="flow-step-label" style="color: rgba(255,255,255,0.8);">STEP 4</div>
+          <div class="flow-step-title" style="color: white;">📖 Detail Read</div>
+          <div class="flow-step-desc" style="color: rgba(255,255,255,0.8);">최종 내용 정밀 판독</div>
+        </div>
+      </div>
+
+      <!-- No branch -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+        <div class="flow-condition no">❌ No →</div>
+        <div class="flow-connector"></div>
+        <div class="flow-node" style="min-width: clamp(100px, 12vw, 140px); border-color: var(--t1); background: var(--t1-bg);">
+          <div class="flow-step-title" style="font-size: clamp(11px, 1.1vw, 14px);">↩️ 재검색</div>
+          <div class="flow-step-desc">의도 재분석 후 Step 1 복귀</div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="card-grid grid-2" style="margin-top:24px;">
+
+  <!-- Supporting info cards (non-duplicate, unique content) -->
+  <div class="card-grid grid-3" style="margin-top:clamp(10px,1.5vh,16px); max-width:1000px;">
     <div class="card">
+      <div class="card-icon">⚡</div>
       <h3>탐색 프로토콜<span class="popup-trigger" onclick="showPopup('s10_protocol')">?</span></h3>
       <p>최상위 Index 먼저 로드<br>도메인 파악 후 수 KB 페이지만 정밀 판독</p>
     </div>
     <div class="card highlight">
+      <div class="card-icon">📊</div>
       <h3>토큰 최적화</h3>
-      <p>전체 DB 조회: 10,000+ 토큰<br>계층 탐색: 500 토큰 미만</p>
+      <p>전체 DB 조회: 10,000+ 토큰<br>계층 탐색: 500 토큰 미만 (95% 절감)</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <h3>재검색 로직<span class="popup-trigger" onclick="showPopup('s10_reroute')">?</span></h3>
+      <p>관련 도메인 발견 실패 시<br>의도 재분석 후 탐색 재시도</p>
     </div>
   </div>
-  <div class="tip-badge"><span>💡Tip:</span> 4 단계를 거쳐 탐색하면 전체 DB 를 한 번에 읽는 것보다 95% 이상의 토큰을 절약할 수 있습니다. 넓은 구조부터 좁아지는 필터링 방식입니다.</div>
+
+  <div class="tip-badge"><span>💡Tip:</span> 4 단계 계층적 탐색을 통해 전체 DB 를 한 번에 읽는 것보다 95% 이상의 토큰을 절약합니다. 넓은 구조(Navigation)부터 좁아지는 필터링(Detail Read) 방식으로, 관련 도메인을 찾지 못하면 재검색 루틴이 자동으로 작동합니다.</div>
 </div>
 
 <!-- S11: Thank You -->
@@ -815,10 +1033,16 @@ const pData = {
   "s8_scoring": "<h4>점수 계산 알고리즘</h4><p>우선순위, 최신성, 사용 빈도, 허브 노드 점수 등을 종합하여 Tier(T1/T2/T3) 를 배정합니다.</p><pre>Score = (priority × 0.4) + \n        (recency × 0.3) + \n        (usage × 0.2) + \n        (hub × 0.1)</pre><p>각 요소는 0~100 점 스케일로 정규화됩니다.</p>",
   
   "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ × days)\nλ = 0.01 (90 일 후 40% 감소)\n최소 점수: 10 (완전 소멸 방지)</pre><p>이 알고리즘은 불필요한 Context 의 메모리 점유를 방지합니다.</p>",
+
+  "s8_tier_ref": "<h4>Tier 참조 방식</h4><p>각 Tier 에 따라 다른 참조 방식이 적용됩니다.</p><pre>T1: 매 대화 자동 로드 (항상 Context 포함)\nT2: 키워드 검색 시 조건부 로드 (시의적)\nT3: 명시적 요청 시만 로드 (수동)</pre><p>이 방식을 통해 불필요한 Token 사용을 최소화하면서도 필요한 정보는 항상 빠르게 접근할 수 있습니다.</p>",
   
   "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다. 4 개 주제 브랜치로 구조화됩니다.</p><pre>metadata.json:\n{\n  'tags': ['agent', 'memory'],\n  'domain': 'system',\n  'priority': 'T2',\n  'created': '2026-06-09',\n  'updated': '2026-06-09'\n}</pre><p>주제 브랜치:</p><ul><li>🤖 <strong>에이전트</strong> — 워크플로우, 스킬, 도구</li><li>⚙️ <strong>시스템</strong> — 인프라, 설정, 보안</li><li>🧠 <strong>메모리</strong> — 지식, 학습, 기억</li><li>📖 <strong>참고 자료</strong> — 위키, 리퍼런스, 가이드</li></ul><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
-  
-  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
+
+  "s9_filetree": "<h4>파일 구조 자동 매핑</h4><p>주제별 하위 카테고리가 자동으로 디렉토리 경로로 매핑됩니다.</p><pre>knowledge-system/\n├── agent/          # 에이전트 도메인\n│   ├── skills/     # 스킬 정의 파일\n│   ├── plugins/    # 플러그인 모듈\n│   └── workflows/  # 워크플로우 템플릿\n├── system/         # 시스템 도메인\n│   ├── settings/   # 설정 파일\n│   ├── infra/      # 인프라 문서\n│   └── cron/       # 스케줄러 정의\n├── memory/         # 메모리 도메인\n│   ├── knowledge/  # 축적된 지식\n│   ├── learning/   # 학습 기록\n│   └── experience/ # 경험 데이터\n└── reference/      # 참고 자료 도메인\n    ├── docs/       # 기술 문서\n    ├── guides/     # 가이드\n    └── reference/  # 리퍼런스</pre><p>4 도메인 × 3 하위 카테고리 = 총 12 개 자동 생성 디렉토리</p>",
+
+  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>",
+
+  "s10_reroute": "<h4>재검색 루틴 (Reroute Logic)</h4><p>Step 2(Index Scan) 에서 관련 도메인을 발견하지 못하면 재검색 루틴이 자동으로 실행됩니다.</p><pre>Reroute 단계:\n1. 사용자 의도 재분석 (Re-parse)\n2. 유사 도메인 검색 (Fuzzy Match)\n3. Synonym 확장 (동의어 매핑)\n4. Step 1 Navigation 에서 재시작</pre><ul><li>최대 재시도 횟수: 3 회</li><li>재시도 간격: 0.5 초</li><li>3 회 실패 시: 사용자에게 명시적 입력 요청</li></ul><p>이 루틴은 탐색 실패율을 5% 미만으로 낮춥니다.</p>"
 };
 
 function init() {

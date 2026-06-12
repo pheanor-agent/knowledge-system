@@ -4,17 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>지식을 주제별로 분류하는 체계 - Gemma 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #ffffff;
   --bg-card: #f9fafb;
+  --bg-card-hover: #f3f4f6;
   --border: #e5e7eb;
   --text: #1a1a1a;
   --text-dim: #666666;
   --accent: #2563eb;
+  --accent-dim: rgba(37,99,235,0.1);
   --gradient-start: #6366f1;
   --gradient-end: #8b5cf6;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
   --radius: 12px;
+  --font-base: clamp(14px, 1.2vw, 18px);
+  --font-title: clamp(28px, 3vw, 48px);
+  --font-heading: clamp(20px, 2.2vw, 36px);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -26,98 +34,164 @@ body {
   align-items: center;
   min-height: 100vh;
   padding: 40px;
+  font-size: var(--font-base);
 }
 .slide {
   max-width: 1200px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .slide-label {
-  font-size: 12px;
+  font-size: clamp(11px, 1vw, 14px);
   font-weight: 700;
   color: var(--accent);
-  margin-bottom: 16px;
+  margin-bottom: clamp(10px, 1.5vh, 16px);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: clamp(1px, 0.5vw, 2px);
 }
 h2.slide-title {
-  font-size: 38px;
+  font-size: var(--font-heading);
   font-weight: 800;
   color: var(--text);
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: clamp(12px, 2vh, 28px);
   line-height: 1.3;
 }
-/* Gemma 4: Flex 기반 중앙 집중 */
+.slide-desc {
+  font-size: clamp(14px, 1.3vw, 18px);
+  color: var(--text-dim);
+  line-height: 1.8;
+  text-align: center;
+  max-width: 800px;
+  margin-bottom: clamp(12px, 2vh, 20px);
+}
+
+/* Tree Diagram */
 .tree-diagram {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: clamp(14px, 2vh, 24px);
+}
+.tree-root {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: white;
+  padding: clamp(12px, 1.5vw, 16px) clamp(24px, 4vw, 36px);
+  border-radius: var(--radius);
+  font-weight: 800;
+  font-size: clamp(15px, 1.5vw, 20px);
+  box-shadow: var(--shadow-md);
+}
+.tree-connector {
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(20px, 3vh, 36px);
+  background: linear-gradient(to bottom, var(--gradient-start), var(--border));
+}
+.tree-hbar {
+  height: clamp(2px, 0.3vw, 3px);
+  background: var(--border);
+  width: 90%;
+  max-width: 800px;
+  position: relative;
+}
+.tree-hbar::before, .tree-hbar::after {
+  content: '';
+  position: absolute;
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+}
+.tree-hbar::before { left: 5%; top: -10px; }
+.tree-hbar::after { right: 5%; top: -10px; }
+.tree-branches {
+  display: flex;
+  gap: clamp(12px, 2vw, 20px);
+  width: 100%;
   justify-content: center;
-  gap: clamp(16px, 2vw, 24px);
-  margin-bottom: 30px;
+  position: relative;
+  padding-top: clamp(10px, 1.5vh, 18px);
 }
 .tree-branch {
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: var(--radius);
-  padding: 28px;
+  padding: clamp(12px, 1.5vw, 18px) clamp(10px, 1.5vw, 16px);
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+  min-width: clamp(100px, 16vw, 180px);
   flex: 1;
-  max-width: 260px;
+  max-width: clamp(140px, 20vw, 220px);
+  position: relative;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
 }
-.tree-branch:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+.tree-branch:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.tree-branch::before {
+  content: '';
+  position: absolute;
+  top: -clamp(10px, 1.5vh, 18px);
+  left: 50%;
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+  transform: translateX(-50%);
 }
-.tree-branch-icon {
-  font-size: 36px;
-  margin-bottom: 16px;
+.tree-branch[data-branch="agent"] { border-top: 4px solid #6366f1; }
+.tree-branch[data-branch="system"] { border-top: 4px solid #f59e0b; }
+.tree-branch[data-branch="memory"] { border-top: 4px solid #22c55e; }
+.tree-branch[data-branch="reference"] { border-top: 4px solid #ec4899; }
+.tree-branch-icon { font-size: clamp(20px, 2.2vw, 28px); margin-bottom: clamp(4px, 0.5vh, 8px); }
+.tree-branch h4 { font-size: clamp(13px, 1.3vw, 16px); margin-bottom: clamp(4px, 0.5vh, 8px); font-weight: 700; }
+.tree-branch p { font-size: clamp(11px, 1vw, 13px); color: var(--text-dim); line-height: 1.5; }
+.tree-branch-items { font-size: clamp(10px, 0.9vw, 12px); color: var(--text-dim); margin-top: clamp(2px, 0.3vh, 4px); line-height: 1.6; }
+
+/* Cards */
+.card-grid {
+  display: grid;
+  gap: clamp(12px, 1.5vw, 20px);
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: clamp(12px, 2vh, 24px);
 }
-.tree-branch h4 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.tree-branch p {
-  font-size: 15px;
-  color: var(--text-dim);
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-.tree-branch-items {
-  margin-top: 10px;
-  font-size: 13px;
-  color: var(--text-dim);
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-}
+.grid-2 { grid-template-columns: repeat(2, minmax(250px, 1fr)); }
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 28px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  max-width: 800px;
-  margin: 0 auto;
+  padding: clamp(16px, 2vw, 24px);
+  text-align: left;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
 }
-.card h3 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.card.highlight { border-color: var(--accent); background: var(--accent-dim); }
+.card-icon { font-size: clamp(20px, 2vw, 28px); margin-bottom: clamp(6px, 0.8vh, 10px); }
+.card h3 { font-size: clamp(14px, 1.3vw, 18px); font-weight: 700; margin-bottom: clamp(4px, 0.5vh, 8px); }
+.card p { font-size: clamp(12px, 1.1vw, 15px); color: var(--text-dim); line-height: 1.6; }
+
+/* Tip Badge */
+.tip-badge {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: clamp(8px, 1vh, 12px) clamp(14px, 2vw, 20px);
+  font-size: clamp(12px, 1.1vw, 15px);
+  color: #92400e;
+  max-width: 700px;
+  text-align: left;
 }
-.card p {
-  font-size: 15px;
-  color: var(--text-dim);
-  line-height: 1.6;
+.tip-badge span { font-weight: 700; }
+
+@media (max-width: 768px) {
+  .tree-branches { flex-wrap: wrap; gap: clamp(8px, 1.5vw, 12px); }
+  .tree-branch { min-width: clamp(80px, 40vw, 140px); max-width: clamp(120px, 45vw, 180px); }
+  .tree-hbar { display: none; }
+  .tree-branch::before { display: none; }
+  .grid-2 { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -125,38 +199,72 @@ h2.slide-title {
 <div class="slide">
   <div class="slide-label">주제 분류</div>
   <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
-  
+  <p class="slide-desc">에이전트 메모리 시스템은 모든 지식을 4 개의 주제 브랜치로 나누어 체계적으로 관리합니다. 물리적 폴더 구조가 아닌 <strong>태그 기반 논리적 분류</strong>를 통해 유연한 확장을 지원합니다.</p>
+
+  <!-- Tree Diagram: L1 Root → L2 Branches → L3 Items -->
   <div class="tree-diagram">
-    <div class="tree-branch">
-      <div class="tree-branch-icon">🤖</div>
-      <h4>에이전트</h4>
-      <p>워크플로우, 스킬, 도구</p>
-      <div class="tree-branch-items">스킬 · 플러그인 · 워크플로우</div>
-    </div>
-    <div class="tree-branch">
-      <div class="tree-branch-icon">⚙️</div>
-      <h4>시스템</h4>
-      <p>인프라, 설정, 보안</p>
-      <div class="tree-branch-items">설정 · 인프라 · Cron</div>
-    </div>
-    <div class="tree-branch">
-      <div class="tree-branch-icon">🧠</div>
-      <h4>메모리</h4>
-      <p>지식, 학습, 기억</p>
-      <div class="tree-branch-items">메모리 · 학습 · 경험</div>
-    </div>
-    <div class="tree-branch">
-      <div class="tree-branch-icon">📖</div>
-      <h4>참고 자료</h4>
-      <p>위키, 리퍼런스, 가이드</p>
-      <div class="tree-branch-items">문서 · 가이드 · 레퍼런스</div>
+    <div class="tree-root">📚 지식 시스템 (Knowledge System)</div>
+    <div class="tree-connector"></div>
+    <div class="tree-hbar"></div>
+    <div class="tree-branches">
+      <div class="tree-branch" data-branch="agent">
+        <div class="tree-branch-icon">🤖</div>
+        <h4>에이전트 (Agent)</h4>
+        <p>에이전트의 행동 정의</p>
+        <div class="tree-branch-items">
+          <div>├── 스킬 (Skills)</div>
+          <div>├── 플러그인 (Plugins)</div>
+          <div>└── 워크플로우 (Workflows)</div>
+        </div>
+      </div>
+      <div class="tree-branch" data-branch="system">
+        <div class="tree-branch-icon">⚙️</div>
+        <h4>시스템 (System)</h4>
+        <p>인프라 및 운영 환경</p>
+        <div class="tree-branch-items">
+          <div>├── 설정 (Config)</div>
+          <div>├── 인프라 (Infra)</div>
+          <div>└── Cron (정기 작업)</div>
+        </div>
+      </div>
+      <div class="tree-branch" data-branch="memory">
+        <div class="tree-branch-icon">🧠</div>
+        <h4>메모리 (Memory)</h4>
+        <p>지식과 학습 기록</p>
+        <div class="tree-branch-items">
+          <div>├── 시스템 메모리</div>
+          <div>├── 학습 (Learning)</div>
+          <div>└── 경험 (Experience)</div>
+        </div>
+      </div>
+      <div class="tree-branch" data-branch="reference">
+        <div class="tree-branch-icon">📖</div>
+        <h4>참고 자료 (Reference)</h4>
+        <p>외부 지식 소스</p>
+        <div class="tree-branch-items">
+          <div>├── 위키 (Wiki)</div>
+          <div>├── 가이드 (Guide)</div>
+          <div>└── 레퍼런스</div>
+        </div>
+      </div>
     </div>
   </div>
-  
-  <div class="card">
-    <h3>태그 기반 분류</h3>
-    <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
+
+  <!-- Info Cards -->
+  <div class="card-grid grid-2">
+    <div class="card">
+      <div class="card-icon">🏷️</div>
+      <h3>Metadata 기반 분류</h3>
+      <p>파일별 metadata.json 이 도메인, 태그, 우선순위, 갱신 일자를 기록하여 <strong>물리적 경로를 분리하지 않고도 논리적 주제</strong>를 판별합니다. 이 방식은 파일 이동 없이 태그만으로 브랜치를 변경할 수 있어 확장성이 뛰어납니다.</p>
+    </div>
+    <div class="card highlight">
+      <div class="card-icon">📁</div>
+      <h3>디렉토리 구조</h3>
+      <p>실제 디렉토리 트리는 도메인별로 분리되어 저장되며, Index 파일이 상위에서 하위를 참조합니다. 에이전트는 Index → 도메인 → 파일의 계층 구조를 따라 지식을 탐색하고 로드합니다.</p>
+    </div>
   </div>
+
+  <div class="tip-badge"><span>💡Tip:</span> 태그 기반 분류는 물리적 폴더 이동 없이 Metadata 만 수정하면 브랜치 전체가 변경되어 확장 비용이 거의 제로에 가깝습니다. 새 도메인을 추가할 때 기존 구조를 수정할 필요가 없습니다.</div>
 </div>
 </body>
 </html>

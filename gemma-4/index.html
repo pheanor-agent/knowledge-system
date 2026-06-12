@@ -684,76 +684,159 @@ cursor: zoom-in;
   <div class="tip-badge"><span>💡Tip:</span> 점수 계산과 감가상각 알고리즘을 통해 불필요한 Context 의 메모리 점유를 방지합니다.</div>
 </div>
 
-<!-- S9: Topic Classification (Gemma 4) -->
+<!-- S9: Topic Classification - Tree Diagram (Gemma 4) -->
 <div class="slide" data-slide="9">
   <div class="slide-label">주제 분류</div>
   <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
-  <div class="tree-diagram" style="max-width: 900px;">
-    <div class="tree-root">📚 지식 시스템</div>
-    <div class="tree-connector" style="width: 2px; height: 20px; background: var(--border);"></div>
-    <div class="tree-hbar" style="display: flex; justify-content: center; gap: 20px; position: relative;">
-      <div style="position: absolute; top: 0; left: 12.5%; right: 12.5%; height: 2px; background: var(--border);"></div>
-    </div>
-    <div class="tree-branches" style="display: flex; justify-content: center; gap: clamp(12px, 2vw, 20px); width: 100%;">
+  <p class="slide-desc" style="margin-bottom:clamp(8px,1.2vh,14px);">에이전트 메모리 시스템은 모든 지식을 4 개의 주제 브랜치로 나누어 체계적으로 관리합니다. 물리적 폴더 구조가 아닌 <strong>태그 기반 논리적 분류</strong>를 통해 유연한 확장을 지원합니다.</p>
+
+  <div class="tree-diagram">
+    <!-- L1: Root -->
+    <div class="tree-root">📚 지식 시스템 (Knowledge System)</div>
+    <div class="tree-connector"></div>
+    <!-- Horizontal bar -->
+    <div class="tree-hbar"></div>
+    <!-- L2: Branches with L3 sub-items -->
+    <div class="tree-branches">
       <div class="tree-branch" data-branch="agent">
         <div class="tree-branch-icon">🤖</div>
-        <h4>에이전트</h4>
-        <p>워크플로우, 스킬, 도구</p>
-        <div class="tree-branch-items">스킬 · 플러그인 · 워크플로우</div>
+        <h4>에이전트 (Agent)</h4>
+        <p>에이전트의 행동 정의</p>
+        <div class="tree-branch-items">
+          <div>├── 스킬 (Skills)</div>
+          <div>├── 플러그인 (Plugins)</div>
+          <div>└── 워크플로우 (Workflows)</div>
+        </div>
       </div>
       <div class="tree-branch" data-branch="system">
         <div class="tree-branch-icon">⚙️</div>
-        <h4>시스템</h4>
-        <p>인프라, 설정, 보안</p>
-        <div class="tree-branch-items">설정 · 인프라 · Cron</div>
+        <h4>시스템 (System)</h4>
+        <p>인프라 및 운영 환경</p>
+        <div class="tree-branch-items">
+          <div>├── 설정 (Config)</div>
+          <div>├── 인프라 (Infra)</div>
+          <div>└── Cron (정기 작업)</div>
+        </div>
       </div>
       <div class="tree-branch" data-branch="memory">
         <div class="tree-branch-icon">🧠</div>
-        <h4>메모리</h4>
-        <p>지식, 학습, 기억</p>
-        <div class="tree-branch-items">메모리 · 학습 · 경험</div>
+        <h4>메모리 (Memory)</h4>
+        <p>지식과 학습 기록</p>
+        <div class="tree-branch-items">
+          <div>├── 시스템 메모리</div>
+          <div>├── 학습 (Learning)</div>
+          <div>└── 경험 (Experience)</div>
+        </div>
       </div>
       <div class="tree-branch" data-branch="reference">
         <div class="tree-branch-icon">📖</div>
-        <h4>참고 자료</h4>
-        <p>위키, 리퍼런스, 가이드</p>
-        <div class="tree-branch-items">문서 · 가이드 · 레퍼런스</div>
+        <h4>참고 자료 (Reference)</h4>
+        <p>외부 지식 소스</p>
+        <div class="tree-branch-items">
+          <div>├── 위키 (Wiki)</div>
+          <div>├── 가이드 (Guide)</div>
+          <div>└── 레퍼런스</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="card" style="margin-top:clamp(14px,2vh,20px); max-width:800px;">
-    <h3>태그 기반 분류<span class="popup-trigger" onclick="showPopup('s9_tagging')">?</span></h3>
-    <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
-  </div>
-  <div class="tip-badge"><span>💡Tip:</span> 지식을 주제별로 분류하면 관련 영역만 빠르게 찾을 수 있고, 컨텍스트 오염을 방지하여 효율적인 검색이 가능합니다.</div>
-</div>
 
-<!-- S10: Hierarchical Search (Gemma 4) -->
-<div class="slide" data-slide="10">
-  <div class="slide-label">계층적 탐색</div>
-  <h2 class="slide-title">AI 가 지식을 찾는 4 단계</h2>
-  <div class="flow-chart" style="max-width: 900px;">
-    <div class="flow-row" style="display: flex; justify-content: center; gap: clamp(8px, 1vw, 12px);">
-      <div class="flow-node start" style="min-width: clamp(100px, 12vw, 130px);">🗺️<br><small>Navigation</small></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node process" style="min-width: clamp(100px, 12vw, 130px);">📋<br><small>Index Scan</small></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node process" style="min-width: clamp(100px, 12vw, 130px);">🔍<br><small>Domain Filter</small></div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node end" style="min-width: clamp(100px, 12vw, 130px);">📖<br><small>Detail Read</small></div>
-    </div>
-  </div>
-  <div class="card-grid grid-2" style="margin-top:24px;">
+  <div class="card-grid grid-2" style="margin-top:clamp(10px,1.5vh,18px); max-width:900px;">
     <div class="card">
-      <h3>탐색 프로토콜<span class="popup-trigger" onclick="showPopup('s10_protocol')">?</span></h3>
-      <p>최상위 Index 먼저 로드<br>도메인 파악 후 수 KB 페이지만 정밀 판독</p>
+      <div class="card-icon">🏷️</div>
+      <h3>Metadata 기반 분류<span class="popup-trigger" onclick="showPopup('s9_metadata')">?</span></h3>
+      <p>파일별 metadata.json 이 도메인, 태그, 우선순위, 갱신 일자를 기록하여 <strong>물리적 경로를 분리하지 않고도 논리적 주제</strong>를 판별합니다. 이 방식은 파일 이동 없이 태그만으로 브랜치를 변경할 수 있어 확장성이 뛰어납니다.</p>
     </div>
     <div class="card highlight">
-      <h3>토큰 최적화</h3>
-      <p>전체 DB 조회: 10,000+ 토큰<br>계층 탐색: 500 토큰 미만</p>
+      <div class="card-icon">📁</div>
+      <h3>디렉토리 구조<span class="popup-trigger" onclick="showPopup('s9_directory')">?</span></h3>
+      <p>실제 디렉토리 트리는 도메인별로 분리되어 저장되며, Index 파일이 상위에서 하위를 참조합니다. 에이전트는 Index → 도메인 → 파일의 계층 구조를 따라 지식을 탐색하고 로드합니다.</p>
     </div>
   </div>
-  <div class="tip-badge"><span>💡Tip:</span> 4 단계를 거쳐 탐색하면 전체 DB 를 한 번에 읽는 것보다 95% 이상의 토큰을 절약할 수 있습니다. 넓은 구조부터 좁아지는 필터링 방식입니다.</div>
+
+  <div class="tip-badge"><span>💡Tip:</span> 태그 기반 분류는 물리적 폴더 이동 없이 Metadata 만 수정하면 브랜치 전체가 변경되어 확장 비용이 거의 제로에 가깝습니다. 새 도메인을 추가할 때 기존 구조를 수정할 필요가 없습니다.</div>
+</div>
+
+<!-- S10: Hierarchical Search - Flow Chart (Gemma 4) -->
+<div class="slide" data-slide="10">
+  <div class="slide-label">계층적 탐색</div>
+  <h2 class="slide-title">AI 가 지식을 찾는 4 단계 과정</h2>
+  <p class="slide-desc" style="margin-bottom:clamp(8px,1.2vh,14px);">전체 DB 를 한 번에 로드하는 대신, <strong>넓은 구조부터 좁아지는 필터링</strong> 방식으로 단계적으로 지식을 탐색합니다. 4 단계를 거치면 95% 이상의 토큰을 절약할 수 있습니다.</p>
+
+  <!-- Flow Chart: 4-stage sequential with detailed branches -->
+  <div class="flow-chart" style="max-width:960px;">
+    <!-- Step 1: Navigation -->
+    <div class="flow-row">
+      <div class="flow-node" style="border-color:#6366f1;background:#eef2ff;">
+        <div style="font-size:clamp(16px,1.8vw,22px);margin-bottom:4px;">🗺️</div>
+        <div>Step 1: Navigation</div>
+        <div style="font-size:clamp(10px,0.85vw,12px);color:var(--text-dim);font-weight:400;margin-top:2px;">전체 구조 로드 (~50 토큰)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:#8b5cf6;background:#f5f3ff;">
+        <div style="font-size:clamp(16px,1.8vw,22px);margin-bottom:4px;">📋</div>
+        <div>Step 2: Index Scan</div>
+        <div style="font-size:clamp(10px,0.85vw,12px);color:var(--text-dim);font-weight:400;margin-top:2px;">도메인 필터 (~100 토큰)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:#2563eb;background:#eff6ff;">
+        <div style="font-size:clamp(16px,1.8vw,22px);margin-bottom:4px;">🔍</div>
+        <div>Step 3: Domain Filter</div>
+        <div style="font-size:clamp(10px,0.85vw,12px);color:var(--text-dim);font-weight:400;margin-top:2px;">관련 문서 선택 (~200 토큰)</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:#22c55e;background:#f0fdf4;">
+        <div style="font-size:clamp(16px,1.8vw,22px);margin-bottom:4px;">📖</div>
+        <div>Step 4: Detail Read</div>
+        <div style="font-size:clamp(10px,0.85vw,12px);color:var(--text-dim);font-weight:400;margin-top:2px;">최종 내용 판독 (~150 토큰)</div>
+      </div>
+    </div>
+    <!-- Condition branch -->
+    <div class="flow-branch" style="flex-wrap:wrap; justify-content:center;">
+      <div class="flow-condition" style="background:#eef2ff;border-color:#6366f1;">
+        ✓ Index.md 먼저 로드<br>
+        <span style="font-size:clamp(10px,0.85vw,11px);">상위 구조 파악 (L1 → L2)</span>
+      </div>
+      <div class="flow-condition" style="background:#f5f3ff;border-color:#8b5cf6;">
+        ✓ 도메인별 요약 참조<br>
+        <span style="font-size:clamp(10px,0.85vw,11px);">관련 브랜치만 선택</span>
+      </div>
+      <div class="flow-condition" style="background:#eff6ff;border-color:#2563eb;">
+        ✓ 점수 기준 필터<br>
+        <span style="font-size:clamp(10px,0.85vw,11px);">T1 자동 로드 / T2 검색</span>
+      </div>
+      <div class="flow-condition" style="background:#f0fdf4;border-color:#22c55e;">
+        ✓ 수 KB 페이지만 읽음<br>
+        <span style="font-size:clamp(10px,0.85vw,11px);">전체 파일이 아닌 핵심 페이지만</span>
+      </div>
+    </div>
+    <!-- Comparison bar -->
+    <div style="margin-top:clamp(6px,1vh,12px); text-align:center;">
+      <div style="display:inline-flex;align-items:center;gap:clamp(10px,1.5vw,20px);background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:clamp(6px,0.8vh,10px) clamp(14px,2vw,24px);">
+        <span style="font-size:clamp(12px,1.1vw,14px);color:var(--text-dim);">전체 DB 조회</span>
+        <span style="background:#fef2f2;color:#dc2626;padding:2px 10px;border-radius:4px;font-weight:700;font-size:clamp(11px,1vw,13px);">10,000+ 토큰</span>
+        <span style="font-size:clamp(12px,1.1vw,14px);">vs</span>
+        <span style="font-size:clamp(12px,1.1vw,14px);color:var(--text-dim);">계층적 탐색</span>
+        <span style="background:#f0fdf4;color:#16a34a;padding:2px 10px;border-radius:4px;font-weight:700;font-size:clamp(11px,1vw,13px);">500 토큰 미만</span>
+        <span style="font-size:clamp(12px,1.1vw,14px);">= 95% 절감</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-grid grid-2" style="margin-top:clamp(10px,1.5vh,18px); max-width:900px;">
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <h3>탐색 프로토콜<span class="popup-trigger" onclick="showPopup('s10_protocol')">?</span></h3>
+      <p>최상위 Index 파일을 먼저 로드한 후 도메인을 파악하고, 관련 브랜치만 선택하여 수 KB 페이지만 정밀 판독합니다. 전체 파일을 읽지 않고도 핵심 정보를 빠르게 추출합니다.</p>
+    </div>
+    <div class="card highlight">
+      <div class="card-icon">⚡</div>
+      <h3>토큰 최적화 효과<span class="popup-trigger" onclick="showPopup('s10_optimization')">?</span></h3>
+      <p>전체 DB 를 한 번에 로드하면 10,000 토큰 이상이 필요하지만, 4 단계 계층적 탐색으로 500 토큰 미만으로 탐색을 완료합니다. 이는 Token Cost 와 처리 속도를 동시에 최적화합니다.</p>
+    </div>
+  </div>
+
+  <div class="tip-badge"><span>💡Tip:</span> 넓고 얕은 구조부터 좁고 깊은 구조로 필터링하면 불필요한 토큰을 95% 이상 절약할 수 있습니다. 이는 데이터베이스의 Binary Search 원리를 자연어에 적용한 것입니다.</div>
 </div>
 
 <!-- S11: Thank You -->
@@ -819,9 +902,13 @@ const pData = {
   
   "s8_decay": "<h4>감가상각 알고리즘</h4><p>90 일 이상 미사용 시 점수가 수학적으로 수렴하도록 설계하여 잊음 곡선을 적용합니다.</p><pre>Decay = Score × e^(-λ × days)\nλ = 0.01 (90 일 후 40% 감소)\n최소 점수: 10 (완전 소멸 방지)</pre><p>이 알고리즘은 불필요한 Context 의 메모리 점유를 방지합니다.</p>",
   
-  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다. 4 개 주제 브랜치로 구조화됩니다.</p><pre>metadata.json:\n{\n  'tags': ['agent', 'memory'],\n  'domain': 'system',\n  'priority': 'T2',\n  'created': '2026-06-09',\n  'updated': '2026-06-09'\n}</pre><p>주제 브랜치:</p><ul><li>🤖 <strong>에이전트</strong> — 워크플로우, 스킬, 도구</li><li>⚙️ <strong>시스템</strong> — 인프라, 설정, 보안</li><li>🧠 <strong>메모리</strong> — 지식, 학습, 기억</li><li>📖 <strong>참고 자료</strong> — 위키, 리퍼런스, 가이드</li></ul><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
-  
-  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n2. Index Scan: 도메인 필터 (100 토큰)\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n4. Detail Read: 최종 내용 판독 (150 토큰)</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>"
+  "s9_metadata": "<h4>Metadata 기반 분류 시스템</h4><p>각 지식 파일은 metadata.json 을 포함하여 도메인, 태그, 우선순위, 갱신 일자를 구조화합니다.</p><pre>metadata.json:\n{\n  'domain': 'agent',\n  'tags': ['skill', 'workflow'],\n  'tier': 'T2',\n  'score': 72,\n  'created': '2026-06-09',\n  'updated': '2026-06-11',\n  'links': ['MEMORY.md', 'USER.md']\n}</pre><p>이 방식은 파일의 물리적 경로와 무관하게 <strong>논리적 브랜치</strong>를 판별합니다.</p><ul><li>🤖 에이전트 — 워크플로우, 스킬, 도구</li><li>⚙️ 시스템 — 인프라, 설정, 보안</li><li>🧠 메모리 — 지식, 학습, 기억</li><li>📖 참고 자료 — 위키, 리퍼런스, 가이드</li></ul>",
+
+  "s9_directory": "<h4>실제 디렉토리 트리 구조</h4><p>도메인별로 분리된 디렉토리 구조와 Index 기반 참조 체계를 사용합니다.</p><pre>~/.hermes/\n├── INDEX.md             # 최상위 진입점\n├── agent/\n│   ├── INDEX.md         # 에이전트 도메인 요약\n│   ├── skills/          # 스킬 정의\n│   └── plugins/         # 플러그인 목록\n├── system/\n│   ├── INDEX.md\n│   ├── config/          # 설정 파일\n│   └── cron/            # 정기 작업\n├── memory/\n│   ├── INDEX.md\n│   ├── knowledge/       # 축적된 지식\n│   └── experience/      # 경험 기록\n└── reference/\n    ├── INDEX.md\n    ├── wiki/            # 위키 문서\n    └── guide/           # 가이드 문서</pre><p>에이전트는 최상위 INDEX.md → 도메인 INDEX.md → 실제 파일의 순서로 탐색합니다.</p>",
+
+  "s10_protocol": "<h4>Hierarchical Search Protocol</h4><p>대용량 DB 쿼리를 대체하는 토큰 최적화 탐색 기법입니다.</p><pre>1. Navigation: 전체 구조 로드 (50 토큰)\n   → 최상위 INDEX.md 참조\n2. Index Scan: 도메인 필터 (100 토큰)\n   → 도메인별 INDEX.md 스캔\n3. Domain Filter: 관련 문서 선택 (200 토큰)\n   → 점수 기준 T1/T2/T3 분류\n4. Detail Read: 최종 내용 판독 (150 토큰)\n   → 수 KB 페이지만 읽음</pre><p>총 500 토큰 미만으로 탐색 완료 (전체 DB 조회 대비 95% 절감)</p>",
+
+  "s10_optimization": "<h4>토큰 최적화 분석</h4><p>계층적 탐색이 Token Cost 를 어떻게 최적화하는지 비교 분석합니다.</p><pre>방식              토큰 수      처리 시간\n전체 DB 로드      10,000+       15~30 초\n계층적 탐색        500 미만       2~5 초\n절감율:           95%            80~90%</pre><p>이 절감 효과는 다음과 같은 메커니즘에서 비롯됩니다:</p><ul><li>불필요한 도메인의 초기 필터링</li><li>점수 기반 우선순위 분류 (T1 자동, T2 검색, T3 요청)</li><li>Index 파일의 요약 정보 활용</li><li>핵심 페이지만의 선택적 판독</li></ul><p>이는 데이터베이스의 Binary Search 원리를 자연어 Context 에 적용한 것입니다.</p>"
 };
 
 function init() {

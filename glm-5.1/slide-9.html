@@ -3,18 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>지식을 주제별로 분류하는 체계 - glm-5.1</title>
+<title>지식을 주제별로 분류하는 체계 - glm-5.1 (从头)</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #ffffff;
   --bg-card: #f9fafb;
+  --bg-card-hover: #f3f4f6;
   --border: #e5e7eb;
   --text: #1a1a1a;
   --text-dim: #666666;
+  --text-bright: #000000;
   --accent: #2563eb;
+  --accent-dim: rgba(37,99,235,0.1);
   --gradient-start: #6366f1;
   --gradient-end: #8b5cf6;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 24px rgba(0,0,0,0.1);
   --radius: 12px;
+  --font-base: clamp(14px, 1.2vw, 18px);
+  --font-card: clamp(12px, 1vw, 16px);
+  --font-title: clamp(28px, 3vw, 48px);
+  --font-heading: clamp(20px, 2.2vw, 36px);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -25,86 +36,206 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 40px;
+  padding: clamp(20px, 4vh, 60px) clamp(20px, 4vw, 80px);
+  font-size: var(--font-base);
 }
 .slide {
   max-width: 1200px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .slide-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-  margin-bottom: 16px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-size: clamp(11px, 1vw, 14px); font-weight: 700;
+  color: var(--accent); margin-bottom: clamp(10px, 1.5vh, 16px);
+  text-transform: uppercase; letter-spacing: clamp(1px, 0.5vw, 2px);
 }
 h2.slide-title {
-  font-size: 38px;
-  font-weight: 800;
-  color: var(--text);
-  text-align: center;
-  margin-bottom: 40px;
-  line-height: 1.3;
+  font-size: var(--font-heading); font-weight: 800;
+  color: var(--text-bright); text-align: center;
+  margin-bottom: clamp(16px, 2vh, 28px); line-height: 1.3;
 }
-/* glm-5.1: Grid 기반 균등 배치 */
-.tree-diagram {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 30px;
-}
-.tree-branch {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  transition: all 0.2s ease;
-}
-.tree-branch:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-.tree-branch-icon {
-  font-size: 32px;
-  margin-bottom: 12px;
-}
-.tree-branch h4 {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.tree-branch p {
-  font-size: 14px;
-  color: var(--text-dim);
-  line-height: 1.6;
-}
-.tree-branch-items {
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--text-dim);
-}
+
+/* Cards */
+.card-grid { display: grid; gap: clamp(12px, 1.5vw, 20px); width: 100%; margin-top: clamp(12px, 2vh, 20px); }
+.grid-3 { grid-template-columns: repeat(3, minmax(200px, 1fr)); }
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: clamp(16px, 2vw, 24px);
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.card.highlight { border-color: var(--accent); background: var(--accent-dim); }
+.card-icon { font-size: clamp(24px, 2.5vw, 32px); margin-bottom: clamp(8px, 1vh, 12px); }
+.card h3 { font-size: clamp(15px, 1.5vw, 19px); font-weight: 700; margin-bottom: clamp(4px, 0.5vh, 8px); }
+.card p { font-size: clamp(12px, 1.1vw, 15px); color: var(--text-dim); line-height: 1.6; }
+
+/* Tree Diagram */
+.tree-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-top: clamp(12px, 2vh, 20px);
+  width: 100%;
+  max-width: 1000px;
+}
+.tree-root {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: white;
+  padding: clamp(12px, 1.5vw, 16px) clamp(24px, 4vw, 36px);
+  border-radius: var(--radius);
+  font-weight: 800;
+  font-size: clamp(15px, 1.5vw, 20px);
+  box-shadow: var(--shadow-md);
+}
+.tree-connector {
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(20px, 3vh, 36px);
+  background: linear-gradient(to bottom, var(--gradient-start), var(--border));
+}
+.tree-hbar {
+  height: clamp(2px, 0.3vw, 3px);
+  background: var(--border);
+  width: 90%;
   max-width: 800px;
-  margin: 0 auto;
+  position: relative;
 }
-.card h3 {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 8px;
+.tree-hbar::before, .tree-hbar::after {
+  content: '';
+  position: absolute;
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
 }
-.card p {
-  font-size: 14px;
+.tree-hbar::before { left: 5%; top: -10px; }
+.tree-hbar::after { right: 5%; top: -10px; }
+.tree-branches {
+  display: flex;
+  gap: clamp(12px, 2vw, 20px);
+  width: 100%;
+  justify-content: center;
+  padding-top: clamp(10px, 1.5vh, 18px);
+}
+.tree-branch {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(12px, 1.5vw, 18px) clamp(10px, 1.5vw, 16px);
+  text-align: center;
+  min-width: clamp(100px, 16vw, 180px);
+  flex: 1;
+  max-width: clamp(140px, 20vw, 220px);
+  position: relative;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
+}
+.tree-branch:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.tree-branch::before {
+  content: '';
+  position: absolute;
+  top: -clamp(10px, 1.5vh, 18px);
+  left: 50%;
+  width: clamp(2px, 0.3vw, 3px);
+  height: clamp(10px, 1.5vh, 18px);
+  background: var(--border);
+  transform: translateX(-50%);
+}
+.tree-branch[data-branch="agent"] { border-top: 4px solid #6366f1; }
+.tree-branch[data-branch="system"] { border-top: 4px solid #f59e0b; }
+.tree-branch[data-branch="memory"] { border-top: 4px solid #22c55e; }
+.tree-branch[data-branch="reference"] { border-top: 4px solid #ec4899; }
+.tree-branch-icon { font-size: clamp(20px, 2.2vw, 28px); margin-bottom: clamp(4px, 0.5vh, 8px); }
+.tree-branch h4 { font-size: clamp(13px, 1.3vw, 16px); margin-bottom: clamp(4px, 0.5vh, 8px); font-weight: 700; }
+.tree-branch p { font-size: clamp(11px, 1vw, 13px); color: var(--text-dim); line-height: 1.5; }
+
+/* Tree sub-branches (L2) */
+.tree-sub-branches {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3px, 0.5vh, 6px);
+  margin-top: clamp(6px, 0.8vh, 10px);
+  padding-top: clamp(6px, 0.8vh, 10px);
+  border-top: 1px dashed var(--border);
+}
+.tree-sub-branch {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 0.5vw, 8px);
+  padding: clamp(3px, 0.4vh, 5px) clamp(6px, 0.8vw, 10px);
+  background: var(--bg);
+  border-radius: 6px;
+  font-size: clamp(10px, 0.9vw, 13px);
   color: var(--text-dim);
-  line-height: 1.6;
+  transition: all 0.2s;
+}
+.tree-sub-branch:hover { background: var(--accent-dim); color: var(--accent); }
+.tree-sub-icon { font-size: clamp(12px, 1.2vw, 16px); }
+.tree-sub-label { font-weight: 600; }
+
+/* Tip */
+.tip-badge {
+  margin-top: clamp(12px, 2vh, 24px);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: clamp(8px, 1vh, 12px) clamp(14px, 2vw, 20px);
+  font-size: clamp(12px, 1.1vw, 15px); color: #92400e;
+  max-width: 700px; text-align: left;
+}
+.tip-badge span { font-weight: 700; }
+
+/* Popup */
+.popup-trigger {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent-dim); color: var(--accent);
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  margin-left: 4px; vertical-align: middle;
+}
+.popup-trigger:hover { background: var(--accent); color: white; }
+.popup-overlay {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 200; display: none;
+  justify-content: center; align-items: center;
+  padding: 40px; backdrop-filter: blur(4px);
+}
+.popup-overlay.active { display: flex; }
+.popup-content {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  text-align: left;
+  box-shadow: var(--shadow-lg);
+}
+.popup-close {
+  position: absolute; top: 20px; right: 20px;
+  background: none; border: none;
+  font-size: 24px; cursor: pointer;
+}
+.popup-content h4 { font-size: 20px; margin-bottom: 16px; color: var(--accent); }
+.popup-content p { font-size: 15px; line-height: 1.7; margin-bottom: 12px; }
+.popup-content pre { background: #f3f4f6; padding: 12px; border-radius: 8px; overflow-x: auto; margin: 12px 0; }
+.popup-content code { font-family: monospace; font-size: 13px; }
+.popup-content ul { margin: 8px 0 8px 20px; }
+.popup-content li { font-size: 14px; line-height: 1.6; margin: 4px 0; }
+
+@media (max-width: 768px) {
+  .tree-branches { flex-wrap: wrap; gap: clamp(8px, 1.5vw, 12px); }
+  .tree-branch { min-width: clamp(80px, 40vw, 140px); max-width: clamp(120px, 45vw, 180px); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
@@ -112,38 +243,145 @@ h2.slide-title {
 <div class="slide">
   <div class="slide-label">주제 분류</div>
   <h2 class="slide-title">지식을 주제별로 분류하는 체계</h2>
-  
+
+  <!-- Tree Diagram: 3-level hierarchy with visual connectors -->
   <div class="tree-diagram">
-    <div class="tree-branch">
-      <div class="tree-branch-icon">🤖</div>
-      <h4>에이전트</h4>
-      <p>워크플로우, 스킬, 도구</p>
-      <div class="tree-branch-items">스킬 · 플러그인 · 워크플로우</div>
-    </div>
-    <div class="tree-branch">
-      <div class="tree-branch-icon">⚙️</div>
-      <h4>시스템</h4>
-      <p>인프라, 설정, 보안</p>
-      <div class="tree-branch-items">설정 · 인프라 · Cron</div>
-    </div>
-    <div class="tree-branch">
-      <div class="tree-branch-icon">🧠</div>
-      <h4>메모리</h4>
-      <p>지식, 학습, 기억</p>
-      <div class="tree-branch-items">메모리 · 학습 · 경험</div>
-    </div>
-    <div class="tree-branch">
-      <div class="tree-branch-icon">📖</div>
-      <h4>참고 자료</h4>
-      <p>위키, 리퍼런스, 가이드</p>
-      <div class="tree-branch-items">문서 · 가이드 · 레퍼런스</div>
+    <!-- L0: Root node -->
+    <div class="tree-root">📚 지식 시스템 (Knowledge System)</div>
+    <div class="tree-connector"></div>
+    <div class="tree-hbar"></div>
+
+    <!-- L1: Domain branches -->
+    <div class="tree-branches">
+      <div class="tree-branch" data-branch="agent">
+        <div class="tree-branch-icon">🤖</div>
+        <h4>에이전트 (Agent)</h4>
+        <p>AI 가 스스로 사용하는 워크플로우와 도구 정의</p>
+        <div class="tree-sub-branches">
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">⚡</div>
+            <div class="tree-sub-label">Skills</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🔌</div>
+            <div class="tree-sub-label">Plugins</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🔀</div>
+            <div class="tree-sub-label">Workflows</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tree-branch" data-branch="system">
+        <div class="tree-branch-icon">⚙️</div>
+        <h4>시스템 (System)</h4>
+        <p>인프라, 설정, 보안 규칙 모음</p>
+        <div class="tree-sub-branches">
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🛠️</div>
+            <div class="tree-sub-label">Settings</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🏗️</div>
+            <div class="tree-sub-label">Infra</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">⏰</div>
+            <div class="tree-sub-label">Cron</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tree-branch" data-branch="memory">
+        <div class="tree-branch-icon">🧠</div>
+        <h4>메모리 (Memory)</h4>
+        <p>에이전트의 누적 지식과 학습 경험</p>
+        <div class="tree-sub-branches">
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">💡</div>
+            <div class="tree-sub-label">Knowledge</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">📚</div>
+            <div class="tree-sub-label">Learning</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🔄</div>
+            <div class="tree-sub-label">Experience</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tree-branch" data-branch="reference">
+        <div class="tree-branch-icon">📖</div>
+        <h4>참고 자료 (Reference)</h4>
+        <p>외부 위키, 리퍼런스, 가이드 문서</p>
+        <div class="tree-sub-branches">
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">📄</div>
+            <div class="tree-sub-label">Docs</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">🗺️</div>
+            <div class="tree-sub-label">Guides</div>
+          </div>
+          <div class="tree-sub-branch">
+            <div class="tree-sub-icon">📋</div>
+            <div class="tree-sub-label">Reference</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  
-  <div class="card">
-    <h3>태그 기반 분류</h3>
-    <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
+
+  <!-- Supporting info cards -->
+  <div class="card-grid grid-3">
+    <div class="card">
+      <div class="card-icon">🏷️</div>
+      <h3>태그 기반 분류<span class="popup-trigger" onclick="showPopup('s9_tagging')">?</span></h3>
+      <p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📁</div>
+      <h3>파일 구조<span class="popup-trigger" onclick="showPopup('s9_filetree')">?</span></h3>
+      <p>주제별 하위 카테고리 자동 생성 및 경로 매핑</p>
+    </div>
+    <div class="card highlight">
+      <div class="card-icon">🔗</div>
+      <h3>Cross-domain Link</h3>
+      <p>4 개 도메인 간 교차 참조로 지식 그래프 형성</p>
+    </div>
+  </div>
+
+  <div class="tip-badge"><span>💡Tip:</span> 4 개 도메인(L1) — 12 개 하위 카테고리(L2) 체계를 통해 지식을 주제별로 분류하면 관련 영역만 빠르게 찾아 컨텍스트 오염을 방지하고, 검색 효율을 극대화할 수 있습니다.</div>
+</div>
+
+<!-- Popup Overlay -->
+<div class="popup-overlay" id="popupOverlay" onclick="hidePopup()">
+  <div class="popup-content" id="popupContent" onclick="event.stopPropagation()">
+    <button class="popup-close" onclick="hidePopup()">×</button>
+    <div id="popupBody"></div>
   </div>
 </div>
+
+<script>
+const pData = {
+  "s9_tagging": "<h4>태그 기반 분류 시스템</h4><p>물리적 폴더 분리가 아닌 Tag 와 Metadata 를 통한 논리적 분리를 지향합니다. 4 개 주제 브랜치로 구조화됩니다.</p><pre>metadata.json:\n{\n  'tags': ['agent', 'memory'],\n  'domain': 'system',\n  'priority': 'T2',\n  'created': '2026-06-09',\n  'updated': '2026-06-09'\n}</pre><p>주제 브랜치:</p><ul><li>🤖 <strong>에이전트</strong> — 워크플로우, 스킬, 도구</li><li>⚙️ <strong>시스템</strong> — 인프라, 설정, 보안</li><li>🧠 <strong>메모리</strong> — 지식, 학습, 기억</li><li>📖 <strong>참고 자료</strong> — 위키, 리퍼런스, 가이드</li></ul><p>이 구조는 도메인 독립적인 확장을 지원합니다.</p>",
+
+  "s9_filetree": "<h4>파일 구조 자동 매핑</h4><p>주제별 하위 카테고리가 자동으로 디렉토리 경로로 매핑됩니다.</p><pre>knowledge-system/\n├── agent/          # 에이전트 도메인\n│   ├── skills/     # 스킬 정의 파일\n│   ├── plugins/    # 플러그인 모듈\n│   └── workflows/  # 워크플로우 템플릿\n├── system/         # 시스템 도메인\n│   ├── settings/   # 설정 파일\n│   ├── infra/      # 인프라 문서\n│   └── cron/       # 스케줄러 정의\n├── memory/         # 메모리 도메인\n│   ├── knowledge/  # 축적된 지식\n│   ├── learning/   # 학습 기록\n│   └── experience/ # 경험 데이터\n└── reference/      # 참고 자료 도메인\n    ├── docs/       # 기술 문서\n    ├── guides/     # 가이드\n    └── reference/  # 리퍼런스</pre><p>4 도메인 × 3 하위 카테고리 = 총 12 개 자동 생성 디렉토리</p>"
+};
+
+function showPopup(key) {
+  const content = pData[key] || '내용 없음';
+  document.getElementById('popupBody').innerHTML = content;
+  document.getElementById('popupOverlay').classList.add('active');
+}
+function hidePopup() {
+  document.getElementById('popupOverlay').classList.remove('active');
+}
+window.showPopup = showPopup;
+window.hidePopup = hidePopup;
+</script>
 </body>
 </html>
